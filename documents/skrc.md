@@ -1,9 +1,11 @@
 [![Sidekick](Images/SKLogo.png)](../README.md)
+
 ## Execute Selected Text 
 
-**Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as this hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
+**Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as the hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
 
 `Sidekick` will call Thor tool [Execute Selected Text](https://github.com/VFPX/Thor/blob/master/Docs/NewsItems/Item_46.md). From its documentation:  
+
 *This tool is an extension of the familiar option in the context menu when editing code:*  
 
 ![](Images/Item_46_ExecuteSelection.png)
@@ -18,5 +20,5 @@ The tool provides three new features:
 
 **Note:** This also works for single lines.
 
-The old way: Mark everything, right-click and select Execute Selection. 
-The new way: Place the cursor anywhere inside the line/statement, and press ![`F8`](Images/F8.png)! 
+**The old way:** Mark everything, right-click and select Execute Selection.  
+**The new way:** Place the cursor anywhere inside the line/statement, and press ![`F8`](Images/F8.png)! 

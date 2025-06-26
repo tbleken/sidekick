@@ -3,49 +3,49 @@
 
 ## Configure `Sidekick`
 
-All important `Sidekick` settings are stored in the file `sidekick.h`. However, since an update to `Sidekick` will overwrite this file, do ***not*** edit this file!!! 
+To fine tune Sidekick to match your needs and wishes, open Thor Tools (Alt+F12), select the right tab (Options) and Sidekick.  
 
-Instead, if you want to change any default values, make the changes in the file `sidekick_override.h`. This file will ***not*** be update.  
+All the different choices have Tooltips to describe their purpose.  
 
-In order to change a value in `sidekick_override.h`, you must first `#UNDEFINE` the old old statement, and then `#DEFINE` a new one. Something like this: 
+**Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as the hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools.
 
-```foxpro
-#UNDEFINE ccBackupFolder
-#DEFINE ccBackupFolder 'MyBack?'
-```
-  
-Any changes you make in `sidekick_override.h` will take effect the next time you run `Sidekick`, the necessary compilations will happen automatically.
+## Detailed description of the options:  
 
-This is a list of the different settings, and what they stand for. 
+### Page 1, general:
 
-* `ccBackupFolder` (default `BU?`): Specifies the default target folder for `Sidekick's` [tidy](sktidy.md) feature. The question mark (`?`) instructs `Sidekick` to move the specified file(s) into folders with automatically incremented names. The first will be called BU0001, the next BU0002 and so on. If you delete any folder, the next folder will still be the highest "number" + 1.
-* `ccMaxDescriptionLine` (default 15): Sets the maximum number of lines that `Sidekick` checks for a [Description](skdesc.md) line in program files (.prg). I higher value will increase the time it takes to show the list of matching files.  
-* `ccNextLength` (default 4): Specifies the length of automatically increased numbers which can be used in `Sidekick's`[zip](skzip.md) and [tidy](sktidy.md) features.
-* `ccSidekickComments` (Default `SkComments.prg`): Defines the name of the file to read "comment snippets" or "scraps" from.
-* `ccSidekickDef` (default `Sidekick.txt`): Defines the name of the file which contains the name of the current [Sidekick group definition](skorg.md) file. 
-* `ccSidekickHelp` (default `https://github.com/tbleken/Sidekick`): Root folder for `Sidekick` help files.
-* `ccRun` (default `exe`): Defines the "command" to tell Sidekick to execute/run a file instead of opening it in [Sidekick projects](skorg.md).
-* `ccUnzipFolder` (default `SKUnzip`): Specifies the default target folder for `Sidekick's` [unzip](skzip.md) feature. This folder name will always be incremented like described above. 
-* `ccVersion`: The current `Sidekick` version number.
-* `ccVFPFilesToList` (Default `[dbf], [scx], [vcx], [prg], [h], [dbc], [frx], [lbx], [mnx], [txt], [sk]`): List of file types to read as VFP and Sidekick files.
-* `ccVFPTablesExtended` (Default `[dbf], [dbc], [frx], [lbx], [mnx], [pjx], [scx], [vcx]`): List of file extensions to read additional data from.
-* `ccWaitTimeOut` (default 3000 meaning 3000 mS or 3 seconds): This value specifies who long messages are shown before they go away.  
-* `ccZipDelay` (default 0.1, meaning 0.1 second or 100 mS): `Sidekick's` [zip](skzip.md) feature needs a little time to create an empty .zip file which will eventually hold the specified files. If you end up with any "ghost" files, you may have to increase this number.
-* `ccZipTarget` (default `SKZip_`): Specifies the default target folder for `Sidekick's` [zip](skzip.md) feature. This folder name will always be incremented like described above. 
+1. **Default command:** Default is `?`. The `Sidekick` command that is suggested when you press ![`F8`](Images/F8.png) from a blank line. The default value, `?`, means that if you press `Enter`, you will see a list of all the available commands. 
+2. **Font size:** Self explanatory. A value of 6 or less means that the font size value is read from _screen.
+3. **Show grid after US command:** When checked, `Sidekick US` commands will show a grid after selection is done.  
+4. **Newest first for files with same name:** When checked, files with the same name will show the newest version first.
 
-## `sidekick_override.h`
+### Page 2, File handling:  
 
-As mentioned above, do ***not*** make any changes in `Sidekick.h`!! Instead, make the changes in `sidekick_override.h` which you will find in Thor's Tools folder. The default content of this file is:
+1. **Path returned:** Files' path are shown and returned in three different ways:  
+    1. Relative path
+    2. Full path
+    3. No path  
+2. **Case returned:** Files' name are shown and returned in three different ways:
+    1. lower case
+    2. Proper Case
+    3. UPPER CASE
+3. **MRU table for ED command:** Default is `SKMRUList`. With `Sidekick's ED` function you can maintain a `MRU` (`Most Recently Used`) list of your own. This can be done by using the appropriate `Sidekick ED` commands, or you can do it manually by browsing this table. The name of the table is specified in this field, `.dbf` is added automatically.
 
-```foxpro
-*** Override file for sidekick.h. Called from sidekick.h
-***
-*** This file is not overridden by updates
-*** while sidekick.h is..
+### Page 3, Zip/Unzip/Tidy:  
+1. **Length of number in Zip and Tidy feature:** Default is `4`. The number of digits added to the filename for consecutive operations of `Sidekick's Zip` and `Tidy` functions. The default value, 4, means that the filename will go from SKZip_0001.zip to SKZip_9999.zip. The "base" part of the filename, SKZip_, can be changes, see `Target template for zip files` below.
+2. **Backup folder:** Default is `Bu?`. The filename "skeleton" used for folders in `Sidekick's Tidy` function. Files included in a `tidy` operation will be zipped and moved to this folder. If this value ends with a question mark, `?`, today's date in the format `yymmdd` will replace the `?`.  
+3. **Unzip folder:** Default is `SKUnzip`. The folder name used for `Sidekick's Unzip` feature if none is specified.
+4. **Target template for zip files:** Default is `SKZip_`. The "base name" for the filename used for `Sidekick's Zip` and `Tidy` function. This value, together with the value in the field `Length of number in Zip and Tidy feature`, is used by `Sidekick` to construct the result file name. The extension `.zip` is automatically added.  
+**Note:** If this value ends with a question mark, `?`, the current date in the format `yymmdd` will replace the `?`.
+5. **Necessary delay for zip creation (mS):** Default is `100`. `Sidekick` need a little time to prepare a `.zip` file before it's filled with data. Increase this number if the operation fails.
 
-*** #Undefine ccRelativePath
-*** #Define ccRelativePath .T.
-```
-Note that the last two lines must be commented if you really want `ccRelativePath` to be `.T.`.
+### Page 4, Projects:  
+1. **Sidekick active project file:** Default is `SKOptions.sk`. This file is used in `Sidekick's` project feature, as described in [`Sidekick` group of files organizer](skorg.md). Change the name here, or use the options specified in the document referred to.
+2. **Command to Run instead of opening a file:** Default is `exe`. This string is used in `Sidekick's` project feature, [`Sidekick` group of files organizer](skorg.md). Change this value if the default string `exe` causes any conflict.  
+3. **Max number for Description in .sk-file:** Default is 15. `Sidekick` uses some time to look for `description` text in the defined format in files. The earlier it appears, the faster is the process. This value specifies how many lines to process before the rest of the file is ignored.
+ 
+### Page 5, Special:
+1. **Location (URL) for Help files:** Default is `https://github.com/tbleken/sidekick`. This is the "base" URL for all of `Sidekick's` help files. Change this value only if the files are moved.
+2. **Wait timeout (seconds):** Default is `3`. Most `Sidekick` messages will timeout automatically after the number of seconds specified. Increase it if necessary, and if you don't want these messages, set it to `0` (zero).
 
+![Sidekick options](Images/skconfig.png)
 

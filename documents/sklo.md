@@ -1,15 +1,17 @@
 [![Sidekick](Images/SKLogo.png)](../README.md)
 
-## `EC` (Execute Clipboard)
+## `LO` (List Open Tables)
 
-If the clipboard (_cliptext) contains text, this command will make Sidekick try to execute it.
-
+`LO` shows all the open tables and cursors in the current datasession in a grid, in addition to their alias, table name, record count and order. If you select one and press `Enter`, the corresponding work area is selected.
 
 | You type:                |        Result after pressing ![`F8`](Images/F8.png) |
 |:-------------------------|:----------------------------------------------------------|
-| `ec`                       | If the clipboard contains a VFP command, it will be executed |
- 
-Sidekick will try to execute the content of the clipboard inside a Try-Catch-Endtry block, no error trapping is performed.
+| `lo`                       | The list of open tables and cursors is presented.  |
+
+![sklo](Images/sklo.png)
 
 **Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as the hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
+
+
+
 

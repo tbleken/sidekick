@@ -1,6 +1,6 @@
 [![Sidekick](Images/SKLogo.png)](../README.md)
 
-## `Zip`
+## `ZIP`
 
 Now you can zip and [unzip](#unzip) files directly from VFP!  
 
@@ -53,9 +53,12 @@ These are some samples of legal `Sidekick's` `zip` commands:
 
 Note that no space is allowed in the list of source files!
 
-* The number of digits in the numbers shown as 00001, 00002 a.s.o. above, can be configured in [sidekick_override.h](skconfig.md). See the setting `MaxLength`.
+* The number of digits in the numbers shown as 00001, 00002 a.s.o. above, can be configured in [Sidekick Options](skconfig.md). See the setting `Length of number in Zip and Tidy feature`.  
+ 
+Possible options:  
+`/a` (for **all**): Will give much more information in the grid. The picture below is with this command switch.
 
-![Sidekick Tidy](Images/sktidy.png)
+![sktidy](Images/sktidy.png)
 
 ### Unzip
 
@@ -70,7 +73,6 @@ The `Unzip` feature has only two parameters.
 
 If the target folder does not exist, it will be created. And if no target folder is specified, the default folder will be used. 
 
-You can change the name of all the default folders mentioned, as described in [Configure Sidekick](skconfig.md)
+You can change the name of all the default folders mentioned, as described in [Sidekick Options](skconfig.md)
 
-
-![panunzip](Images/panunzip.png)
+![skunzip](Images/skunzip.png)

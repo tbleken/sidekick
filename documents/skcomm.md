@@ -1,6 +1,6 @@
-[![Pandora](Images/SKLogo.png)](../README.md)
+[![Sidekick](Images/SKLogo.png)](../README.md)
 
-## * (Create comment line to break code)
+## `*` (Create comment line to break code)
 
 This command is an easy way to break code into segments by adding a line of repeated characters.
 

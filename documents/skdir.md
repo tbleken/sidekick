@@ -4,69 +4,60 @@
 
 **Sidekick** comes with a nice "file finder" with several options. For instance it will show the number of records in all DBF's plus the size of the corresponding memo file.    
 
-To start with a more limited selection of files, you can specify one or more "words" from the file name. If the "words list" contains a `.` (dot), you can also specify the extension. In that case also non VFP files are included in the search.  
+To start with a more limited selection of files, you can specify one or more "words" from the file name. All listed words, separated by a space, must be present in the filename or path of the listed files. If the "words list" contains a `.` (dot), you can also specify the extension. In that case also non VFP files are included in the search. 
 
-All the commands have two version, one "long" and one "short", these are interchangeable.
+When the list shows up, you can filter it even further, each "word" you type must be present in what you see or inside the memo fields. Also numeric fields and date fields are included in the filtering process.
 
 This tool comes in three variants:
 
-***Note 1:*** These commands only work in the command window, and in editors opened by Modify Command or Modify File. 
-
-**Note 2:** In this documentation ![`F8`](Images/F8.png) is consistently used as this hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
+**Note ** In this documentation ![`F8`](Images/F8.png) is consistently used as the hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
 
 
-# #1: Dr (or *): Will open files for editing
+# Version #1, `+`: Will open files for editing
 
 
-| Command| Short version            |        Result after pressing ![`F8`](Images/F8.png)      |
-|:--|:-----------------------|:----------------------------------------------------------|
-|dr| \* (or \*:)                     | Picklist of all VFP files in the path, for editing |  
-|dr bb| \* db  (or \*: db<sub>note 1</sub>)                 | As above, only files having `db` in its name *or* extension|
-|dr db cust | \* db cust       | All files with names containing  `db` *and* `cust` |  
-|dr my .prg | \* my .prg          | All files with `my` in the name *and* `prg`as extension|
-| dr .png | \* .png             | All files `.png` files |
-| dr \?  | \* ? | All files in the current VFP path |
-| \* \*  | dr \* | Same as above |
-|dirx| +, \*\* (or **: <sub>note 1</sub>)             | Same as Dr, with more information, se below|  
-|dirrun|++, \*\*\* (or ***: <sub>note 1</sub>)               | Same as DirX, will run file|  
+| Command        |        Result after pressing ![`F8`](Images/F8.png)      |
+|:--|:----------------------------------------------------------|
+|`+`                     | Picklist of all VFP files in the path, for editing |  
+|`+ bb`|  As above, only files having `db` in its name *or* extension|
+|`+ db cust` |  All files with names containing  `db` *and* `cust` |  
+|`+ my .prg` |  All files with `my` in the name *and* `prg`as extension|
+| `+ .png` | All files `.png` files |
+| `+ *`  | Same as above |
+| `dr *`  | Same as above, see note below |  
 
-### Note 3: 
-In order **not** to "collide" with comments in the editor windows, the short form of the syntax **must** include the colon (**:**) after the asterisk(s), unless you specify additional "parameters".  
-In the command window this colon is optional.
+**Note** that this version only works in the command window! The reason is that `+` is also used as a short version for `Sidekick's` [Ins](skins.md) command. If you need this functionality from one of VFP's program editors, you can use `dr` instead.
 
-![dr](Images/pandir.png)
-
+![skdir](Images/skdir.png)
 <a id="dirc">  
 
-# #2: DirX (or **): Like #1 with much more information </a>
+# Version #2, `++`: Like #1 with many more information </a>
 
-`dirx` or `**` adds several more columns, and more information:  
-* **Lines column:** the number of lines in all .txt, .prg, .h and .pan files
+`++` adds several more columns, and more information:  
+* **Lines column:** the number of lines in all .txt, .prg, .h and .sk files
 * **Text column:** the content of the files as mentioned above   
 * **Memosize column:** the size, in bytes, of the corresponding memo files.  
-* In addition, the record size information is filled in for **all** VFP tables, including .dbc and .*x files. This can be very handy for analyzing the complexity of applications.
+* In addition, the record count is filled in for **all** VFP tables, including .dbc and .*x files. This can be very handy for analyzing the complexity of applications.
 
 This gives two big advantages:  
 1. Hover the mouse over the field `text`, and you will see the file contents as a tooltip.
 1. The incremental search also includes the contents of the files.
 
-Note that the syntax is identical to `Dr` and the short form `*`.  
+Note that the syntax is identical to `+`.  
+![dirc](Images/skdirc.png)
 
-![dirx](Images/pandircr.png)
-<a id="dirrun">   
-# #3: Dirrun (or ***): Will *run* forms and programs </a>
+<a id="dirrun"> 
 
-Syntax is identical to #1 and #2. This variant will show the information as DirX, but only prg and scx files are listed. When you press `Enter`, **Sidekick** will try to `run` the selected file. 
+# Version #3, `+++`: Similar to version #2, `++`, except it will *run* forms and programs </a>
+
+Syntax is identical to #1 and #2. This variant will show the same information as `++`, but only .prg and .scx files are listed. When you press `Enter`, **Sidekick** will try to `run` the selected file. 
+
+![dirrun](Images/skdirrun.png)
  
-## A quick summary of the shortest and most common versions:  
-| You type | Used to |
-|:--|:--|
-|* |  locate VFP files quickly, and modify them |
-| **| same as above, with more info, but slower|
-| ***| locate VFP files, and run them|
-
-**Note 4:** Add a colon (:) in a Modify Command/File window!
-
+## A quick summary:
+* `+`: will show a picklist of all VFP "main" files
+* `++`: Like `+` but with more info
+* `+++`: Like `++` but will only show .prg and .scx, selected file will be `run`, if possible.
 
 
 

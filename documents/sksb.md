@@ -2,7 +2,7 @@
 ## SuperBrowse 
 `Sidekick` can call [SuperBrowse](https://github.com/VFPX/Thor/blob/master/Docs/Thor_superbrowse.md) directly.  
 
-**Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as this hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
+**Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as the hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
 
 Place the cursor "inside" a table name and press ![`F8`](Images/F8.png). `Sidekick` will use several tools to try to locate the table, and open it in `SuperBrowse`.  
 

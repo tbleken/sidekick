@@ -13,6 +13,6 @@ An initial \* is respected as a commented line for single executable lines. **Ho
 
 *Note:* To distinguish "real" VFP commands from `Sidekick` keywords, it's necessary to add the the keyword `ed`, as the first word in a line in a prg. This is **not** necessary in the Command window. 
 
-This is really handy, since you can have a special file with all your `Sidekick` code snippets. Tip: Use `Sidekick.prg` for this, available directly from the Command window by typing . (dot) and pressing ![`F8`](Images/F8.png).
+This is really handy, since you can have a special file with all your `Sidekick` code snippets. Tip: Use `SKTestarea.prg` for this, available directly from the Command window by typing . (dot) and pressing ![`F8`](Images/F8.png).
 
-**Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as this hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
+**Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as the hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 

@@ -5,7 +5,7 @@ Introducing `Sidekick` "group of files organizer"
 
 `Sidekick` is a utility that helps VFP developers manage, use, and execute files, classes, objects, code, as well as offering additional development productivity features more.**
 
-**Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as this hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
+**Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as the hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
 
 --------------------------------
 
@@ -65,16 +65,16 @@ A special case in many aspects is `0 (zero)`:
 1. `0` in the Command window will open `Sidekick.sk` for editing, if it exists.
 2. `0` as the group number in `Sidekick.sk` will include the file(s) mentioned for every group.
 
-Notice the first line above, `Default project: 5`. To open all the files in the specified group, `5` in this example, you don't have to specify the number. Just press ![`F8`](Images/F8.png) in an empty line in the Command window, and all the #5 files will be opened, plus all the #0 files. Notice that this number must be the very last "word" in the first line.
+Notice the first line above, `Default project: 5`. To open all the files in the specified group, `5` in this example, you don't have to specify the number, you can use `-` (minus, hyphen) instead. Just type `-` followed by ![`F8`](Images/F8.png) in an empty line in the Command window, and all the #5 files will be opened, plus all the #0 files. Notice that this number must be the very last "word" in the first line.
 
 Tip: If you store this file in your applications' root folder, you can have different versions in each of them.
 
 ## Note on the ***Sidekick*** keyword `exe:`  
 
 If you want to **run** a prg or execute a VFP command or any .prg file from `Sidekick.sk`, you must include the keyword `exe`.  
-You can see this "in action" above with the line `3 exe On Key Label ALT+2 do test`. The result is that when you type `3` in the command window and press ![`F8`](Images/F8.png), this line will be `executed` while the other files starting with `3` are opened in the editor. 
+You can see this "in action" above with the line `3 exe On Key Label ALT+2 do test`. The result is that when you type `3` followed by ![`F8`](Images/F8.png) in the command window, this line will be `executed` while the other files starting with `3` are opened in the editor. This makes it possible to open several windows and files, even separate applications, by only typing one number followed by ![`F8`](Images/F8.png). 
 
-#### NB! The keyword `exe` can be changed in [Sidekick_override.h](skconfig.md)!
+#### NB! The keyword `exe` can be changed in [Sidekick Options](skconfig.md)!
 
 ## Note on the ***Sidekick*** keyword `ed`
 
@@ -83,23 +83,36 @@ Note that in the `Sidekick` "organizer" file `Sidekick.sk`, the keyword `ed` mus
 
 ### Using `Sidekick.sk`: 
 
-|C/E| You type:                |        Result after pressing ![`F8`](Images/F8.png)        |
-|--|:-------------------------|:----------------------------------------------------------|
-| C| `ed`                           | Group of files defined in line 1 of `Sidekick.sk` are opened |
-| C| `<blank>`                    | Same as above                                             |
-| C| `ed x (x=integer,>0)`          | Group of matching files in `Sidekick.sk` are opened       |
-| C| `x (x=integer)`                | Same as above                           |
-|CE| `ed 0 (zero)`                  | File `Sidekick.sk` is opened in editor   |
-|CE| `0`                            | Same as above                             |
-|C| `es 1-999`               | Creates Editsource() command for all open windows   |
-| C| `pr` or  `-` (hyphen/minus)             | Picklist of projects in active `.sk` file (default = `Sidekick.sk`) |
-| C| `0 somefilename`             | Active `Sidekick` file is changed to `somefilename.sk`       |
-| C| `0 *`                 | Picklist of `Sidekick` files in the path  |
-| C| `0 ?`                 | Active `Sidekick` file is reported  |
+| You type:                |        Result after pressing ![`F8`](Images/F8.png)        |
+|:-------------------------|:----------------------------------------------------------|
+| `-` (hyphen/minus)           | Group of files defined in line 1 of `Sidekick.sk` are opened |
+| `ed x (x=integer,>0)`          | Group of matching files in `Sidekick.sk` are opened       |
+| `x (x=integer)`                | Same as above                           |
+| `ed 0 (zero)`                  | File `Sidekick.sk` is opened in editor   |
+| `0`                            | Same as above                             |
+| `es 1-999`               | Creates Editsource() command for all open windows   |
+| `pr`              | Picklist of projects in active `.sk` file (default = `Sidekick.sk`) |
+| `*`| Same as above |
+| `* ab`| Only "projects" where project name contains `ab` |
+| `* ab cd`| Only "projects" where project name contains both `ab` and `cd` |
 
-#### The C/E column describes where the "command" (keyword) works: 
-**C:** Command Window  
-**E:** program editor (Modify Command) and the text editor (Modify File) 
+**Note:** The commands listed above only work from the command window, except `ed X`and `ed 0`.  
+
+This is a sample of what you see after typing `*` in the Command Window and pressing ![`F8`](Images/F8.png):
+
+![Project](Images/skproj.png)
+
+### To check or change `Sidekick Project file`:
+
+| You type:                |        Result after pressing ![`F8`](Images/F8.png)        |
+|:-------------------------|:----------------------------------------------------------|
+| `0 someproject`              | Active `Sidekick` file is changed to `someproject.sk`       |
+| `0 *`                 | Picklist of `Sidekick` files in the path  |
+| `**`                 | Same as above  |
+| `0 ?`                 | Active `Sidekick` file is reported  |
+
+**Note:** If the given project file, `someproject.sk` in the sample above, doesn't already exist, you are asked if `Sidekick` shall create it for you.
+
 
 ## 2. Easy opening (or running) VFP files  
 
@@ -120,7 +133,7 @@ Note that in the `Sidekick` "organizer" file `Sidekick.sk`, the keyword `ed` mus
 |:-------------------------|:----------------------------------------------------------|
 | prg| Editor  |  
 | txt|Editor  |
-| pan| Editor |
+| sk | Editor |
 | dbf| SuperBrowse  |
 | scx| Form Designer|
 | vcx| Class Browser|
@@ -159,17 +172,14 @@ Likewise, a URL will be opened in the default Browser.
 
 <a id="proj">
 
-## 4. List of active "projects" or "group of files"  </a>
 
-| Command| Short                |        Result after pressing ![`F8`](Images/F8.png)|
-|:-------|:------------------|:----------------------------------------------------------|
-| `project`| `pr`, `-` (minus) | List of "projects" in the active .sk file|
 
-  
-![Project](Images/panproj.png)
+
+
+
 
 ## Tip: If you add `.sk` as a `Program Files` extension in VFP's options menu, you will be able to take advantage of IntelliSense in your `Sidekick` "projects".
 
-![panoptions](Images/panoptions.png)
+![options](Images/skoptions.png)
 
 

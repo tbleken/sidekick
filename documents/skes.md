@@ -1,30 +1,21 @@
-[![Sidekick](Images/SKLogo.png)](../README.md)
+6[![Sidekick](Images/SKLogo.png)](../README.md)
 
-## ES (EdisSource builder)
+## `ES` (EdisSource builder)
 
 This command will create the correct EditSource() command necessary to open the active form(s) and/or program file(s), and place the cursor on the current line.  
 
-**Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as this hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
+**Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as the hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
 
 | You type:                |        Result after pressing ![`F8`](Images/F8.png)|
 |:-------------------------|:----------------------------------------------------------|
 | es       | Sidekick will show the built syntax to open the active window, and ask if you want to copy it to the clipboard |
 | es all   | Same as above, all the open windows are included, except the active one |
 
-In order to force relative path , add `/r` as parameter. In other words:
+The different path options are defined in Sidekick Options (Thor Tools -> Options). However, this setting can be temporarily overridden:
+* `es /f` means full path, fullpath(filename) is used.
+* `es /j` means no path, justfname(filename) is used.
+* `es /r` means relative path, sys(2014(filename)) is used.
 
-| You type:                |        Result after pressing ![`F8`](Images/F8.png) |
-|:-------------------------|:----------------------------------------------------------|
-| `es /r`       | The EditSource() syntax with path relative to the current folder|
-| `es all /r`    | Same as above, except all the open windows are included |
-| `es /r all`    | Same as above|
-
-Likewise, if you have set relative path as default as described above, you can force full path by adding `/f`.
-
-| You type:                |        Result after pressing ![`F8`](Images/F8.png)              |
-|:-------------------------|:----------------------------------------------------------|
-| `es /f`       | The EditSource() syntax full path|
-| `es all /f`    | Same as above, all the open windows are included, except the active one |
 
 ## Sidekick project file [`Sidekick.sk`](skorg.md)
  

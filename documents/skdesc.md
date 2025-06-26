@@ -11,17 +11,23 @@ If your program files contains a description in one of the ten first lines, **Si
 
 #### Syntax samples: 
 
-| Window | You type: | Short version |  Result after pressing ![`F8`](Images/F8.png)|
-|-------|:--|:--------|:----------------------|
-| C | `Desc`  | `De`        | You get a list of all prgs in your path which have a description|
-| C | `Desc aaa` | `De aaa`|  List of files where the descriptions contains `aaa`|
-| E | `Desc` | `De` | A `* Description *` template is added in the current line (line 15 or less)|
+**In theCommand window:**  
+
+|You type: | Short version |  Result after pressing ![`F8`](Images/F8.png)|
+|:--|:--------|:----------------------|
+| `Desc`  | `De`        | You get a list of all prg's in your path which have a description|  
+|`Desc aaa` | `De aaa`|  List of files where the descriptions contains `aaa`|
+  
+**In the Editor window:** 
+
+|You type: | Short version |  Result after pressing ![`F8`](Images/F8.png)|
+|:--|:--------|:----------------------|
+|`Desc` | `De` | A `* Description *` template is added in the current line (line 15 or less)|
 
 
 `C`: Command Window  
 `E`: Any VFP editor, normally Modify Command  
 
-**Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as this hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
+**Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as the hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
 
-
-![Desc](Images/Pandesc.png)
+![Desc](Images/skdesc.png)

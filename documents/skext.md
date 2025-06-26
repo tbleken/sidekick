@@ -2,117 +2,124 @@
 
 ## Create your own `Sidekick` extensions
 
-The key to using your own `Sidekick` extensions, is to remember the `!` symbol, aka exclamation mark. It's easy to remeber since "VFP uses ! as shortcut for **run**".  
+The key to using your own `Sidekick` extensions, is to remember the `!` symbol, aka exclamation mark. It's easy to remember since "VFP uses `!` as shortcut for **run**".  
 
 All `Sidekick` extensions must be named `sk_xxx.prg` where `xxx` is the name of the tool.  
 
-**Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as this hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
+**Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as the hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
 
-To create a tool, type `!xxx` and press ![`F8`](Images/F8.png). You are told that the file doesn't exist, and asked if you want to create it. If you confirm, the file is created in one of the following folders:
+#### To create a `Sidekick` extension:  
 
-1. prog (if it exists)
-1. prg (if it exists)
-1. the default folder  
+Let's say you want to create a **Sidekick** extension called `xxx`. To create this tool, type `sk xxx` or `!xxx`, and press ![`F8`](Images/F8.png). You are told that the file doesn't exist, and asked if you want to create it. If you confirm, the file is created in one of the following folders:
+
+1. `prog` (if it exists)
+1. `prg` (if it exists)
+1. the current "root" folder  
 
 Write the code you want, and save it.
 
-#### To "run" a `Sidekick` extension  
+#### To "run" a `Sidekick` extension:  
 
-Type the same as mentioned above, `!xxx`, and press ![`F8`](Images/F8.png). **Sidekick** will locate the file and run it.  
+Type an exclamation mark (`!`) and the name of the extension, like `!xxx`, and press ![`F8`](Images/F8.png). **Sidekick** will locate the file and run it.  
+Any additional characters will be passed to the program as a text string.  
+You can even leave out the exclamation mark, `!`. This makes it possible to override a **Sidekick** command, which may, or may not, be what you want to do!
 
-#### To see a list of all your **Sidekick** extensions
+One sample: You have a program called `sk_4k.prg`, see below. This program sets the screen resolution to 4K (3840x2160). To run this program, all you have to do is type `4k` and press ![`F8`](Images/F8.png).    
 
-| Command| Short                |        Result after pressing ![`F8`](Images/F8.png)             |
-|:---|:----------------------|:----------------------------------------------------------|
-| sk | ! | Lists all your **Sidekick** extensions|
+#### To see a list of all your **Sidekick** extensions:
 
-Select the one you want, and press **Enter** to run it.
+| Command|       Result after pressing ![`F8`](Images/F8.png)             |
+|:---|:----------------------------------------------------------|
+| sk |Lists all your **Sidekick** extensions|
+| ! | Same as above |
 
-![ext](Images/panext.png)
+Select the one you want, and press **Enter** to run it.  
+
+
+![ext](Images/skext.png)
 
 If you know the name of the `Sidekick` extension:
 
-| Command| Short                |        Result after pressing ![`F8`](Images/F8.png) |
-|:---|:----------------------|:----------------------------------------------------------|
-| sk xxx | ! xxx | `Sidekick` extensions sk_xxx is run|
-| |!xxx |  Same as above, space not necessary with short version |
+| Command|  Result after pressing ![`F8`](Images/F8.png) |
+|:---|:----------------------------------------------------------|
+| sk xxx |  `Sidekick` extensions sk_xxx is run|
+|! xxx |  Same as above |
+|!xxx |  Same as above, space not necessary with this version |
+
+If there is no file matching `sk_xxx.prg`, it is created as described above.
 
 <a id="sked">
 
 #### To modify or create a `Sidekick` extension:  </a>
 
-| Command | Short                |        Result after pressing ![`F8`](Images/F8.png)|
-|:-------|:------------------|:----------------------------------------------------------|
-| sked <sub>Note 1</sub> | !!    | Lists all **Sidekick** extensions|
-| sked xxx <sub>Note 2</sub> | !! xxx |File `sk_xxx.prg` is opened in the editor |
-| | !!xxx |Same as above <sub> |
+| Command |      Result after pressing ![`F8`](Images/F8.png)|
+|:-------|:----------------------------------------------------------|
+| sked <sub>Note 1</sub> | Lists all **Sidekick** extensions|
+| !! | Same as above |
+| sked xxx <sub>Note 2</sub> | File `sk_xxx.prg` is opened in the editor |
+| !! xxx | Same as above |
+| !!xxx |Same as above, space not necessary with this version |
 
 Note 1: Select the one you want to edit, and press **Enter**.  
 Note 2: If the named **Sidekick** extension means a non existent file, you get an error.  
-Note 3: Space not necessary with short version  
 
-![exted](Images/panexted.png)  
 
+![exted](Images/skexted.png)  
+ 
 ### Sample Sidekick Extension
 
-This program, sk_use.prg, will ease the work of opening a table. It works differently in the command window and in a code window.  
+This program, `sk_4k.prg`, changes the screen resolution to 3840x2160.  
 
-In the command window, type
-```!Use yourtable``` and press ![`F8`](Images/F8.png). Now the table is used and selected.
+To run it, type `4k` in the command window, and press ![`F8`](Images/F8.png).
 
-In a code windows, do the same as above. The line is replaced with this:
-
-```foxpro
-Select (Select(JustStem("yourtable")))
-Use ("yourtable")
-```
-
-This is the contents of sk_use.prg:
+This is the contents of `sk_use.prg`:
 
 ```foxpro
-* Description: Sidekick tool to open a table *
-* sk_use.prg 
+* Description: Change screen resolution to 3840x2160 *
+Do changeres && Default is 3 which gives 3840x2160
+Function ChangeRes
+  Lparameters tnWidth, tnHeight
+  m.tnWidth = Evl(m.tnWidth, 3)
+  Do Case
+  Case m.tnWidth = 1
+    m.tnWidth = 1200
+    m.tnHeight = 800
+  Case m.tnWidth = 2
+    m.tnWidth = 1920
+    m.tnHeight = 1080
+  Case m.tnWidth = 3
+    m.tnWidth = 3840
+    m.tnHeight = 2160
+  Otherwise
+  Endcase
+  Local lnWidth, lnHeight, lnModeNum, lcDevMode
+  m.lnModeNum  = 0
+  m.lcDevMode  = Replicate(Chr(0), 156)
+  m.lnWidth    = Iif(Empty(m.tnWidth), 800, m.tnWidth)
+  m.lnHeight   = Iif(Empty(m.tnHeight), 600, m.tnHeight)
+  Declare Integer EnumDisplaySettings   In Win32API ;
+    String lpszDeviceName,;
+    Integer iModeNum, ;
+    String @lpDevMode
 
-Lparameters tcTable
-Local lcCommand, llThor, lnWindowType, loEditorWin
-m.llThor = Vartype(_Screen.cThorDispatcher) = [C]
-If m.llThor
-  m.loEditorWin = Execscript(_Screen.cThorDispatcher, [Thor_Proc_EditorWin])
-  m.lnWindowType = m.loEditorWin.FindWindow()
-  m.loEditorWin.Delete()
-  If m.lnWindowType = 0 && Command window
-    If !Empty(m.tcTable)
-      Text To m.lcCommand Textmerge Noshow Pretext 3
-        lnWorkArea = Select(JustStem("<<m.tcTable>>"))
-        If m.lnWorkArea > 0
-          Select (m.lnWorkArea)
-        Else
-          Select 0
-          try
-            Use ("<<m.tcTable>>")
-          Catch
-            messagebox( Textmerge('No table <<m.tcTable>> found'),48,'Warning!',5000)
-          EndTry
-        Endif
-        If Upper(Alias()) = Upper(JustStem("<<m.tcTable>>"))
-          Wait Window at 1,1 Textmerge('Table <<m.tcTable >> is opened') Timeout 3
-        Endif
-      Endtext
-    Else
-      m.lcCommand = 'Use'
-    EndIf
-    Execscript(m.lcCommand)
-  Else
-    If !Empty(m.tcTable)
-      Text To m.lcCommand Textmerge Noshow Pretext 3
-        Select (Select(JustStem("<<m.tcTable>>")))
-        Use ("<<m.tcTable>>")
-      Endtext
-    Else
-      m.lcCommand = 'Use'
-    Endif
+  Declare Integer ChangeDisplaySettings In Win32API String @lpDevMode, Integer dwFlags
+  Do While EnumDisplaySettings(Null, m.lnModeNum, @m.lcDevMode) <> 0
+    m.lnModeNum = m.lnModeNum + 1
+  Enddo
+  m.lcDevMode = Stuff(m.lcDevMode,  41, 4, LongToStr(1572864))
+  m.lcDevMode = Stuff(m.lcDevMode, 109, 4, LongToStr(m.tnWidth))  && Ancho
+  m.lcDevMode = Stuff(m.lcDevMode, 113, 4, LongToStr(m.tnHeight))  && Alto
+  ChangeDisplaySettings(@m.lcDevMode, 1)
+Endfunc
 
-    m.loEditorWin.Insert(m.lcCommand + Chr(13))
-  Endif
-Endif
+Function LongToStr
+  Lparameters lnLongVal
+  Local lnCnt, lcRetStr
+  m.lcRetStr = []
+  For m.lnCnt = 24 To 0 Step - 8
+    m.lcRetStr = Chr(Int(m.lnLongVal /(2^m.lnCnt))) + m.lcRetStr
+    m.lnLongVal = Mod(m.lnLongVal, (2^m.lnCnt))
+  Next
+  Return m.lcRetStr
+Endfunc
 ```
