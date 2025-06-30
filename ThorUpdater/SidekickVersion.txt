@@ -1,0 +1,23 @@
+lparameters toUpdateObject
+
+with toUpdateObject
+	.VersionNumber    = '1.00 - 20250630'
+	.AvailableVersion = 'Sidekick-1.00-09312-20250630'
+	.Component        = 'No'
+	.Notes            = GetNotes()
+endwith
+return toUpdateObject
+
+* Get the notes for the project.
+
+procedure GetNotes
+local lcNotes
+text to lcNotes noshow
+### 2025-06-30, Version 1.00 First version released to the public.
+
+All documentation is synchronized.
+
+![Picture](./documents/Images/vfpxpoweredby_alternative.gif)
+
+endtext
+return lcNotes

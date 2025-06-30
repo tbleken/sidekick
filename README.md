@@ -1,6 +1,8 @@
 
 [![How Sidekick works](documents/Images/SKLogo.png)](documents/skhow.md)
 
+SideKick version 1.00 released June 30, 2025.
+
 [What's new in this release](Change%20Log.md)
 
 ***
@@ -44,6 +46,7 @@ In addition to the "commands" listed above, these work **only** in the **Command
 
 |Command |Result after pressing `Sidekick` hotkey, e.g. ![`F8`](documents/Images/F8.png)|
 |:--|:-------------|
+|[? ](documents/skmnu.md)  | [Menu of relevant `Sidekick` options](documents/skmnu.md)|
 |[- (minus)](documents/skorg.md)  | [Opens default files listed in active .sk file](documents/skorg.md)|
 |[+](documents/skdir.md)  |[List all VFP files in the path](documents/skdir.md)|
 |[++](documents/skdir.md#dirc)  | [Same as above, more info in the table](documents/skdir.md#dirc)|
@@ -54,8 +57,7 @@ In addition to the "commands" listed above, these work **only** in the **Command
 |[Pr (or Project)](documents/skorg.md#proj) | [List of projects in active .pan file](documents/skorg.md#proj)|
 |[Tidy](documents/sktidy.md)  | [Easily move one or several files ](documents/sktidy.md)|
 |[Zip](documents/skzip.md)  | [Easily zip one or several files ](documents/skzip.md)|
-
-|Help ||This document|
+|Help |This document|
 
 # Code windows commands:
 Likewise, these "commands" **only** work in VFP's code editors (**Modify Command, Form or Class designer**):
@@ -64,7 +66,6 @@ Likewise, these "commands" **only** work in VFP's code editors (**Modify Command
 |:--|:-------------|
 |[-na-](documents/skrc.md)  | [Run the code where your cursor is](documents/skrc.md)|
 |[-blank-](documents/skmnu.md)  | [Menu of relevant Sidekick options](documents/skmnu.md)|
-|[? ](documents/skmnu.md)  | [Menu of relevant `Sidekick` options](documents/skmnu.md)|
 | [?= ](documents/skdb.md)|[Creates ? command for listing memvar name and value on the screen](documents/skdb.md)|
 |[+ ](documents/skins.md)| [Insert contents from a prg](documents/skins.md)|
 |[=](documents/skeval.md)| [Insert returned value from a function](documents/skeval.md)|

@@ -1,0 +1,7 @@
+AppName   = Sidekick
+AppID     = Sidekick
+Version   = 1.00
+Component = No
+
+ChangeLog      = Change Log.md
+Bin2PRGFolder  = InstalledFiles
