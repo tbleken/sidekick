@@ -28,3 +28,5 @@
 # code ref files
 *_ref.*
 /.markdownmonster
+/SKMRUList.dbf
+/SKOPTIONS.SK

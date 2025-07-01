@@ -797,7 +797,7 @@ DEFINE CLASS skoptions AS container
 	ENDPROC
 
 	PROCEDURE pgf1.Page4.cboSKProject.Valid
-		this.Parent.Parent.Parent.SetOption('Project', this.Value)
+		this.Parent.Parent.Parent.SetOption('Project', Alltrim(this.Value))
 	ENDPROC
 
 	PROCEDURE pgf1.Page4.spnMaxDescript.InteractiveChange

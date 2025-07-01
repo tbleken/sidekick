@@ -12,7 +12,7 @@ local;
 
 * Get the URL for the version and ZIP files.
 
-lcRepositoryURL   = 'https://github.com/VFPX/Sidekick'
+lcRepositoryURL   = 'https://github.com/tbleken/Sidekick'
 	&& the URL for the project's repository
 * Note: If you use a more recent version of git, your default branch may not be "master".
 lcDownloadsBranch = 'master'
@@ -41,6 +41,8 @@ with m.toUpdateObject
 	.ProjectCreationDate  = date(2025, 6, 30)
 	.Dependencies         = ''	&& a comma or space delimited list of other Thor applications (ApplicationName) that this project depends on
 	.RegisterWithThor     = m.lcRegisterWithThor
+  .InstallInTools        = .T.
+  .Dependencies      = ''
 
 endwith
 
