@@ -1,0 +1,18 @@
+Default project: 0
+****************************************
+* Description: Sidekick sample projects *
+
+#1 List of all DBF tables in my path:
+1 exe execScript(_screen.cthordispatcher,'thor_tool_sidekick', '++ .dbf')
+
+#2 List of all SCX forms in my path:
+2 exe execScript(_screen.cthordispatcher,'thor_tool_sidekick', '++ .scx')
+
+#3 List of all VCX class libraries in my path:
+3 exe execScript(_screen.cthordispatcher,'thor_tool_sidekick', '++ .vcx')
+
+#4 List of all PRG files in my path:
+4 exe execScript(_screen.cthordispatcher,'thor_tool_sidekick', '++ .prg')
+
+#5 Sidekick Help pages:
+5 https://github.com/tbleken/sidekick

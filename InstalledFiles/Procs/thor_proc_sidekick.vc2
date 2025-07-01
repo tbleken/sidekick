@@ -2069,8 +2069,8 @@ DEFINE CLASS sidekick AS container
 		*m: ozipinit
 		*m: processsidekickfile
 		*m: readclasslibs
+		*m: readoptions
 		*m: readregistryoption
-		*m: readsettings
 		*m: removedoublecharacter
 		*m: removeprocendproc
 		*m: replacecurrentline
@@ -2311,7 +2311,6 @@ DEFINE CLASS sidekick AS container
 			<memberdata name="dounzip" display="DoUnzip"/>
 			<memberdata name="readregistryoption" display="ReadRegistryOption"/>
 			<memberdata name="cutandgivemessage" display="CutAndGiveMessage"/>
-			<memberdata name="readsettings" display="ReadSettings"/>
 			<memberdata name="changesidekickfile" display="ChangeSidekickFile"/>
 			<memberdata name="createsidekickcursor" display="CreateSidekickCursor"/>
 			<memberdata name="checkorcreatesidekickfile" display="CheckOrCreateSidekickFile"/>
@@ -2342,6 +2341,7 @@ DEFINE CLASS sidekick AS container
 			<memberdata name="cskfile" display="cSKFile"/>
 			<memberdata name="ctabletokeepopen" display="cTableToKeepOpen"/>
 			<memberdata name="getfieldcount" display="GetFieldCount"/>
+			<memberdata name="readoptions" display="ReadOptions"/>
 		</VFPData>
 	*</PropValue>
 
@@ -5168,7 +5168,7 @@ DEFINE CLASS sidekick AS container
 		Lparameters tcCommand
 		
 		Local lnX
-		this.cVersion  = '1.00'
+		this.cVersion  = '1.02'
 		If !Pemstatus(_Screen, [lTest], 5)
 		  _Screen.AddProperty([lTest],.F.)
 		Endif
@@ -5181,8 +5181,7 @@ DEFINE CLASS sidekick AS container
 		This.lNoInterface = Vartype(m.tcCommand) = [L]
 		This.cCommentString = Evl(This.ReadRegistryOption([EditorCommentString]), [*!*])
 		Use in (Select(this.cCursor))
-		ExecScript(_screen.cthordispatcher,'thor_proc_getsidekickoptions')
-		This.ReadSettings()
+		this.ReadOptions()
 		Aused(This.aInUse)
 		this.HandleMRUTable('Check')
 		If Empty(m.tcCommand) And !This.lNoInterface
@@ -6111,17 +6110,56 @@ DEFINE CLASS sidekick AS container
 		
 	ENDPROC
 
-	PROCEDURE readregistryoption
-		Lparameters tcOption
-		Local lcReturn
+	PROCEDURE readoptions
+		#Define ccThorTool     'SideKick'
 		
-		tcOption = Evl(m.tcOption, [EditorCommentString])
-		lcReturn = Execscript(_Screen.cThorDispatcher, [Thor_Proc_GetRegistryOption.prg], m.tcOption )
-		Return m.lcReturn
-	ENDPROC
-
-	PROCEDURE readsettings
-		Local lcFolder
+		Local loSk As [empty]
+		Local lcFolder, loThor
+		
+		If [O] # Vartype(_Screen.oSKOptions)
+		  loThor      = Execscript(_Screen.cThorDispatcher, [Thor Engine=])
+		  If Vartype(m.loThor.GetOption('Project',ccThorTool)) = 'X' && No defaults, so we set them!
+		    m.loThor.SetOption('BackupFolder','Bu?',ccThorTool ) 
+		    m.loThor.SetOption('DefaultCommand','?',ccThorTool ) 
+		    m.loThor.SetOption('HelpURL', 'https://github.com/tbleken/sidekick',ccThorTool ) 
+		    m.loThor.SetOption('MRUTable','SMKRUList',ccThorTool ) 
+		    m.loThor.SetOption('Project','sidekick.sk', ccThorTool ) 
+		    m.loThor.SetOption('RunCommand','exe',ccThorTool ) 
+		    m.loThor.SetOption('Unzipfolder','SKUnzip',ccThorTool ) 
+		    m.loThor.SetOption('ZipTarget','SKZip_',ccThorTool ) 
+		    m.loThor.SetOption('GridAuto',.T.,ccThorTool ) 
+		    m.loThor.SetOption('NewFirst',.T.,ccThorTool ) 
+		    m.loThor.SetOption('DisplayCase',2,ccThorTool ) 
+		    m.loThor.SetOption('FontSize',14,ccThorTool ) 
+		    m.loThor.SetOption('MaxDescriptionLine',15,ccThorTool ) 
+		    m.loThor.SetOption('NextLength',4,ccThorTool ) 
+		    m.loThor.SetOption('PathReturned',1,ccThorTool ) 
+		    m.loThor.SetOption('WaitTimeout',3,ccThorTool ) 
+		    m.loThor.SetOption('ZipDelay',100,ccThorTool ) 
+		  Endif
+		
+		  
+		  loSk = Createobject([empty])
+		  AddProperty(m.loSk, [cDefaultCommand], m.loThor.GetOption([DefaultCommand],  ccThorTool))
+		  AddProperty(m.loSk, [nFontsize], m.loThor.GetOption([Fontsize],  ccThorTool))
+		  AddProperty(m.loSk, [lGridAuto], m.loThor.GetOption([GridAuto],  ccThorTool))
+		  AddProperty(m.loSk, [lNewFirst], m.loThor.GetOption([NewFirst],  ccThorTool))
+		  AddProperty(m.loSk, [nPathReturned], m.loThor.GetOption([PathReturned],  ccThorTool))
+		  AddProperty(m.loSk, [nDisplayCase], m.loThor.GetOption([DisplayCase],  ccThorTool))
+		  AddProperty(m.loSk, [cMRUTable], m.loThor.GetOption([MRUTable],  ccThorTool))
+		  AddProperty(m.loSk, [lNewFirst], m.loThor.GetOption([NewFirst],  ccThorTool))
+		  AddProperty(m.loSk, [nNextLength], m.loThor.GetOption([NextLength],  ccThorTool))
+		  AddProperty(m.loSk, [cBackupFolder], m.loThor.GetOption([BackupFolder],  ccThorTool))
+		  AddProperty(m.loSk, [cUnzipFolder], m.loThor.GetOption([UnzipFolder],  ccThorTool))
+		  AddProperty(m.loSk, [cZipTarget], m.loThor.GetOption([ZipTarget],  ccThorTool))
+		  AddProperty(m.loSk, [nZipDelay], m.loThor.GetOption([ZipDelay],  ccThorTool))
+		  AddProperty(m.loSk, [cProject], m.loThor.GetOption([Project],  ccThorTool))
+		  AddProperty(m.loSk, [cRunCommand], m.loThor.GetOption([RunCommand],  ccThorTool))
+		  AddProperty(m.loSk, [nMaxDescriptLine], m.loThor.GetOption([MaxDescriptLine],  ccThorTool))
+		  AddProperty(m.loSk, [cHelpURL], m.loThor.GetOption([HelpUrl],  ccThorTool))
+		  AddProperty(m.loSk, [nWaitTimeout], m.loThor.GetOption([WaitTimeout],  ccThorTool))
+		  _Screen.AddProperty([oSKOptions], m.loSk)
+		Endif
 		
 		This.nMaxDescriptLine = _Screen.oSKOptions.nMaxDescriptLine
 		This.nZipDelay = _Screen.oSKOptions.nZipDelay
@@ -6174,6 +6212,15 @@ DEFINE CLASS sidekick AS container
 		  Select (This.nSelect)
 		Endif
 		
+	ENDPROC
+
+	PROCEDURE readregistryoption
+		Lparameters tcOption
+		Local lcReturn
+		
+		tcOption = Evl(m.tcOption, [EditorCommentString])
+		lcReturn = Execscript(_Screen.cThorDispatcher, [Thor_Proc_GetRegistryOption.prg], m.tcOption )
+		Return m.lcReturn
 	ENDPROC
 
 	PROCEDURE removedoublecharacter

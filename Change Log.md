@@ -2,4 +2,9 @@
 
 All documentation is synchronized.
 
+### 2025-07-01, Version 1.02
+
+Minor bug fixes. Added code to set defaults when run before it's configured.
+Added `Sidekick.sk` file as a sample `Sidekick` project file.
+
 ![Picture](./documents/Images/vfpxpoweredby_alternative.gif)

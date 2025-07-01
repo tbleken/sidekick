@@ -1,7 +1,7 @@
 lparameters toUpdateObject
 
 with toUpdateObject
-	.VersionNumber    = '1.01 - 20250701'
+	.VersionNumber    = '1.02 - 20250701'
 	.AvailableVersion = 'Sidekick-1.01-09313-20250701'
 	.Component        = 'No'
 	.Notes            = GetNotes()
@@ -13,7 +13,7 @@ return toUpdateObject
 procedure GetNotes
 local lcNotes
 text to lcNotes noshow
-### 2025-06-30, Version 1.01 First version released to the public.
+### 2025-07-01, Version 1.02 Some bugs fixed
 
 All documentation is synchronized.
 
