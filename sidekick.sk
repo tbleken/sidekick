@@ -16,3 +16,14 @@ Default project: 0
 
 #5 Sidekick Help pages:
 5 https://github.com/tbleken/sidekick
+
+#6 Test
+6 exe set proc to sidekick.sk addi
+6 exewait window testpr123()
+6 exe Release Procedure sidekick.sk
+
+Procedure testpr123
+Text To lcText Noshow Textmerge Pretext 1+2+4
+  I dag er <<Date()>>
+EndText
+Return m.lcText 

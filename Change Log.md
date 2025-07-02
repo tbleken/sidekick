@@ -7,4 +7,8 @@ All documentation is synchronized.
 Minor bug fixes. Added code to set defaults when run before it's configured.
 Added `Sidekick.sk` file as a sample `Sidekick` project file.
 
+### 2025-07-01, Version 1.03
+
+Added option to store procedures in the `.sk` project files. See [skorg.md](documents/skorg.md) for details.
+
 ![Picture](./documents/Images/vfpxpoweredby_alternative.gif)

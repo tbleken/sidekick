@@ -1,8 +1,8 @@
 lparameters toUpdateObject
 
 with toUpdateObject
-	.VersionNumber    = '1.02 - 20250701'
-	.AvailableVersion = 'Sidekick-1.01-09313-20250701'
+	.VersionNumber    = '1.03 - 20250702'
+	.AvailableVersion = 'Sidekick-1.03-09314-20250702'
 	.Component        = 'No'
 	.Notes            = GetNotes()
 endwith
@@ -13,9 +13,18 @@ return toUpdateObject
 procedure GetNotes
 local lcNotes
 text to lcNotes noshow
-### 2025-07-01, Version 1.02 Some bugs fixed
+### 2025-06-30, Version 1.00 First version released to the public.
 
 All documentation is synchronized.
+
+### 2025-07-01, Version 1.02
+
+Minor bug fixes. Added code to set defaults when run before it's configured.
+Added `Sidekick.sk` file as a sample `Sidekick` project file.
+
+### 2025-07-01, Version 1.03
+
+Added option to store procedures in the `.sk` project files. See [skorg.md](documents/skorg.md) for details.
 
 ![Picture](./documents/Images/vfpxpoweredby_alternative.gif)
 

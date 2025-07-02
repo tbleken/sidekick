@@ -6458,7 +6458,8 @@ DEFINE CLASS sidekick AS container
 		  Case Getwordnum(m.tcCommand, 1) = [do]
 		    Execscript(m.tcCommand)
 		  Case Getwordnum(m.tcCommand, 1) = this.cRun 
-		    tcCommand = Strextract(m.tcCommand, this.cRun , [])
+		*!*      tcCommand = Strextract(m.tcCommand, this.cRun , [])
+		    tcCommand = Alltrim(Strextract(m.tcCommand, this.cRun , []),0,Chr(10), Chr(13), Chr(31), Chr(32))
 		    Execscript(m.tcCommand)
 		  Otherwise
 		    Try 
