@@ -2004,7 +2004,7 @@ DEFINE CLASS sidekick AS container
 		*m: cutcurrentline
 		*m: decodetimestamp
 		*m: dir2dt
-		*m: dobrow
+		*m: dobrowmodal
 		*m: dounzip
 		*m: dozip
 		*m: dropfieldifempty
@@ -2049,6 +2049,7 @@ DEFINE CLASS sidekick AS container
 		*m: handledescription
 		*m: handlemrutable
 		*m: highlightcurrentline
+		*m: indexiffield
 		*m: insertmethod
 		*m: insertresult
 		*m: listallcustomtools
@@ -2332,7 +2333,6 @@ DEFINE CLASS sidekick AS container
 			<memberdata name="cmrutable" display="cMRUTable"/>
 			<memberdata name="findedoptions" display="FindEdOptions"/>
 			<memberdata name="handlemrutable" display="HandleMRUTable"/>
-			<memberdata name="dobrow" display="DoBrow"/>
 			<memberdata name="cdefaultcommand" display="cDefaultCommand"/>
 			<memberdata name="showcurrentpath" display="ShowCurrentPath"/>
 			<memberdata name="fixpath" display="FixPath"/>
@@ -2342,6 +2342,8 @@ DEFINE CLASS sidekick AS container
 			<memberdata name="ctabletokeepopen" display="cTableToKeepOpen"/>
 			<memberdata name="getfieldcount" display="GetFieldCount"/>
 			<memberdata name="readoptions" display="ReadOptions"/>
+			<memberdata name="indexiffield" display="IndexIfField"/>
+			<memberdata name="dobrowmodal" display="DoBrowModal"/>
 		</VFPData>
 	*</PropValue>
 
@@ -2781,11 +2783,9 @@ DEFINE CLASS sidekick AS container
 		#Define Stripextension 'BIZ,$$$'
 		#Define ccCursor 'CurObjects'
 		
-		Local lcClass, lcClassFilter, lcClassInfo, lcClassLib, lcExact, lcFilter, lcNewText, lcParameter
+		Local lcClass, lcClassFilter, lcClassInfo, lcClassLib, lcFilter, lcNewText, lcParameter
 		Local lcPasteText, lcPrefix, lcSource, lcText, lcVariable, llClipboard, llMethod, llPartOfClass
 		Local llPartOfClasslib, llRefresh, lnClasses, lnHits, lnI, lnSelect, lnX, ltTimestamp
-		
-		lcExact = Set([Exact])
 		lnSelect = Select()
 		lcFilter = []
 		lcParameter = This.cParameter
@@ -2838,6 +2838,7 @@ DEFINE CLASS sidekick AS container
 		  Select (ccCursor)
 		  lnClasses = Reccount()
 		
+		*!*  Set Step On 
 		
 		  Do Case
 		    Case (Left(m.lcClassFilter, 1) == [*] Or Right(m.lcClassFilter, 1) == [*]) And Len(m.lcClassFilter) > 1
@@ -2845,19 +2846,19 @@ DEFINE CLASS sidekick AS container
 		        lcFilter = Chrtran(m.lcClassFilter, [*], [])
 		        lcVariable = [lo] + Proper(m.lcFilter)
 		      Endif
-		      Select * From (ccCursor) Where m.lcFilter $ Classname Into Cursor (ccCursor) Readwrite Order By 1, 2
+		      Select * From (ccCursor) Where m.lcFilter $ Lower(Classname) Into Cursor (ccCursor) Readwrite Order By 1, 2
 		      *!*        Select * From (ccCursor) Where Substr(m.lcClassFilter, 2) $ Classname Into Cursor (ccCursor) Readwrite Order By 1, 2
 		    Case Getwordcount(This.cParameter ) = 2
 		      lcVariable = Getwordnum(This.cParameterOriginal, 1)
 		      lcFilter = Getwordnum(This.cParameter, 2)
-		      Select * From (ccCursor) Where m.lcFilter $ Classname Into Cursor (ccCursor) Readwrite Order By 1, 2
+		      Select * From (ccCursor) Where m.lcFilter $ Lower(Classname) Into Cursor (ccCursor) Readwrite Order By 1, 2
 		    Case Empty(This.cParameter );
 		        Or This.cParameter == [*];
 		        Or m.lcClassFilter == [*];
 		        Or Empty(m.lcParameter)
 		      Select * From (ccCursor) Into Cursor (ccCursor) Readwrite Order By 1, 2
 		    Otherwise
-		      Select * From (ccCursor) Where m.lcClassFilter = Classname  Into Cursor (ccCursor) Readwrite Order By 1, 2
+		      Select * From (ccCursor) Where m.lcClassFilter = Lower(Classname)  Into Cursor (ccCursor) Readwrite Order By 1, 2
 		  Endcase
 		  lnHits = Reccount()
 		Else
@@ -2875,7 +2876,6 @@ DEFINE CLASS sidekick AS container
 		      This.GiveMessage([Illegal input!], 0, [], 5000)
 		      Return
 		  Endcase
-		  Set Exact Off
 		  llNoProject = Type([_vfp.activeproject.name]) = [U] Or Empty(_vfp.ActiveProject.Name)
 		  lcNewText = []
 		  Do Case
@@ -2994,9 +2994,6 @@ DEFINE CLASS sidekick AS container
 		  This.oEditorWin.Paste(m.lcPasteText)
 		Else
 		  This.GiveMessage([No match found!], 0 + 48, [], 5000)
-		Endif
-		If m.lcExact = [ON]
-		  Set Exact On
 		Endif
 		Select (m.lnSelect)
 		Return
@@ -3211,7 +3208,6 @@ DEFINE CLASS sidekick AS container
 		  This.cTableSelected = m.lcTable
 		  Do Case
 		    Case This.cCommand = [sf]
-		*!*          Select  from <<this.FixPath(lcFullName)>>
 		
 		      Text To m.lcText Noshow Textmerge Pretext 1 + 2 + 4
 		        Select  from <<StrExtract(this.FixPath(lcFullName),'','.')>>
@@ -3240,7 +3236,7 @@ DEFINE CLASS sidekick AS container
 		        This.CutCurrentLine()
 		        This.ReplaceCurrentLine(m.lcText + Chr(13))
 		        If [b] $ This.cOption
-		          This.GetDataFromGrid(Dbf(), [Field(1)], ,.F.)
+		          this.DoBrowModal()
 		        Else
 		          Return
 		        Endif
@@ -3353,10 +3349,10 @@ DEFINE CLASS sidekick AS container
 		Return Datetime(m.lnYear, m.lnMonth, m.lnDay, m.lnHour, m.lnMin, m.lnSec)
 	ENDPROC
 
-	PROCEDURE dobrow
+	PROCEDURE dobrowmodal
 		Lparameters tcValues
 		Local lcParameter, lcProcess
-		Local loPg as pg of tools\procs\thor_proc_sidekick.vcx
+		Local loPg as pg of thor_proc_sidekick.vcx
 		If !Empty(Dbf())
 		  tcValues = Evl(m.tcValues, [])
 		  If 'w' $ this.cOption 
@@ -3540,28 +3536,21 @@ DEFINE CLASS sidekick AS container
 	ENDPROC
 
 	PROCEDURE dropfieldifempty
-		Lparameters tcCursor, tcField, tnIndex
-		Local Array laDummy[1]
+		Lparameters tcCursor, tcField
 		
-		tnIndex = Evl(m.tnIndex, 0)
+		Local llDrop
+		
 		If !Empty(Field(m.tcField, m.tcCursor))
 		  Select (m.tcCursor)
 		  llDrop = .T.
-		  Scan 
+		  Scan
 		    If !Empty(Evaluate(m.tcField))
-		      m.llDrop = .F.
+		      llDrop = .F.
 		      Exit
 		    Endif
 		  Endscan
-		  If m.llDrop  && m.laDummy = 0
+		  If m.llDrop
 		    Alter Table (m.tcCursor) Drop Column (m.tcField)
-		  Else
-		    Do Case
-		      Case m.tnIndex = 1
-		        ExecScript(Textmerge('Index on <<m.tcField>> tag <<m.tcField >>'))  
-		      Case m.tnIndex = 2
-		        ExecScript(Textmerge('Index on Upper(<<m.tcField>>) tag <<m.tcField >>'))  
-		    Endcase
 		  Endif
 		Endif
 		
@@ -3661,7 +3650,6 @@ DEFINE CLASS sidekick AS container
 
 	PROCEDURE finddiroptions
 		Local lcParameter, llSuccess
-		
 		lcParameter = []
 		If This.nWindowType <= 1
 		  llSuccess = .T.
@@ -3674,6 +3662,12 @@ DEFINE CLASS sidekick AS container
 		      This.AddOption([a])
 		    Case This.nWindowType = 0 And Inlist(Left(This.cCommand, 1), [+])
 		      lcParameter = Substr(This.cCommand, 2)
+		    Case Inlist(Left(This.cCommand, 3), [dre], 'drr')
+		      lcParameter = Substr(This.cCommand, 4)
+		      This.AddOption([e])
+		    Case Inlist(Left(This.cCommand, 3), [drx])
+		      lcParameter = Substr(This.cCommand, 4)
+		      This.AddOption([a])
 		    Case Inlist(Left(This.cCommand, 2), [dr])
 		      lcParameter = Substr(This.cCommand, 3)
 		    Otherwise
@@ -3702,7 +3696,7 @@ DEFINE CLASS sidekick AS container
 		  Case This.nWindowType = 0 And This.cCommand == [ed?] And [w] $ This.cOption
 		    Use (This.cMRUTable) In Select(This.cMRUTable)
 		    Select (This.cMRUTable)
-		    This.DoBrow([W])
+		    This.DoBrowModal([W])
 		    Use In Select(This.cMRUTable)
 		  Case This.nWindowType > 0 And This.cCommand == [ed+] Or (This.cCommand == [ed] And This.cParameter == [+])
 		    This.HandleMRUTable([Add])
@@ -3884,8 +3878,9 @@ DEFINE CLASS sidekick AS container
 		        Or Left(This.cCommand, 3) = [inc])
 		    This.GetHeader()
 		  Case This.cCommand == [br] And !Empty(Dbf())
-		    This.DoBrow()
-		    *!*      This.GetDataFromGrid(Dbf(), [Field(1)], ,.F.)
+		    this.DoBrowModal()
+		  Case This.cCommand == [br]
+		    This.GiveMessage('No table is open in the current work area.')
 		  Case This.cCommand = [be]
 		    This.CreateBindEvent()
 		  Case This.cCommand = [rt]
@@ -4110,7 +4105,8 @@ DEFINE CLASS sidekick AS container
 
 	PROCEDURE getdatafromgrid
 		Lparameters tcCaption, tcReturnField, tnHideColumns, tlModeless, tcPGParameter
-		Local loPg As pg Of pg.vcx
+		Local loPg As pg Of thor_proc_sidekick.vcx
+		
 		Local lcCurrent, lcF3, lcF4, lcF5, lcFilter, lcHideColumns, lcParameter, lcProcess, lcReturn
 		Local lnModeless
 		
@@ -5164,11 +5160,27 @@ DEFINE CLASS sidekick AS container
 		
 	ENDPROC
 
+	PROCEDURE indexiffield
+		Lparameters tcCursor, tcField, tnIndex
+		Local Array laDummy[1]
+		
+		tnIndex = Evl(m.tnIndex, 0)
+		If !Empty(Field(m.tcField, m.tcCursor))
+		  Do Case
+		    Case m.tnIndex = 1
+		      Execscript(Textmerge([Index on <<m.tcField>> tag <<m.tcField >>]))
+		    Case m.tnIndex = 2
+		      Execscript(Textmerge([Index on Upper(<<m.tcField>>) tag <<m.tcField >>]))
+		  Endcase
+		Endif
+		
+	ENDPROC
+
 	PROCEDURE Init
 		Lparameters tcCommand
 		
 		Local lnX
-		this.cVersion  = '1.02'
+		this.cVersion  = '1.04'
 		If !Pemstatus(_Screen, [lTest], 5)
 		  _Screen.AddProperty([lTest],.F.)
 		Endif
@@ -5263,8 +5275,6 @@ DEFINE CLASS sidekick AS container
 		  Scan
 		    lcSource = curprgs.Fname
 		    lnProcs = Aprocinfo(laProc, curprgs.Fname, 0)
-		    If Lower(curprgs.fname)='tempa'
-		    Endif
 		    For lnX = 1 To m.lnProcs
 		      If m.laProc(m.lnX, 3) = [Procedure] And (m.lcMethod $ Lower(m.laProc(m.lnX, 1)) Or Empty(m.lcMethod)) && And ![.] $ m.laProc(m.lnX, 1) 
 		        lcProc = m.laProc(m.lnX, 1)
@@ -5557,6 +5567,7 @@ DEFINE CLASS sidekick AS container
 		    Endfor
 		Endcase
 		If Reccount(m.lcCursorfiles) = 0
+		  Wait clear
 		  This.RunEd(This.cParameter )
 		  Return
 		Endif
@@ -5580,7 +5591,6 @@ DEFINE CLASS sidekick AS container
 		  Alter Table (m.lcCursorfiles) Add Column Fields i
 		  Alter Table (m.lcCursorfiles) Add Column MemoSize i
 		Endif
-		*!*  Set Step On 
 		
 		Do Case
 		  Case [a] $ This.cOption Or [e] $ This.cOption
@@ -5652,12 +5662,18 @@ DEFINE CLASS sidekick AS container
 		    Endscan
 		  Endif
 		Endif
-		This.DropFieldIfEmpty(m.lcCursorfiles, [records], 1)
-		This.DropFieldIfEmpty(m.lcCursorfiles, [lines], 1)
-		This.DropFieldIfEmpty(m.lcCursorfiles, [Fields], 1)
+		This.DropFieldIfEmpty(m.lcCursorfiles, [records])
+		This.DropFieldIfEmpty(m.lcCursorfiles, [lines])
+		This.DropFieldIfEmpty(m.lcCursorfiles, [Fields])
 		This.DropFieldIfEmpty(m.lcCursorfiles, [text])
-		This.DropFieldIfEmpty(m.lcCursorfiles, [descript], 2)
-		This.DropFieldIfEmpty(m.lcCursorfiles, [memosize], 1)
+		This.DropFieldIfEmpty(m.lcCursorfiles, [descript])
+		This.DropFieldIfEmpty(m.lcCursorfiles, [memosize])
+		This.IndexIfField(m.lcCursorfiles,'records',1)
+		This.IndexIfField(m.lcCursorfiles, [lines], 1)
+		This.IndexIfField(m.lcCursorfiles, [Fields], 1)
+		This.IndexIfField(m.lcCursorfiles, [descript], 2)
+		This.IndexIfField(m.lcCursorfiles, [memosize], 1)
+		
 		If [l] $ This.cOption And Inlist(m.tcFilter, [dbf], [.vcx]) And [v] $ This.cOption && vcx
 		  Select * From (m.lcCursorfiles) Into Cursor (m.lcCursorfiles + [1]) Readwrite
 		  Use In (m.lcCursorfiles)
@@ -6424,6 +6440,8 @@ DEFINE CLASS sidekick AS container
 		      loTools = Execscript (_Screen.cThorDispatcher, [Class= tools from pemeditor])
 		      m.loTools.EditSourceX(m.lcParam1 )
 		    Endif
+		  Case m.lcParam1= '.*'
+		    Return 
 		  Otherwise
 		    loTools = Execscript (_Screen.cThorDispatcher, [Class= tools from pemeditor])
 		    m.loTools.EditSourceX(m.lcParam1 )
@@ -6458,7 +6476,6 @@ DEFINE CLASS sidekick AS container
 		  Case Getwordnum(m.tcCommand, 1) = [do]
 		    Execscript(m.tcCommand)
 		  Case Getwordnum(m.tcCommand, 1) = this.cRun 
-		*!*      tcCommand = Strextract(m.tcCommand, this.cRun , [])
 		    tcCommand = Alltrim(Strextract(m.tcCommand, this.cRun , []),0,Chr(10), Chr(13), Chr(31), Chr(32))
 		    Execscript(m.tcCommand)
 		  Otherwise

@@ -26,7 +26,7 @@ When done from one of VFP's code editors, code like this will be inserted when y
 Use data\projects.dbf in Select("projects")
 ```
 
-And if you do the same from the Command Window, the chosen table is selected and will appear in a form with a grid with searching facilities. 
+And if you do the same from the Command Window, the chosen table is selected and will appear in a modal form with a grid and searching facilities. 
 
 ![SKUS2](Images/skus2.png)
 
@@ -37,7 +37,7 @@ Also in the command window, the typed "command" is replaced with something like 
 * Use data\projects.dbf
 ```
 
-**NB!** If you don't want to see the form with the grid, you can add the switch `/-b`, like `us my /-b`. Or you change it permanently in `Sidekick Options` in `Thor Tools -> Options`.
+**NB!** If you don't want to see the modal form with the grid, you can add the switch `/-b`, like `us my /-b`. Or you change it permanently in `Sidekick Options` in `Thor Tools -> Options`.
 
 Note that with this change in behavior, you can still get the grid by using the `/b` switch, like `us my /b`.  
 

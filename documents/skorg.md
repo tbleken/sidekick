@@ -58,22 +58,6 @@ Here is the content of a typical `Sidekick.sk`:
 >
 > #5 Zip utility, needs more classes, and must be tested  
 > 5 utilities.vcx.zipfiles.zipfile:2 
-> 
-> #6 Delete .bak and .fxp files  
-> \* Demonstrates how to use a function defined in the same file
-> 6 exe set proc to sidekick.sk  
-> 6 exe wait window Tidier()  
-> 6 Release proc sidekick.sk  
->
-> Procedure Tidier  
->   Try  
-> &nbsp;    Delete *.fxp  
-> &nbsp;    Delete *.pak  
-> &nbsp;    lcMessage = 'Files deleted!'  
->   Catch  
-> &nbsp;    lcMessage = 'File deletion failed!'  
->   Endtry  
-> Return lcMessage  
 
 To open **all** the files prefixed with a number, type that number in the Command window and press `F8`. This may be any kind of file as seen in the previous paragraphs. Typically these will be a group of related files that you work with in a VFP project, also non VFP files.
 

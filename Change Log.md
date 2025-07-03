@@ -9,6 +9,10 @@ Added `Sidekick.sk` file as a sample `Sidekick` project file.
 
 ### 2025-07-01, Version 1.03
 
-Added option to store procedures in the `.sk` project files. See [skorg.md](documents/skorg.md) for details.
+Minor bug fixes.
+
+### 2025-07-03, Version 1.04
+
+More minor bug fixes. 
 
 ![Picture](./documents/Images/vfpxpoweredby_alternative.gif)
