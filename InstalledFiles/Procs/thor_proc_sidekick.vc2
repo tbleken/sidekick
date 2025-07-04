@@ -3827,6 +3827,12 @@ DEFINE CLASS sidekick AS container
 		    This.ModifyForm()
 		  Case This.cCommand == [no]
 		    This.CreateNo()
+		  Case This.cCommand == [ec] and !Empty(this.cParameter)
+		    Try 
+		      ExecScript(this.cParameter )
+		    Catch 
+		      this.GiveMessage(Textmerge('Unknown command "<<this.cParameter>>"!'))
+		    Endtry
 		  Case This.cCommand == [ec] And [C] = Vartype(This.cClip )
 		    This.TryExecScript()
 		  Case Left(This.cCommand, 2) == [?=] And (Len(This.cCommand) > 2 Or !Empty(This.cParameter ))
@@ -5180,7 +5186,7 @@ DEFINE CLASS sidekick AS container
 		Lparameters tcCommand
 		
 		Local lnX
-		this.cVersion  = '1.04'
+		this.cVersion  = '1.05'
 		If !Pemstatus(_Screen, [lTest], 5)
 		  _Screen.AddProperty([lTest],.F.)
 		Endif
