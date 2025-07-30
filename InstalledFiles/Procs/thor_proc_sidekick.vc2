@@ -1988,29 +1988,17 @@ DEFINE CLASS sidekick AS container
 		*m: addlinesandtext
 		*m: addoption
 		*m: arrayscan
-		*m: browsealltools
-		*m: browsehotkeys
 		*m: changesidekickfile
 		*m: checkorcreatesidekickfile
 		*m: closeopenedtables
-		*m: createbindevent
 		*m: createcommentline
-		*m: createes
-		*m: createno
-		*m: createqmark
-		*m: createsidekickcursor
-		*m: createusesyntax
 		*m: cutandgivemessage
 		*m: cutcurrentline
 		*m: decodetimestamp
 		*m: dir2dt
 		*m: dobrowmodal
-		*m: dounzip
-		*m: dozip
 		*m: dropfieldifempty
-		*m: editcustomtool
 		*m: findcommand
-		*m: finddiroptions
 		*m: findedoptions
 		*m: findfile
 		*m: findfunction
@@ -2029,7 +2017,6 @@ DEFINE CLASS sidekick AS container
 		*m: getfieldcount
 		*m: getfilelisttoprocess		&& Pass a comma delimited file list, return list with corresponding files added. Pass .T: to include secondary files (.bak, .err e.t.c.)
 		*m: getfilesinpath
-		*m: getheader
 		*m: gethelptopics
 		*m: getlastcharacter
 		*m: getlastfile
@@ -2046,29 +2033,16 @@ DEFINE CLASS sidekick AS container
 		*m: getsortabledate		&& Returns YYMMDD format from date
 		*m: getthorfiles
 		*m: givemessage
-		*m: handledescription
 		*m: handlemrutable
 		*m: highlightcurrentline
 		*m: indexiffield
-		*m: insertmethod
-		*m: insertresult
-		*m: listallcustomtools
 		*m: listdescript
 		*m: listfiles
-		*m: listopentables
-		*m: listprojects
 		*m: listusedtables
-		*m: makedodefault
-		*m: makefieldpicker
-		*m: makeloremtext
-		*m: makerandowtext
-		*m: makesktestarea
 		*m: makestringfromarray
-		*m: modifyform
 		*m: notes
 		*m: oeditorwininit
 		*m: ozipinit
-		*m: processsidekickfile
 		*m: readclasslibs
 		*m: readoptions
 		*m: readregistryoption
@@ -2081,13 +2055,46 @@ DEFINE CLASS sidekick AS container
 		*m: runprogram
 		*m: runsidekickline
 		*m: scanallwindows
-		*m: setstepon
 		*m: setupgrid
 		*m: setupregistry
 		*m: shellx
 		*m: showcase
-		*m: showcurrentpath
-		*m: tryexecscript
+		*m: skfactory
+		*m: sk_be
+		*m: sk_br
+		*m: sk_db
+		*m: sk_dd
+		*m: sk_def
+		*m: sk_desc
+		*m: sk_dr
+		*m: sk_ec
+		*m: sk_ed
+		*m: sk_es
+		*m: sk_eval
+		*m: sk_fp
+		*m: sk_hei
+		*m: sk_help
+		*m: sk_hk
+		*m: sk_inc
+		*m: sk_ins
+		*m: sk_lor
+		*m: sk_menu
+		*m: sk_mf
+		*m: sk_no
+		*m: sk_ot
+		*m: sk_pa
+		*m: sk_proj
+		*m: sk_rt
+		*m: sk_sk
+		*m: sk_sked
+		*m: sk_ta
+		*m: sk_tools
+		*m: sk_unzip
+		*m: sk_us
+		*m: sk_ver
+		*m: sk_zero
+		*m: sk_zip
+		*m: splitcommand
 		*m: tryexecute
 		*m: writecurrentline
 		*p: cbackupfolder		&& Name of folder for "deleted" files
@@ -2121,6 +2128,7 @@ DEFINE CLASS sidekick AS container
 		*p: cskfile		&& Prefix for Sidekick extensions
 		*p: ctableselected
 		*p: ctabletokeepopen		&& Table NOT to close on exit
+		*p: ctestarea
 		*p: ctitle
 		*p: cunzipfolder		&& Default folder to unzip into
 		*p: cversion
@@ -2159,7 +2167,6 @@ DEFINE CLASS sidekick AS container
 	*</DefinedPropArrayMethod>
 
 	*<PropValue>
-		cbackupfolder = BU?
 		cclip = 
 		ccommand = 
 		ccommandoriginal = 
@@ -2190,11 +2197,12 @@ DEFINE CLASS sidekick AS container
 		cskfile = sk_                                                            
 		ctableselected = 
 		ctabletokeepopen = 
+		ctestarea = 
 		ctitle = 
 		cunzipfolder = PanUnzip                                                       
 		cversion = 
 		cziptarget = Panzip_                                                        
-		Height = 406
+		Height = 330
 		laddextraextensions = .F.
 		lcomment = .F.
 		lnobrowse = .F.
@@ -2242,17 +2250,12 @@ DEFINE CLASS sidekick AS container
 			<memberdata name="shellx" display="ShellX"/>
 			<memberdata name="addlinesandtext" display="AddLinesAndText"/>
 			<memberdata name="createcommentline" display="CreateCommentLine"/>
-			<memberdata name="createes" display="CreateES"/>
-			<memberdata name="createno" display="CreateNO"/>
-			<memberdata name="createqmark" display="CreateQmark"/>
 			<memberdata name="cutcurrentline" display="CutCurrentLine"/>
-			<memberdata name="editcustomtool" display="EditCustomTool"/>
 			<memberdata name="getallfiles" display="GetAllFiles"/>
 			<memberdata name="getdatafromurl" display="GetDataFromURL"/>
 			<memberdata name="getdescript" display="GetDescript"/>
 			<memberdata name="geteditsourcecode" display="GetEditSourceCode"/>
 			<memberdata name="getfilesinpath" display="GetFilesInPath"/>
-			<memberdata name="getheader" display="GetHeader"/>
 			<memberdata name="getlastword" display="GetLastWord"/>
 			<memberdata name="getlineno" display="GetLineNo"/>
 			<memberdata name="getlinestoprocess" display="GetLinesToProcess"/>
@@ -2263,11 +2266,8 @@ DEFINE CLASS sidekick AS container
 			<memberdata name="getrecordsindbf" display="GetRecordsInDBF"/>
 			<memberdata name="getthorfiles" display="GetThorFiles"/>
 			<memberdata name="highlightcurrentline" display="HighlightCurrentLine"/>
-			<memberdata name="insertmethod" display="InsertMethod"/>
-			<memberdata name="insertresult" display="InsertResult"/>
 			<memberdata name="listdescript" display="ListDescript"/>
 			<memberdata name="listfiles" display="ListFiles"/>
-			<memberdata name="listprojects" display="ListProjects"/>
 			<memberdata name="getmethdfromprg" display="GetMethdFromPrg"/>
 			<memberdata name="readclasslibs" display="ReadClassLibs"/>
 			<memberdata name="removeprocendproc" display="RemoveProcEndproc"/>
@@ -2279,22 +2279,11 @@ DEFINE CLASS sidekick AS container
 			<memberdata name="showcase" display="ShowCase"/>
 			<memberdata name="tryexecute" display="TryExecute"/>
 			<memberdata name="writecurrentline" display="WriteCurrentLine"/>
-			<memberdata name="browsealltools" display="BrowseAllTools"/>
-			<memberdata name="browsehotkeys" display="BrowseHotKeys"/>
-			<memberdata name="tryexecscript" display="TryExecScript"/>
-			<memberdata name="handledescription" display="HandleDescription"/>
 			<memberdata name="cdescriptionmask1" display="cDescriptionMask1"/>
 			<memberdata name="cdescriptionmask2" display="cDescriptionMask2"/>
-			<memberdata name="createbindevent" display="CreateBindEvent"/>
-			<memberdata name="makeloremtext" display="MakeLoremText"/>
-			<memberdata name="makerandowtext" display="MakeRandowText"/>
 			<memberdata name="coption" display="cOption"/>
-			<memberdata name="finddiroptions" display="FindDirOptions"/>
-			<memberdata name="makedodefault" display="MakeDoDefault"/>
-			<memberdata name="makefieldpicker" display="MakeFieldPicker"/>
 			<memberdata name="removedoublecharacter" display="RemoveDoubleCharacter"/>
 			<memberdata name="cfilter" display="cFilter" favorites="True"/>
-			<memberdata name="dozip" display="DoZip"/>
 			<memberdata name="gethelptopics" display="GetHelpTopics"/>
 			<memberdata name="getlastfile" display="GetLastFile"/>
 			<memberdata name="getnextfile" display="GetNextFile"/>
@@ -2309,23 +2298,16 @@ DEFINE CLASS sidekick AS container
 			<memberdata name="makestringfromarray" display="MakeStringFromArray"/>
 			<memberdata name="givemessage" display="GiveMessage"/>
 			<memberdata name="getsortabledate" display="GetSortableDate"/>
-			<memberdata name="dounzip" display="DoUnzip"/>
 			<memberdata name="readregistryoption" display="ReadRegistryOption"/>
 			<memberdata name="cutandgivemessage" display="CutAndGiveMessage"/>
 			<memberdata name="changesidekickfile" display="ChangeSidekickFile"/>
-			<memberdata name="createsidekickcursor" display="CreateSidekickCursor"/>
 			<memberdata name="checkorcreatesidekickfile" display="CheckOrCreateSidekickFile"/>
 			<memberdata name="findskoptions" display="FindSKOptions"/>
-			<memberdata name="makesktestarea" display="MakeSKTestArea"/>
-			<memberdata name="processsidekickfile" display="ProcessSidekickFile"/>
 			<memberdata name="runsidekickline" display="RunSidekickLine"/>
 			<memberdata name="findswitch" display="FindSwitch"/>
 			<memberdata name="notes" display="Notes"/>
 			<memberdata name="addoption" display="AddOption"/>
-			<memberdata name="setstepon" display="SetStepOn"/>
-			<memberdata name="modifyform" display="ModifyForm"/>
 			<memberdata name="listusedtables" display="ListUsedTables"/>
-			<memberdata name="listallcustomtools" display="ListAllCustomTools"/>
 			<memberdata name="dropfieldifempty" display="DropFieldIfEmpty"/>
 			<memberdata name="decodetimestamp" display="DecodeTimeStamp"/>
 			<memberdata name="closeopenedtables" display="CloseOpenedTables"/>
@@ -2334,9 +2316,7 @@ DEFINE CLASS sidekick AS container
 			<memberdata name="findedoptions" display="FindEdOptions"/>
 			<memberdata name="handlemrutable" display="HandleMRUTable"/>
 			<memberdata name="cdefaultcommand" display="cDefaultCommand"/>
-			<memberdata name="showcurrentpath" display="ShowCurrentPath"/>
 			<memberdata name="fixpath" display="FixPath"/>
-			<memberdata name="listopentables" display="ListOpenTables"/>
 			<memberdata name="lnomessage" display="lNoMessage"/>
 			<memberdata name="cskfile" display="cSKFile"/>
 			<memberdata name="ctabletokeepopen" display="cTableToKeepOpen"/>
@@ -2344,6 +2324,9 @@ DEFINE CLASS sidekick AS container
 			<memberdata name="readoptions" display="ReadOptions"/>
 			<memberdata name="indexiffield" display="IndexIfField"/>
 			<memberdata name="dobrowmodal" display="DoBrowModal"/>
+			<memberdata name="skfactory" display="SKFactory"/>
+			<memberdata name="ctestarea" display="cTestArea"/>
+			<memberdata name="splitcommand" display="SplitCommand"/>
 		</VFPData>
 	*</PropValue>
 
@@ -2439,93 +2422,6 @@ DEFINE CLASS sidekick AS container
 		return lnRow
 	ENDPROC
 
-	PROCEDURE browsealltools
-		#Define ccTool         'Browse all Thor Tools'
-		Local lcDesc, lcDestAlias, lcHotkey, lcProg, llExcludeNotUsed, lnSelect
-		
-		Local Array laDummy[1]
-		
-		llExcludeNotUsed = Execscript(_Screen.cThorDispatcher, [Get Option=], ccTool, ccTool)
-		lcDestAlias = [curHotKeys]
-		Select 0
-		Wait Window 'Wait while Sidekick processes files!' at 10,25 nowait noclear
-		Execscript(_Screen.cThorDispatcher, [Thor_Proc_GetHotKeyDefs], m.lcDestAlias, m.llExcludeNotUsed )
-		Select Distinct Cast(Ltrim(Descript) As c(100)) As Descript, Chrtran(HotKey, [-], [+]) As HotKey, Cast([] As c(10)) As sortkey, PRGName, StatusBar From (m.lcDestAlias);
-		  Into Cursor (m.lcDestAlias ) Where Left(Descript, 1) # [ ] And Substr(Descript, 3, 1) # [-];
-		  Readwrite
-		Scan
-		  lcHotkey = HotKey
-		  Select Recno() From (_Screen.Cthorfolder + [\source\hotkeys])  Hotkeys Where Hotkeys.Key = Substr(m.lcHotkey, 1 + Rat([+], m.lcHotkey ), 10) Into Array laDummy
-		  If _Tally > 0
-		    Replace sortkey With Padl(m.laDummy, 2, [ ]) + m.lcHotkey
-		  Endif
-		Endscan
-		Select HotKey, Descript, PRGName From (m.lcDestAlias) Into Cursor (m.lcDestAlias) Readwrite
-		lcDesc = []
-		lcHotkey = []
-		Scan
-		  If Lower(Descript) == m.lcDesc And Lower(HotKey) = m.lcHotkey
-		    Delete
-		  Endif
-		  lcDesc = Lower(Descript)
-		  lcHotkey = Lower(HotKey)
-		EndScan
-		If !Empty(this.cparameter)
-		  For lnX = 1 to GetWordCount(this.cparameter)
-		    lcWord = GetWordNum(this.cparameter, m.lnX)
-		    Select * From (m.lcDestAlias ) Into Cursor (m.lcDestAlias ) Readwrite where m.lcWord  $ Lower( descript + '|' + prgname)
-		  Endfor
-		Endif
-		Select * From (m.lcDestAlias ) Into Cursor (m.lcDestAlias ) Readwrite order by descript Where !Deleted()
-		Index On HotKey Tag HotKey
-		Index On Upper(Descript) Tag Descript
-		Set Order To 
-		Go top
-		Wait clear
-		lcProg = this.GetDataFromGrid([Thor tools], [prgname], 1)
-		Use
-		If !Empty(m.lcProg)
-		  Execscript(_Screen.cThorDispatcher, m.lcProg)
-		Endif
-		
-		
-	ENDPROC
-
-	PROCEDURE browsehotkeys
-		#Define ccTool         'Browse all Thor Tools'
-		Local lcDestAlias, lcHotkey, lcProg, llExcludeNotUsed, lnSelect
-		
-		Local Array laDummy[1]
-		
-		llExcludeNotUsed = Execscript(_Screen.cThorDispatcher, [Get Option=], ccTool, ccTool)
-		lcDestAlias = [curHotKeys]
-		Select 0
-		Execscript(_Screen.cThorDispatcher, [Thor_Proc_GetHotKeyDefs], m.lcDestAlias, m.llExcludeNotUsed )
-		Select Distinct Cast(Descript As c(100)) As Descript, Chrtran(HotKey, [-], [+]) As HotKey, Cast([] As c(10)) As sortkey, PRGName, StatusBar From (m.lcDestAlias);
-		  Where !Empty(HotKey ) And Substr(Descript, 3, 1) # [-] Into Cursor (m.lcDestAlias ) ;
-		  Readwrite
-		Scan
-		  lcHotkey = HotKey
-		  Select Recno() From (_Screen.Cthorfolder + [\source\hotkeys])  Hotkeys Where Hotkeys.Key = Substr(m.lcHotkey, 1 + Rat([+], m.lcHotkey ), 10) Into Array laDummy
-		  Replace sortkey With Padl(m.laDummy, 2, [ ]) + m.lcHotkey
-		Endscan
-		Select Distinct HotKey, Descript, PRGName, sortkey From (m.lcDestAlias) Into Cursor (m.lcDestAlias) Order By sortkey Readwrite
-		Select HotKey, Descript, PRGName From (m.lcDestAlias) Into Cursor (m.lcDestAlias) Readwrite
-		Index On Lower(HotKey) Tag HotKey
-		Index On Lower(Descript) Tag Descript
-		Set Order To
-		lcProg = this.GetDataFromGrid([Thor tools], [prgname], 1)
-		Use
-		If !Empty(m.lcProg)
-		  Execscript(_Screen.cThorDispatcher, m.lcProg)
-		Endif
-		If !this.lSKComment 
-		  this.CutCurrentLine()
-		Endif
-		
-		
-	ENDPROC
-
 	PROCEDURE changesidekickfile
 		Local lcContent, lcCurrent, lcDescript, lcFile, lcFilename, lcParameter, lcText, lnFiles, lnLines
 		Local lnX
@@ -2534,9 +2430,9 @@ DEFINE CLASS sidekick AS container
 		Local Array laFiles[1]
 		
 		lcFile =  This.cSidekickFile
-		lcParameter = Substr(This.cCommand, 2)
-		lcParameter = Evl(m.lcParameter, This.cParameter)
-		If Inlist(m.lcParameter, [*], [-], [+], [/] )
+		
+		lcParameter = This.cParameter
+		If Inlist(m.lcParameter, [*], [-], [+], [/] ) 
 		  lnFiles = Adir(laFiles, [*.sk])
 		  Do Case
 		    Case m.lnFiles = 0
@@ -2634,20 +2530,6 @@ DEFINE CLASS sidekick AS container
 		
 	ENDPROC
 
-	PROCEDURE createbindevent
-		#Define crlf Chr(13)+Chr(10)
-		Local lcText, lcWord1, lcWord2
-		
-		lcWord1 = Getwordnum(This.cParameter, 1, [, ])
-		lcWord2 = Getwordnum(This.cParameter, 2, [, ])
-		If Empty(m.lcWord1) Or Empty(m.lcWord2) Or ![.] $ m.lcWord1 Or ![.] $ m.lcWord2
-		  this.GiveMessage([syntax: BE object1.event1,object2.event2], 0 + 64, [Invalid Parameters(s)], 5000)
-		Else
-		  lcText = Textmerge([Bindevent(<<Juststem(lcWord1)>>, "<<Justext(lcWord1)>>", <<Juststem(lcWord2)>>, "<<Justext(lcWord2)>>")])
-		  This.ReplaceCurrentLine(m.lcText + crlf)
-		Endif
-	ENDPROC
-
 	PROCEDURE createcommentline
 		Local lcReturn, lcString, lcX, lnMax, lnX
 		
@@ -2667,595 +2549,6 @@ DEFINE CLASS sidekick AS container
 		Endcase
 		This.ReplaceCurrentLine(m.lcReturn)
 		
-		
-	ENDPROC
-
-	PROCEDURE createes
-		#Define crlf Chr(13)+Chr(10)
-		Local lcCallerName, lcCommand, lcFullName, lcProject, lcText, llClip, llNewProject, llTest
-		Local lnCallerHandle, lnCallerType, lnEdType, lnLength, lnProject, loWindows
-		
-		lcText = This.cParameter
-		lnCallerType = This.nWindowType
-		If m.lnCallerType > 0
-		  lcCallerName = Lower(This.oEditorWin.GetTitle())
-		  lcFullName = Fullpath(m.lcCallerName)
-		Endif
-		lnCallerHandle = This.nHandle
-		If m.lnCallerType < 0 Or (m.lnCallerType = 0 And Empty(m.lcCallerName))
-		  Wait Window [Not legal from this window] At 10, 25 Timeo 5
-		  Return
-		Endif
-		lnProject = 0
-		loWindows = This.oEditorWin.GetOpenWindows()
-		llTest = Pemstatus(_Screen, [lTest], 5) And _Screen.lTest
-		llClip = .T.
-		lnEdType = 1
-		llNewProject = .F.
-		Do Case
-		  Case Inlist( m.lnCallerType, 1, 2) And Pemstatus(_Screen, [cSidekickfile], 5) And m.lcCallerName = Lower(This.cSidekickFile)
-		    lnEdType = 4 && Only number, Ed syntax
-		    Do Case
-		      Case Left(m.lcText, 1) = [+] && find next project
-		        lnProject = This.GetNextProject()
-		        lcText = Substr(m.lcText, 2)
-		        If Empty(Left(m.lcText, 1))
-		          lcProject = Getwordnum(m.lcText, 1)
-		          lcText = []
-		        Else
-		          lcProject = Getwordnum(m.lcText, 2)
-		          lcText = Getwordnum(m.lcText, 1)
-		        Endif
-		        llNewProject = .T.
-		      Case Val(m.lcText) > 0
-		        lnProject = Int(Val(m.lcText))
-		        lnLength = Len(Transform(m.lnProject))
-		        lcText = Substr(m.lcText, m.lnLength + 1 )
-		      Otherwise
-		        lnProject = -1
-		    Endcase
-		    Do Case
-		      Case Inlist(Lower(m.lcText), [x], [editsourcex], [edx], [ex])
-		        lnEdType = 3
-		      Case Inlist(Lower(m.lcText), [s], [editsource], [eds], [es])
-		        lnEdType = 1
-		      Case Inlist(Lower(m.lcText), [e], [es])
-		        lnEdType = 2
-		    Endcase
-		    lcCommand  = This.ScanAllWIndows(m.loWindows, m.lnCallerHandle, m.lnProject, m.lnEdType)
-		    This.oEditorWin.SelectWindow(m.lnCallerHandle)
-		    This.CutCurrentLine()
-		    If m.llNewProject
-		      lcProject = Evl(m.lcProject, [New project])
-		      lcProject = Inputbox([Type new project name: ], [], m.lcProject)
-		      lcProject = Evl(m.lcProject, [New project])
-		      lcCommand = [#] + Transform(m.lnProject) + [ ] + m.lcProject + crlf + crlf + m.lcCommand
-		    Endif
-		    If !Empty(m.lcCommand) And This.GiveMessage([Paste the following code:] + crlf + m.lcCommand, 4 + 64, [Current file is ] + This.cSidekickFile ) = 6
-		      This.WriteCurrentLine(m.lcCommand)
-		    Else
-		      Wait Window At 10, 25 [Operation cancelled!] Timeout 2
-		    Endif
-		  Case m.lnCallerType >= 0
-		    Do Case
-		      Case [s] $ Lower(m.lcText) Or [s] $ This.cOption
-		        lnEdType = 1
-		      Case [e] $ Lower(m.lcText) Or [e] $ This.cOption
-		        lnEdType = 2
-		      Case [x] $ Lower(m.lcText) Or [x] $ This.cOption
-		        lnEdType = 3
-		      Case [n] $ Lower(m.lcText)
-		        lnEdType = 4
-		    Endcase
-		    If Left(Lower(m.lcText), 3) = [all]
-		      lcCommand  = This.ScanAllWIndows(m.loWindows, m.lnCallerHandle, m.lnProject, m.lnEdType)
-		      This.oEditorWin.SelectWindow(m.lnCallerHandle)
-		      This.CutCurrentLine()
-		      If !Empty(m.lcCommand) And  This.GiveMessage([Paste the following code:] + crlf + m.lcCommand, 4 + 64, [Current file is ] + This.cSidekickFile ) = 6
-		        This.WriteCurrentLine(m.lcCommand)
-		      Else
-		        Wait Window At 10, 25 [Operation cancelled!] Timeout 2
-		      Endif
-		    Else
-		      If m.lnCallerType > 0
-		        lcCommand = This.GetEditSourceCode(m.lnCallerHandle, m.lnEdType, [])
-		        This.CutCurrentLine()
-		        If !Empty(m.lcCommand)
-		          If This.GiveMessage( [Copy this code to the clipboard?] + crlf + m.lcCommand, 4 + 32, [Generated code!]) = 6
-		            This.cClip = m.lcCommand
-		          Else
-		            Wait Window At 10, 25 [Operation cancelled!] Timeout 2
-		          Endif
-		        Endif
-		      Endif
-		    Endif
-		  Case Empty(m.lcCallerName)
-		    This.GiveMessage( [Select a program or text file, or a method, first!], 0 + 48, [Not applicable from here!], 3000)
-		  Otherwise
-		    This.GiveMessage(ccCanNotUse, 0 + 48, [This function only works in code windows!], 3000)
-		Endcase
-		This.oEditorWin.SelectWindow(m.lnCallerHandle)
-		
-		
-	ENDPROC
-
-	PROCEDURE createno
-		#Define Stripextension 'BIZ,$$$'
-		#Define ccCursor 'CurObjects'
-		
-		Local lcClass, lcClassFilter, lcClassInfo, lcClassLib, lcFilter, lcNewText, lcParameter
-		Local lcPasteText, lcPrefix, lcSource, lcText, lcVariable, llClipboard, llMethod, llPartOfClass
-		Local llPartOfClasslib, llRefresh, lnClasses, lnHits, lnI, lnSelect, lnX, ltTimestamp
-		lnSelect = Select()
-		lcFilter = []
-		lcParameter = This.cParameter
-		lcClassFilter = Getwordnum(m.lcParameter, 2, [= ])
-		lcParameter = Getwordnum(m.lcParameter, 1, [= ] )
-		If Empty(m.lcClassFilter)
-		  lcClassFilter = Evl(m.lcParameter, [lo])
-		  lcParameter = []
-		Endif
-		llMethod = [.] $ m.lcParameter
-		
-		If m.llMethod
-		  lcPrefix = Getwordnum(m.lcParameter, 1, [.])
-		  lcVariable = Getwordnum(This.cParameterOriginal, 2, [.])
-		Else
-		  lcPrefix = []
-		  If Empty(m.lcParameter)
-		    lcVariable = m.lcClassFilter && []
-		  Else
-		    lcVariable = This.cParameterOriginal
-		  Endif
-		Endif
-		
-		If ![o] $ This.cOption
-		  This.GetFilesInPath([vcx], [curdummy])
-		  If Reccount([curdummy]) > 0
-		    Create Cursor (ccCursor) (Classname c(50), LibName c(240), Timestamp T, Classinfo c(254) )
-		    Select curDummy
-		    Scan
-		      lcSource = Trim(curDummy.Fname)
-		      Use In Select([tempsource])
-		      Use (m.lcSource) Again In 0 Alias tempsource
-		      Select tempsource
-		      Scan For reserved1 == [Class] And !Deleted()
-		        lcClass = tempsource.ObjName
-		        lcClassLib = m.lcSource
-		        ltTimestamp = This.DecodeTimeStamp(tempsource.Timestamp)
-		        If  ! [r] $ This.cOption
-		          lcClassInfo = This.ShowCase(m.lcClass) + [|] + This.ShowCase(Sys(2014, m.lcClassLib, Curdir()))
-		        Else
-		          lcClassInfo = This.ShowCase(m.lcClass) + [|] + This.ShowCase(m.lcClassLib)
-		        Endif
-		        Insert Into (ccCursor) (Classname, LibName, Classinfo, Timestamp) Values (;
-		            This.ShowCase( tempsource.ObjName), This.ShowCase(m.lcSource), m.lcClassInfo, m.ltTimestamp )
-		      Endscan
-		      Use In tempsource
-		    Endscan
-		    Use In curDummy
-		  Endif
-		  Select (ccCursor)
-		  lnClasses = Reccount()
-		
-		*!*  Set Step On 
-		
-		  Do Case
-		    Case (Left(m.lcClassFilter, 1) == [*] Or Right(m.lcClassFilter, 1) == [*]) And Len(m.lcClassFilter) > 1
-		      If Getwordcount(This.cParameter) = 1
-		        lcFilter = Chrtran(m.lcClassFilter, [*], [])
-		        lcVariable = [lo] + Proper(m.lcFilter)
-		      Endif
-		      Select * From (ccCursor) Where m.lcFilter $ Lower(Classname) Into Cursor (ccCursor) Readwrite Order By 1, 2
-		      *!*        Select * From (ccCursor) Where Substr(m.lcClassFilter, 2) $ Classname Into Cursor (ccCursor) Readwrite Order By 1, 2
-		    Case Getwordcount(This.cParameter ) = 2
-		      lcVariable = Getwordnum(This.cParameterOriginal, 1)
-		      lcFilter = Getwordnum(This.cParameter, 2)
-		      Select * From (ccCursor) Where m.lcFilter $ Lower(Classname) Into Cursor (ccCursor) Readwrite Order By 1, 2
-		    Case Empty(This.cParameter );
-		        Or This.cParameter == [*];
-		        Or m.lcClassFilter == [*];
-		        Or Empty(m.lcParameter)
-		      Select * From (ccCursor) Into Cursor (ccCursor) Readwrite Order By 1, 2
-		    Otherwise
-		      Select * From (ccCursor) Where m.lcClassFilter = Lower(Classname)  Into Cursor (ccCursor) Readwrite Order By 1, 2
-		  Endcase
-		  lnHits = Reccount()
-		Else
-		  Private llNoProject
-		  llPartOfClass = [*] $ m.lcClassFilter
-		  llRefresh = [!] $ m.lcClassFilter
-		  llPartOfClasslib = [+] $ m.lcClassFilter
-		  llClipboard = [-] $ m.lcClassFilter
-		  lcClassFilter = Chrtran(m.lcClassFilter, [*!+-], [])
-		
-		  lcParameter = Evl(m.lcParameter, [*]) && TB
-		
-		  Do Case
-		    Case m.llMethod And Len(m.lcClassFilter) = 0
-		      This.GiveMessage([Illegal input!], 0, [], 5000)
-		      Return
-		  Endcase
-		  llNoProject = Type([_vfp.activeproject.name]) = [U] Or Empty(_vfp.ActiveProject.Name)
-		  lcNewText = []
-		  Do Case
-		    Case m.llNoProject
-		      This.readClassLibs()
-		    Case m.llRefresh Or !Pemstatus(_vfp, [noClasses], 5) Or Empty(_vfp.noClasses);
-		        Or !Pemstatus(_vfp, [noLenClasses], 5) Or _vfp.noLenClasses = 1
-		      lnClasses = This.readClassLibs()
-		    Otherwise
-		      lnClasses = _vfp.noLenClasses
-		  Endcase
-		  lcClassFilter = Lower(m.lcClassFilter)
-		  Do Case
-		    Case Type([_vfp.activeproject.name]) = [U] And !Pemstatus(_vfp, [noProject], 5)
-		      AddProperty(_vfp, [noProject], [])
-		    Case !Pemstatus(_vfp, [noProject], 5)
-		      AddProperty(_vfp, [noProject], _vfp.ActiveProject.Name)
-		  Endcase
-		  Do Case
-		    Case m.llNoProject
-		      _vfp.Noproject = []
-		      lnClasses = This.readClassLibs()
-		    Case m.llRefresh
-		      If Type([_vfp.activeproject.name]) = [C]
-		        _vfp.Noproject = _vfp.ActiveProject.Name
-		      Endif
-		      This.readClassLibs()
-		    Case Type([_vfp.activeproject.name]) # [U] And !_vfp.Noproject == _vfp.ActiveProject.Name
-		      _vfp.Noproject = _vfp.ActiveProject.Name
-		      This.readClassLibs()
-		  Endcase
-		  If m.lnClasses > 1
-		    Select 0
-		    Create Cursor (ccCursor) (Classname c(50), LibName c(240), Classinfo c(254) )
-		    Index On LibName Tag LibName
-		    Index On Classname Tag Classname
-		    lnHits = 0
-		    For lnI = 1 To _vfp.noLenClasses
-		      lcClassLib  = _vfp.noClasses(m.lnI, 2)
-		      lcClass     = _vfp.noClasses(m.lnI, 1)
-		      Do Case
-		        Case m.llPartOfClass And Len(m.lcClassFilter) > 0 And m.lcClassFilter $ Lower(m.lcClass)
-		        Case m.llPartOfClasslib And Len(m.lcClassFilter) > 0 And;
-		            (m.lcClassFilter $ Lower(m.lcClass) Or m.lcClassFilter $ Lower(m.lcClassLib))
-		        Case Len(m.lcClassFilter) > 0 And m.lcClass = Lower(m.lcClassFilter)
-		        Case Empty(This.cParameter) && or m.lcParameter == [*] && TBCheck
-		        Case This.cParameter == [*]
-		        Otherwise
-		          Loop
-		      Endcase
-		      lnHits = m.lnHits + 1
-		      If ! [r] $ This.cOption
-		        lcClassInfo = This.ShowCase(m.lcClass) + [|] + This.ShowCase(Sys(2014, m.lcClassLib, Curdir()))
-		      Else
-		        lcClassInfo = This.ShowCase(m.lcClass) + [|] + This.ShowCase(m.lcClassLib)
-		      Endif
-		      Insert Into (ccCursor) (Classname, LibName, Classinfo) Values (This.ShowCase(m.lcClass), This.ShowCase(Sys(2014, m.lcClassLib)), m.lcClassInfo )
-		    Endfor
-		    Go Top
-		  Endif
-		Endif
-		If Reccount() = 0
-		  Wait Window [No match found] At 10, 25 Timeout 2
-		  Return
-		Endif
-		If [n] $ This.cOption && Newest first
-		  Select * From (ccCursor) Into Cursor (ccCursor) Order By Classname, Timestamp Desc Readwrite
-		Endif
-		
-		lcClassInfo =  This.GetDataFromGrid([Pick a class], [Classinfo], 1)
-		If Empty(m.lcClassInfo)
-		  Return
-		Endif
-		If m.lnHits > 0
-		  lcClassInfo = Alltrim(Evaluate(ccCursor + [.ClassInfo]))
-		  lcClass  = Getwordnum (m.lcClassInfo, 1, [|])
-		  lcClassLib     = Getwordnum (m.lcClassInfo, 2, [|])
-		  lcPasteText = []
-		  If Empty(m.lcVariable) Or Right(m.lcVariable, 1) = [*]
-		    lcVariable = [lo] + Proper(Juststem(m.lcClass))
-		    For lnX = 1 To Getwordcount(Stripextension, [,])
-		      lcText = Getwordnum(Stripextension, m.lnX, [,])
-		      If Lower(Right(m.lcVariable, Len(m.lcText))) == Lower(m.lcText)
-		        lcVariable = Left(m.lcVariable, Len(m.lcVariable) - Len(m.lcText))
-		        Exit
-		      Endif
-		    Endfor
-		  Endif
-		  If m.llMethod
-		    If ! [r] $ This.cOption
-		      lcPasteText = m.lcPrefix + [.NewObject('] + m.lcVariable + [','] + Juststem(m.lcClass) + [', '] + Alltrim(m.lcClassLib) + [')]
-		    Else
-		      lcPasteText = m.lcPrefix + [.NewObject('] + m.lcVariable + [','] + Juststem(m.lcClass) + [', '] + Justfname (m.lcClassLib) + [')]
-		    Endif
-		  Else
-		    If ! [r] $ This.cOption
-		      If This.nWindowType # 0
-		        lcPasteText = [Local ] + m.lcVariable + [ as ] + m.lcClass + [ of ] + Alltrim(m.lcClassLib) + crlf
-		      Endif
-		      lcPasteText = m.lcPasteText + m.lcVariable + [ = NewObject('] + Juststem(m.lcClass) + [', '] + Alltrim(m.lcClassLib) + [')]
-		    Else
-		      If This.nWindowType = 0
-		        lcPasteText = m.lcPasteText + m.lcVariable + [ = NewObject('] + Juststem(m.lcClass) + [', '] + m.lcClassLib + [')]
-		      Else
-		        lcPasteText = [Local ] + m.lcVariable + [ as ] + m.lcClass + [ of ] + Justfname (m.lcClassLib) + crlf
-		        lcPasteText = m.lcPasteText + m.lcVariable + [ = NewObject('] + Juststem(m.lcClass) + [', '] + Justfname (m.lcClassLib) + [')]
-		      Endif
-		    Endif
-		  Endif
-		  If m.llClipboard
-		    _Cliptext = Iif(Empty(m.lcPrefix), m.lcVariable, m.lcPrefix + [.] + m.lcVariable)
-		  Endif
-		  If This.nWindowType # 0
-		    lcPasteText = m.lcPasteText + crlf
-		  Endif
-		  This.oEditorWin.Paste(m.lcPasteText)
-		Else
-		  This.GiveMessage([No match found!], 0 + 48, [], 5000)
-		Endif
-		Select (m.lnSelect)
-		Return
-		
-		
-	ENDPROC
-
-	PROCEDURE createqmark
-		Lparameters tldbo
-		Local lcReturn
-		lcParameter = this.cParameter 
-		If Empty(m.lcParameter )
-		  m.lcParameter = Substr(this.cCommand , 3)
-		EndIf
-		If Left(m.lcParameter,1) = '='
-		  m.lcParameter = Substr(m.lcParameter,2)
-		Endif
-		If Empty(m.lcParameter ) Or Getwordcount(m.lcParameter ) > 1
-		  Return
-		Endif
-		If m.tldbo
-		  lcReturn = Textmerge([DebugOut '<<Strtran( m.lcParameter ,'m.','') >>', <<m.lcParameter >>])
-		Else
-		  lcReturn = Textmerge([?'<<Strtran( m.lcParameter ,'m.','') >>', <<m.lcParameter >>])
-		Endif
-		this.ReplaceCurrentLine(m.lcReturn)
-	ENDPROC
-
-	PROCEDURE createsidekickcursor
-		Local lcAsk, lcDesc, lcFile, lcProg, lcSelect, lcSidekickOptions, lcTrigger, lcURL, lcVar, lcWindow
-		Local lnLines, lnX
-		
-		Local Array laSidekickChoices[1]
-		
-		lcSidekickOptions = This.GetHelpTopics()
-		lcSelect = Select()
-		Select 0
-		Create Cursor curSidekick (Trigger c(12), Descript c(50),  Window c(2), Ask c(25),  url c(100))
-		
-		lnLines = Alines(m.laSidekickChoices, m.lcSidekickOptions )
-		For lnX = 1 To m.lnLines
-		  lcWindow = Alltrim(Getwordnum( m.laSidekickChoices(m.lnX), 1, [|]))
-		  Do Case
-		    Case Left(m.lcWindow, 1) = [*]
-		      Loop
-		    Case m.lcWindow = [a]
-		    Case This.nWindowType = 0 And [c] $ m.lcWindow && Command window
-		    Case This.nWindowType > 0 And [e] $ m.lcWindow && Modify window/file
-		    Case This.nWindowType >= 10 And [f] $ m.lcWindow && Form or class window
-		    Case This.nWindowType < 0 And [m] $ m.lcWindow && Menu version
-		    Otherwise
-		      Loop
-		  Endcase
-		  lcTrigger = Alltrim(Getwordnum( m.laSidekickChoices(m.lnX), 2, [|]))
-		  If m.lcTrigger = [<blank>]
-		    lcTrigger = [ <blank>]
-		  Endif
-		  lcDesc = Alltrim(Getwordnum( m.laSidekickChoices(m.lnX), 3, [|]))
-		  lcAsk = Alltrim(Getwordnum( m.laSidekickChoices(m.lnX), 5, [|]))
-		  lcURL = Alltrim(Getwordnum( m.laSidekickChoices(m.lnX), 4, [|]))
-		  Do Case
-		    Case Left(m.lcURL, 2) = [sk] And [ #] $ m.lcURL
-		      lcURL = Strtran(m.lcURL, [#], [.md#])
-		      lcURL = Textmerge([<<this.cSidekickHelp>>blob/master/documents/<<m.lcURL>>])
-		    Case Left(m.lcURL, 2) = [sk]
-		      lcURL = Forceext(m.lcURL, [md])
-		      lcURL = Textmerge([<<this.cSidekickHelp>>blob/master/documents/<<m.lcURL>>])
-		    Case m.lcURL = [<default>]
-		      lcURL = Textmerge([<<this.cSidekickHelp>>])
-		    Case m.lcURL = [<ver>]
-		      lcDesc = [Version: ] + This.cVersion
-		      lcURL = Textmerge([<<this.cSidekickHelp>>/blob/master/Change%20Log.md])
-		  Endcase
-		
-		
-		  Insert Into curSidekick (Trigger, Descript, Ask, url) Values (m.lcTrigger, m.lcDesc, m.lcAsk, m.lcURL )
-		Endfor
-		Select Trigger, Descript, url, Ask From curSidekick Into Cursor curSidekick Readwrite
-		Index On Lower(Descript) Tag Descript
-		Index On Trigger Tag Trigger
-		If [x] $ This.cOption
-		  Browse Normal
-		Endif
-		lcProg = This.GetDataFromGrid(Textmerge([<<this.cProgram>> "commands", Ctrl+Enter opens url]), [trigger], 1)
-		lcAsk = Alltrim(Ask)
-		
-		Use
-		Select (m.lcSelect)
-		If Getwordnum(m.lcProg, 1) # [0]
-		  lcProg = Getwordnum( m.lcProg, 1)
-		Endif
-		If !Empty(m.lcProg)
-		  Do Case
-		    Case Lower(m.lcAsk) == [na]
-		      lcProg = []
-		    Case m.lcProg = [<blank>]
-		      lcProg = [menu] && [ed]
-		    Case m.lcProg = [2-9999]
-		      lcProg = Alltrim(Inputbox(m.lcAsk), [Empty for list])
-		      m.lcProg = Evl(m.lcProg,'*')
-		    Case m.lcProg = [0 <file>]
-		      lcFile = Alltrim(Inputbox(m.lcAsk, [Specify .sk file name!]))
-		      If Empty(m.lcFile)
-		        This.GiveMessage([No Sidekick file is specified!], 0 + 48)
-		        Return
-		      Endif
-		      lcFile = Forceext(m.lcFile, [sk])
-		      lcProg = [0 ] + m.lcFile
-		    Case m.lcProg = [?=]
-		      lcVar = Alltrim(Inputbox(m.lcAsk, [Value is required!]))
-		      If Empty(m.lcVar)
-		        This.GiveMessage([No variable given], 0 + 48)
-		        Return
-		      Endif
-		      lcProg = m.lcProg + m.lcVar
-		    Case Lower(m.lcAsk) = [filename or url:]
-		      lcProg = m.lcProg + [ ] + Inputbox(m.lcAsk, [Enter a value or press Enter for list!])
-		    Case !Empty(m.lcAsk)
-		      lcProg = m.lcProg + [ ] + Inputbox(m.lcAsk, [Value is required!])
-		    Case Inlist(Lower(m.lcProg), [sk], [sked], [eval])
-		      lcProg = m.lcProg + [ ] + Inputbox([Name of file:], [Empty gives picklist])
-		  Endcase
-		  If This.lSKComment
-		    lcProg = [*] + m.lcProg
-		  Endif
-		  *!*    lo = Newobject([sidekick], [tools\procs\thor_proc_sidekick.vcx] )
-		  *!*    m.lo.Init(m.lcProg)
-		  *!*    this.Init(m.lcProg)
-		  If !Empty(m.lcProg)
-		    Execscript(_Screen.cThorDispatcher, [thor_tool_sidekick], m.lcProg )
-		  Else
-		    This.GiveMessage([This command is not available via Help menu!])
-		  Endif
-		Endif
-		If This.lSKComment
-		  This.CutCurrentLine()
-		Endif
-		
-		
-	ENDPROC
-
-	PROCEDURE createusesyntax
-		Local lcCursorfiles, lcDBF, lcFullName, lcMessage, lcTable, lcText, llListfiles, lnPos
-		
-		lcCursorfiles = This.cCursor
-		llListfiles = .T.
-		Do Case
-		  Case File(This.cParameter)
-		    llListfiles = .F.
-		  Case [.dbf] $ This.cParameter
-		    This.cParameter = Strtran(This.cParameter, [.dbf], [])
-		  Case [.d] $ This.cParameter
-		    This.cParameter = Strtran(This.cParameter, [.d], [])
-		  Case [.vcx] $ This.cParameter
-		    This.AddOption([v])
-		    This.cParameter = Strtran(This.cParameter, [.vcx], [])
-		  Case [.vc] $ This.cParameter
-		    This.AddOption([v])
-		    This.cParameter = Strtran(This.cParameter, [.vc], [])
-		  Case [.v] $ This.cParameter
-		    This.AddOption([v])
-		    This.cParameter = Strtran(This.cParameter, [.v], [])
-		  Case [.scx] $ This.cParameter
-		    This.AddOption([s])
-		    This.cParameter = Strtran(This.cParameter, [.scx], [])
-		  Case [.sc] $ This.cParameter
-		    This.AddOption([s])
-		    This.cParameter = Strtran(This.cParameter, [.sc], [])
-		  Case [.s] $ This.cParameter
-		    This.AddOption([s])
-		    This.cParameter = Strtran(This.cParameter, [.s], [])
-		Endcase
-		If This.nWindowType # 0 And ([s] $ This.cOption Or [v] $ This.cOption)
-		  Return
-		Endif
-		Do Case
-		  Case [u] $ This.cOption Or This.cParameter == [-]
-		    This.AddOption([-b])
-		    This.AddOption([u])
-		    lcMessage = [List if tables in use:]
-		  Otherwise
-		    lcMessage = [Pick a table to use:]
-		Endcase
-		If [c] $ This.cOption Or [u] $ This.cOption
-		  If This.ListUsedTables()
-		    lcMessage = [Pick a table to close:]
-		    this.lNoMessage = .T.
-		    lcDBF = This.GetDataFromGrid(m.lcMessage, [fullname], 0)
-		    If Lastkey() = 27
-		      m.lcDBF = ''
-		    Endif
-		  Else
-		    This.GiveMessage([No tables are currently in use], , , This.nTimeOut )
-		  Endif
-		Else
-		  If m.llListfiles
-		    lcDBF = This.ListFiles([dbf])
-		  Else
-		    lcDBF = This.cParameter
-		  Endif
-		Endif
-		If Vartype(m.lcDBF) = [C] And !Empty(m.lcDBF)
-		  This.lNoSelectOnExit = .T.
-		  If m.llListfiles
-		    lcTable = Trim(Juststem(Evaluate(m.lcCursorfiles + [.fullname])))
-		    lcFullName = Trim(Evaluate(m.lcCursorfiles + [.fullname]))
-		  Else
-		    lcTable = Juststem(m.lcDBF)
-		    lcFullName = m.lcDBF
-		  Endif
-		  lcFullName = This.FixPath( m.lcFullName )
-		  This.cTableSelected = m.lcTable
-		  Do Case
-		    Case This.cCommand = [sf]
-		
-		      Text To m.lcText Noshow Textmerge Pretext 1 + 2 + 4
-		        Select  from <<StrExtract(this.FixPath(lcFullName),'','.')>>
-		      Endtext
-		      lnPos = This.oEditorWin.nCurrentLineStart
-		      This.ReplaceCurrentLine(m.lcText )
-		      This.oEditorWin.SetInsertionPoint(m.lnPos + 7)
-		    Case [u] $ This.cOption
-		      Select Trim(Evaluate(This.cCursor + [.alias]))
-		      This.GiveMessage(Trim(Evaluate(This.cCursor + [.alias])) + [ is selected], , , This.nTimeOut )
-		    Case [c] $ This.cOption and !Empty(m.lcDBF)
-		      Use In Select(Trim(Evaluate(This.cCursor + [.alias])))
-		      This.GiveMessage(Trim(Evaluate(This.cCursor + [.alias])) + [ is closed], , , This.nTimeOut )
-		    Otherwise
-		      If This.nWindowType = 0
-		        Text To m.lcText Noshow Textmerge Pretext 1 + 2 + 4
-		          * Select Select("<<m.lcTable>>" )
-		          * Use "<<m.lcFullName>>"
-		        Endtext
-		        Select Select(m.lcTable )
-		        If Select([query]) > 0 And  Lower(Juststem(Dbf(Select([query])))) = Lower(m.lcTable)
-		          Use In Query
-		        Endif
-		
-		        Use (m.lcFullName )
-		        This.CutCurrentLine()
-		        This.ReplaceCurrentLine(m.lcText + Chr(13))
-		        If [b] $ This.cOption
-		          this.DoBrowModal()
-		        Else
-		          Return
-		        Endif
-		      Else
-		        If ! [s] $ This.cOption And ! [v] $ This.cOption && Len(This.cOption) = Len(Chrtran(This.cOption, [sv], []))   && Empty(This.cOption)
-		          Text To m.lcText Noshow Textmerge Pretext 1 + 2 + 4
-		            Use "<<m.lcFullName>>" in Select("<<m.lcTable>>")
-		          Endtext
-		          This.ReplaceCurrentLine(m.lcText)
-		        Endif
-		      Endif
-		  Endcase
-		Else
-		  If ! 'c' $ this.cOption 
-		    This.GiveMessage([No files matches], , , 3000)
-		  Endif
-		  Return .T.
-		
-		Endif
 		
 	ENDPROC
 
@@ -3373,173 +2666,11 @@ DEFINE CLASS sidekick AS container
 		
 	ENDPROC
 
-	PROCEDURE dounzip
-		Local lcZipFile, lcTargetFolder, llOK
-		
-		lcZipFile = GetWordNum(this.cParameter,1)
-		lcTargetFolder = GetWordNum(this.cParameter,2)
-		
-		If Vartype(This.oZip) # [O]
-		  This.oZipInit()
-		EndIf
-		If m.lcZipFile = '?' or Empty(m.lcZipFile)
-		  m.lcZipFile = this.ListFiles('.zip')
-		Endif
-		
-		If Empty(m.lcZipFile) 
-		  This.GiveMessage([You must specify a zip file!])
-		  Return .F.
-		Endif
-		If Empty(Justext(m.lcZipFile))
-		  lcZipFile = Forceext(m.lcZipFile, [.zip])
-		Endif
-		lcTargetFolder = Evl(m.lcTargetFolder, this.cUnzipFolder)
-		llOK = .T.
-		lcNew = 'already existing'
-		If !Directory(m.lcTargetFolder)
-		  Try
-		    Md (m.lcTargetFolder)
-		    m.lcNew = 'new'
-		  Catch
-		    llOK = .F.
-		    This.GiveMessage([Can't create folder ] + m.lcTargetFolder)
-		  Endtry
-		Endif
-		If !File(m.lcZipFile)
-		  This.GiveMessage([No file called ] + m.lcZipFile)
-		  llOK = .F.
-		Endif
-		If !m.llOK
-		  Return .T.
-		Else
-		  If !This.oZip.Unzip(m.lcZipFile, m.lcTargetFolder)
-		    this.GiveMessage(this.oZip.cErrorMessage)
-		  Else
-		    this.GiveMessage(m.lcZipFile + ' is unzipped into ' + m.lcNew + ' folder ' + m.lcTargetFolder)
-		  Endif
-		Endif 
-		
-	ENDPROC
-
-	PROCEDURE dozip
-		Local lcDestination, lcFileList, lcFiles, lcFolder, lcText, llSuccess, lnFails, lnFiles, lnLines
-		Local lnX
-		
-		Local Array laDummy[1]
-		
-		If Vartype(This.oZip) # [O]
-		  This.oZipInit()
-		Endif
-		This.cParameter = Evl(This.cParameter, [?])
-		lcFiles = Getwordnum(This.cParameter, 1)
-		lcDestination = Getwordnum(This.cParameter, 2)
-		If !This.lTidy
-		  lcDestination = Forceext(m.lcDestination, [zip])
-		  If Empty(m.lcDestination)
-		    lcDestination = This.GetLastFile(Forceext(This.cZipTarget, [.zip]))
-		    lcDestination = This.GetNextFile(m.lcDestination, This.nNextLength)
-		  Endif
-		  Do Case
-		    Case  Inlist(This.GetLastCharacter(m.lcDestination), [!], [*])
-		      lcDestination = Juststem(Chrtran( m.lcDestination, [*!], []))
-		      lcDestination = This.GetLastFile(Forceext(m.lcDestination, [zip]))
-		      lcDestination = This.GetNextFile(m.lcDestination, This.nNextLength)
-		    Case This.GetLastCharacter(m.lcDestination) = [?]
-		      lcDestination = Chrtran(m.lcDestination, [?], []) + This.GetSortableDate()
-		  Endcase
-		Endif
-		If m.lcFiles # [?] And Empty(Getwordnum(This.cParameter, 2)) And ![,] $ m.lcFiles And (Empty(Justext(m.lcFiles)) Or Lower(Justext(m.lcFiles)) = [zip]) And !File(m.lcFiles)
-		  lcDestination = Forceext(m.lcFiles, [.zip])
-		  lcFiles = []
-		Endif
-		lcFiles = Evl(m.lcFiles, [?])
-		Do Case
-		  Case [?] $ m.lcFiles
-		    If This.lTidy
-		      *!*        this.AddOption('x')
-		      This.lAddExtraExtensions = .T.
-		    Endif
-		    lcFiles = Chrtran(m.lcFiles, [?], [])
-		    This.cFilter = [Include]
-		    lcFiles = This.ListFiles(m.lcFiles )
-		  Case Len(m.lcFiles) # Len(Chrtran(m.lcFiles,'*',''))
-		*!*      [ *] $ m.lcFiles does not work, bug in BeautifyX!!!
-		    lnFiles = Adir(laDummy, m.lcFiles)
-		    If m.lnFiles > 0
-		      lcFolder = Justpath(m.lcFiles)
-		      lcFiles = Lower(This.MakeStringFromArray(@m.laDummy, m.lcFolder ))
-		    Else
-		      This.GiveMessage( [No match found], 0 + 48 )
-		    Endif
-		  Otherwise
-		Endcase
-		If !Empty(m.lcFiles)
-		  lcFileList = This.GetFilelistToProcess(Lower(m.lcFiles))
-		Endif
-		If !Empty(m.lcFileList)
-		  lcText = [added]
-		  If !This.lTidy
-		    lnLines = Alines(m.laDummy, m.lcFileList, 0, [,])
-		    lnFails = 0
-		    For lnX = 1 To m.lnLines
-		      Wait Window [Zipping ] + m.laDummy(m.lnX) At 10, 25 Time This.nZipDelay
-		      If !This.oZip.Zip(m.laDummy(m.lnX), m.lcDestination)
-		        This.GiveMessage(This.oZip.cErrorMessage, 48, [Fail!])
-		        lnFails = m.lnFails + 1
-		      Else
-		        If [d] $ This.cOption
-		          Erase (m.laDummy(m.lnX))
-		          lcText = [moved]
-		        Endif
-		      Endif
-		    Endfor
-		
-		    This.CutAndGiveMessage(Textmerge([<<m.lnLines - m.lnFails>> files <<m.lcText>> to file <<m.lcDestination >>]), ,;
-		        Textmerge([<<this.cProgram>> zip utility]), This.nTimeOut)
-		  Else
-		    lcDestination = Evl(m.lcDestination, Alltrim(This.cBackupFolder))
-		    If This.GetLastCharacter(m.lcDestination) = [?]
-		      lcDestination = Strtran(m.lcDestination, [?], This.GetSortableDate())
-		    Endif
-		    llSuccess = .T.
-		    If !Directory(m.lcDestination )
-		      Try
-		        Md (m.lcDestination )
-		      Catch
-		        This.GiveMessage([Can't create folder ] + m.lcDestination, 16, [Something went wrong])
-		        llSuccess = .F.
-		      Endtry
-		    Endif
-		    If !m.llSuccess
-		      Return
-		    Endif
-		    lnLines = Alines(m.laDummy, m.lcFileList, 0, [,])
-		    lnFails = 0
-		    For lnX = 1 To m.lnLines
-		      Wait Window [Moving ] + m.laDummy(m.lnX) At 10, 25 Time This.nZipDelay
-		      Try
-		        Rename (m.laDummy(m.lnX)) To Forcepath( m.laDummy(m.lnX), m.lcDestination )
-		      Catch
-		        This.GiveMessage([Can't move file ] + m.laDummy(m.lnX))
-		        lnFails = m.lnFails + 1
-		      Endtry
-		    Endfor
-		    This.CutAndGiveMessage(Textmerge([<<m.lnLines - m.lnFails>> files moved to folder <<m.lcDestination >>]), ,;
-		        Textmerge([<<this.cProgram>> move utility]), This.nTimeOut)
-		  Endif
-		Else
-		  This.CutAndGiveMessage([Nothing to do!], , , This.nTimeOut)
-		Endif
-		Return
-		
-		
-	ENDPROC
-
 	PROCEDURE dropfieldifempty
 		Lparameters tcCursor, tcField
 		
 		Local llDrop
-		
+		lcCurTemp = m.tcCursor + 'tmp'
 		If !Empty(Field(m.tcField, m.tcCursor))
 		  Select (m.tcCursor)
 		  llDrop = .T.
@@ -3550,60 +2681,21 @@ DEFINE CLASS sidekick AS container
 		    Endif
 		  Endscan
 		  If m.llDrop
-		    Alter Table (m.tcCursor) Drop Column (m.tcField)
+		    lcFields = ''
+		    For lnX = 1 to Fcount()
+		      If Lower(Field(m.lnX)) # Lower(m.tcField)
+		        m.lcFields = m.lcFields + Field(m.lnX) + ','
+		      Endif
+		    EndFor
+		    m.lcFields = Trim(m.lcFields ,0,',',Chr(32))
+		    Use in (Select(m.lcCurTemp))
+		    Select &lcFields from (m.tcCursor) into cursor (m.lcCurTemp ) readwrite
+		    Use in (Select(m.tcCursor))
+		    Select * from (m.lcCurTemp) into cursor (m.tcCursor) readwrite
+		*!*      Alter Table (m.tcCursor) Drop Column (m.tcField)
 		  Endif
 		Endif
 		
-	ENDPROC
-
-	PROCEDURE editcustomtool
-		Local lcCursor, lcDescript, lcFile, lcMessage, lcProg, lcProgFile, lnSelect, lnTools
-		If [z] $ This.cOption
-		  Set Step On
-		Endif
-		lcProg = This.cParameter
-		If This.cCommand = [!!] And Len(This.cCommand ) > 2
-		  lcProg = Substr(This.cCommand, 3)
-		Endif
-		If !Lower(m.lcProg) = this.cSKFile 
-		  lcProg = this.cSKFile + m.lcProg
-		Endif
-		lcProgFile = Forceext(m.lcProg, [prg])
-		If !Empty(m.lcProg) And !m.lcProg == this.cSKFile 
-		  If File(m.lcProgFile)
-		    Modify Command (m.lcProgFile) Nowait
-		  Else
-		    This.GiveMessage([File ] + m.lcProgFile + [ is not found!], 0 + 48, [Nothing to do])
-		  Endif
-		Else
-		  lnSelect = Select()
-		  lcCursor = [curCustom]
-		  lnTools = This.GetFilesInPath([prg], m.lcCursor )
-		  Select Cast(Lower(Substr(Juststem(Fname), 4)) As c(30)) As Program, FileSize, Filedate, Cast([] As c(100)) As Descript, Fname;
-		    From (m.lcCursor) Into Cursor (m.lcCursor) Readwrite Where Lower(Left(Juststem(Fname), 3)) = this.cSKFile 
-		  If _Tally = 0
-		    lcMessage = [No tool matching ] + this.cSKFile + [ found]
-		    This.GiveMessage(m.lcMessage, 0 + 48, [No custom tool defined])
-		  Else
-		    Scan
-		      lcFile = Alltrim(Fname)
-		      lcDescript = This.GetDescript(m.lcFile )
-		      If !Empty( m.lcDescript )
-		        Replace Descript With m.lcDescript
-		      Endif
-		    Endscan
-		    Go Top
-		    lcProg = This.GetDataFromGrid(Textmerge([My "<<this.cProgram>>" extensions to edit:]), [fname], 1)
-		    Use
-		    Select (m.lnSelect)
-		    If !Empty(m.lcProg)
-		      Modify Command (m.lcProg) Nowait
-		    Endif
-		    If !This.lSKComment
-		      This.CutCurrentLine()
-		    Endif
-		  Endif
-		Endif
 	ENDPROC
 
 	PROCEDURE findcommand
@@ -3645,43 +2737,6 @@ DEFINE CLASS sidekick AS container
 		
 		This.cCommandOriginal = This.cCommand
 		This.cCommand = Lower(This.cCommand)
-		
-	ENDPROC
-
-	PROCEDURE finddiroptions
-		Local lcParameter, llSuccess
-		lcParameter = []
-		If This.nWindowType <= 1
-		  llSuccess = .T.
-		  Do Case
-		    Case Inlist(Left(This.cCommand, 3), [+++])
-		      lcParameter = Substr(This.cCommand, 4)
-		      This.AddOption([e])
-		    Case Inlist(Left(This.cCommand, 2), [++])
-		      lcParameter = Substr(This.cCommand, 3)
-		      This.AddOption([a])
-		    Case This.nWindowType = 0 And Inlist(Left(This.cCommand, 1), [+])
-		      lcParameter = Substr(This.cCommand, 2)
-		    Case Inlist(Left(This.cCommand, 3), [dre], 'drr')
-		      lcParameter = Substr(This.cCommand, 4)
-		      This.AddOption([e])
-		    Case Inlist(Left(This.cCommand, 3), [drx])
-		      lcParameter = Substr(This.cCommand, 4)
-		      This.AddOption([a])
-		    Case Inlist(Left(This.cCommand, 2), [dr])
-		      lcParameter = Substr(This.cCommand, 3)
-		    Otherwise
-		      llSuccess = .F.
-		  Endcase
-		Endif
-		lcParameter = Evl(m.lcParameter, This.cParameter)
-		If ! m.llSuccess && Or Val(m.lcParameter) > 0
-		  Return .F.
-		Else
-		  Wait Window 'Wait while Sidekick processes files!' at 10,25 nowait noclear  
-		  This.ListFiles(m.lcParameter)
-		Endif
-		
 		
 	ENDPROC
 
@@ -3768,20 +2823,11 @@ DEFINE CLASS sidekick AS container
 	ENDPROC
 
 	PROCEDURE findfunction
-		Local lcParameter
+		Local lcParameter, lcProg
 		
-		If _Screen.lTest &&or .t.
-		  Set Step On
-		Endif
-		*!*  If Empty(this.cCommand)
-		*!*    lcCommand = InputBox('Type command:','Sidekick', this.cDefaultCommand ,0,'','<>')
-		*!*    If m.lcCommand = '<>' && Cancel
-		*!*      Return
-		*!*    Else 
-		*!*      this.cCommand = Alltrim(Lower(m.lcCommand))
-		*!*    Endif
-		*!*  Endif
+		This.SplitCommand()
 		Do Case
+		  Case This.SKFactory()
 		  Case This.FindSKOptions()
 		  Case Left(This.cCommand, 1) = [*] And This.nValCommand > 0 And Empty(This.cParameter)
 		    This.CreateCommentLine()
@@ -3791,118 +2837,20 @@ DEFINE CLASS sidekick AS container
 		    This.CreateCommentLine()
 		  Case File([sk_] + This.cCommand + [.prg])
 		    lcProg = [sk_] + This.cCommand
-		    If Empty(this.cParameter)
+		    If Empty(This.cParameter)
 		      Do (m.lcProg)
 		    Else
-		      Do (m.lcProg) with this.cParameter 
+		      Do (m.lcProg) With This.cParameter
 		    Endif
-		  Case This.FindDirOptions()
-		  Case This.FindEdOptions()
-		  Case Inlist(This.cCommand, [th], [thor], [tool], [tools])
-		    This.BrowseAllTools()
-		  Case Inlist(This.cCommand, [hotkeys], [hk])
-		    This.BrowseHotKeys()
 		  Case Left(This.cCommand, 4) = [http]
 		    This.RunEd(This.cParcedText)
 		  Case Left(This.cParameter, 4) = [http]
 		    This.RunEd(This.cParameterOriginal )
-		  Case Inlist(This.cCommand, [ver], [version])
-		    This.CutAndGiveMessage([Version: ] + This.cVersion, 64, This.cProgram )
-		  Case Inlist(This.cCommand, [desc], [description], [descript], [de])
-		    This.HandleDescription()
-		  Case This.cCommand = [--] Or This.cCommand = [tidy]
-		    This.lTidy = .T.
-		    This.DoZip()
-		  Case Inlist(This.cCommand, [menu]) ;
-		      Or (This.nWindowType > 0 And This.cCommand == [ed] And Empty(This.cParameter));
-		      Or (This.cCommand == [?] And Empty(This.cParameter))
-		    This.CreateSidekickCursor()
-		  Case This.cCommand = [zip]
-		    This.DoZip()
-		  Case This.cCommand = [unzip]
-		    This.DoUnzip()
-		  Case This.cCommand = [help]
-		    This.RunEd(This.cSidekickHelp )
-		  Case This.cCommand == [mf]
-		    This.ModifyForm()
-		  Case This.cCommand == [no]
-		    This.CreateNo()
-		  Case This.cCommand == [ec] and !Empty(this.cParameter)
-		    Try 
-		      ExecScript(this.cParameter )
-		    Catch 
-		      this.GiveMessage(Textmerge('Unknown command "<<this.cParameter>>"!'))
-		    Endtry
-		  Case This.cCommand == [ec] And [C] = Vartype(This.cClip )
-		    This.TryExecScript()
-		  Case Left(This.cCommand, 2) == [?=] And (Len(This.cCommand) > 2 Or !Empty(This.cParameter ))
-		    This.CreateQmark()
-		  Case Left(This.cCommand, 2) == [db] And (Len(This.cCommand) > 2 Or !Empty(This.cParameter ))
-		    This.CreateQmark(.T.)
-		  Case This.cCommand == [es]
-		    This.CreateES()
-		  Case Inlist(This.cCommand, [path], [pa])
-		    This.ShowCurrentPath()
 		
-		  Case This.cCommand == [us] Or (This.cCommand == [use] And This.nWindowType = 0)
-		    This.CreateUseSyntax()
-		  Case This.cCommand == [lo]
-		    This.ListOpenTables()
-		  Case This.cCommand == [sf]
-		    This.CreateUseSyntax()
-		  Case This.cCommand == [cl]
-		    This.AddOption([c])
-		    This.CreateUseSyntax()
-		  Case This.nWindowType > 0 And (Inlist(This.cCommand, [insert], [ins]) Or This.cCommand = [+])
-		    This.InsertMethod()
-		  Case Inlist(This.cCommand, [=], [eval])
-		    This.InsertResult()
-		  Case Inlist(This.cCommand, [hk], [hotkeys])
-		    This.BrowseHotKeys()
-		  Case Inlist(This.cCommand, [th], [thor], [tools], [tool])
-		    This.BrowseAllTools()
-		  Case This.cCommand = [!!] Or This.cCommand == [sked]
-		    This.EditCustomTool()
-		  Case (This.cCommand = [!] Or This.cCommand == [sk]) And Left(This.cParcedText, 1) # [*]
-		    This.ListAllCustomTools()
-		  Case Inlist(This.cCommand, [.], [,], [ta], [test])
-		    This.MakeSKTestArea()
-		  Case This.cCommand == [0] And Empty(This.cParameter)
-		    This.CutCurrentLine()
-		    Modify Command (This.cSidekickFile ) Nowait
-		  Case This.cCommand == [0?]  Or (This.cCommand == [0] And This.cParameter = [?])
-		    This.CutAndGiveMessage(Textmerge([Active "<<this.cProgram>>" file is <<this.cSidekickFile>>]), 64, This.cProgram )
-		  Case This.cCommand == [0*] Or This.cCommand == [**] Or (This.cCommand = [0] And Inlist(This.cParameter, [*], [-], [+], [/]))
-		    This.ChangeSidekickFile()
-		  Case Inlist(This.cCommand, [*], [pr], [proj], [project]) And This.nWindowType = 0
-		    This.ListProjects()
-		  Case This.cCommand == [0] And Getwordnum(This.cParameter, 1) # This.cRun
-		    This.ChangeSidekickFile()
-		  Case This.nWindowType > 0;
-		      And (This.cCommand = [#];
-		        Or Left(This.cCommand, 4) = [#inc];
-		        Or Left(This.cCommand, 3) = [inc])
-		    This.GetHeader()
-		  Case This.cCommand == [br] And !Empty(Dbf())
-		    this.DoBrowModal()
-		  Case This.cCommand == [br]
-		    This.GiveMessage('No table is open in the current work area.')
-		  Case This.cCommand = [be]
-		    This.CreateBindEvent()
-		  Case This.cCommand = [rt]
-		    This.MakeRandowText()
-		  Case Inlist(This.cCommand, [lor], [lorem])
-		    This.MakeLoremText()
-		  Case This.cCommand = [fp]
-		    This.MakeFieldPicker()
-		  Case This.cCommand == [-] And This.nWindowType = 0
-		    This.ProcessSidekickFile()
 		  Case Isdigit(This.cCommand) And This.cCommand = Transform(Val(This.cCommand )) And Empty(This.cParameter ) And This.nWindowType = 0
 		    This.GetLinesToProcess(Val(This.cCommand))
 		  Case Isdigit(This.cCommand ) And This.cCommand = Transform(Val(This.cCommand )) And !Empty(This.cParameter ) And Inlist(This.nWindowType, 1, 2)
 		    This.RunEd(This.cParameter)
-		  Case This.cCommand = [dd] And This.nWindowType = 10
-		    This.MakeDoDefault()
 		  Case Isdigit(This.cCommand ) And This.cCommand = Transform(Val( This.cCommand )) And !Empty( This.cParameter) ;
 		      And Inlist(Getwordnum( This.cParameter, 1), [do], This.cRun ) And  Inlist(This.nWindowType, 1, 2)
 		    If Getwordnum(This.cParameter, 1) = This.cRun
@@ -3954,6 +2902,7 @@ DEFINE CLASS sidekick AS container
 	ENDPROC
 
 	PROCEDURE findskoptions
+		* Procession of project files, single lines
 		If Inlist(This.nWindowType, 1, 2) And Lower(Justext(This.cTitle)) = [sk]
 		  Do Case
 		    Case Isdigit(This.cCommand ) And This.cCommand = Transform(Val(This.cCommand )) And !Empty(This.cParameter )
@@ -3966,7 +2915,8 @@ DEFINE CLASS sidekick AS container
 		  EndCase
 		Else 
 		  Return .f.  
-		Endif
+		EndIf
+		
 	ENDPROC
 
 	PROCEDURE findswitch
@@ -4122,6 +3072,7 @@ DEFINE CLASS sidekick AS container
 		lnModeless = Iif(Empty(m.tlModeless), 1, 2)
 		tcPGParameter = Evl(m.tcPGParameter, [])
 		lcReturn = []
+		Wait clear
 		If !Empty(Dbf())
 		  If Reccount() = 1
 		    If Vartype(Evaluate(m.tcReturnField)) = [N]
@@ -4181,8 +3132,6 @@ DEFINE CLASS sidekick AS container
 		        On Key Label F3 Execscript(m.lcF3)
 		        On Key Label F4 Execscript(m.lcF4)
 		        On Key Label F5 Execscript(m.lcF5)
-		        *!*        Case this.cCommand == 'lu'
-		        *!*          On Key Label 
 		    Endcase
 		    *!*      Set Step On 
 		    m.loPg.Show(m.lnModeless )
@@ -4572,43 +3521,6 @@ DEFINE CLASS sidekick AS container
 		
 	ENDPROC
 
-	PROCEDURE getheader
-		Local lcClip, lcCursorfiles, lcParameter, lcText
-		
-		Local Array laHeaders[1]
-		Local Array laList[1]
-		
-		lcCursorfiles = This.cCursor
-		#Define ccCR Chr(13)
-		lcParameter = This.cParameter
-		If This.cCommand = [#] And Len(This.cCommand) > 1
-		  lcParameter = Substr(This.cCommand, 2)
-		Endif
-		lcClip = _Cliptext
-		Select 0
-		If this.GetFilesInPath([H], m.lcCursorfiles) = 0
-		  _Cliptext = _Screen.cClip
-		  Return
-		EndIf
-		Select (m.lcCursorfiles) 
-		*!*  Select fname, Cast('' as date) as date, Cast(0 as i) as size From (m.lcCursorfiles) Into Cursor (m.lcCursorfiles) Readwrite 
-		*!*  Scan 
-		*!*    Adir(laDummy, Alltrim(fname))
-		*!*    ldDate = m.laDummy(1, 3)
-		*!*    lnSize = m.laDummy(1, 2)
-		*!*    Replace date with m.ldDate, size with m.lnSize 
-		*!*  Endscan
-		If !Empty(m.lcParameter )
-		  Select * From (m.lcCursorfiles) Into Cursor (m.lcCursorfiles) Readwrite Where m.lcParameter  $ Lower(Fname)
-		Endif
-		lcText = This.GetDataFromGrid([Select file:], m.lcCursorfiles + [.fname])
-		If !Empty(m.lcText)
-		  This.ReplaceCurrentLine([#Include ] + m.lcText + ccCR)
-		Endif
-		
-		
-	ENDPROC
-
 	PROCEDURE gethelptopics
 		* a = all windows
 		* c = command window
@@ -4623,6 +3535,7 @@ DEFINE CLASS sidekick AS container
 		 a   | !           | Create and run Sidekick extensions                     | skta
 		 a   | !!          | Edit Sidekick extensions                               | skta
 		 c   | *           | Picklist of projects in active .sk file                | skorg
+		 c   | **          | Picklist of Sidekick files in the path                 | skorg
 		 ef  | * <number>  | Repeat * characters to split code into segments        | skorg| Number of characters: 
 		 c   | +           | Picklist of all VFP files in the path, edit            | skdir
 		 ef  | +           | Inserts contents from prg                              | skins   | Name of file to include:
@@ -5002,36 +3915,13 @@ DEFINE CLASS sidekick AS container
 
 	PROCEDURE givemessage
 		Lparameters tcMessage, tnDialog, tcTitle, tnTimeOut
+		Wait clear
 		m.tcMessage = Evl(m.tcMessage,'No text given')
 		m.tcTitle = Evl(m.tcTitle, this.cProgram)
 		m.tnTimeOut = Evl(m.tnTimeOut,0)
 		m.tnDialog = Evl(m.tnDialog,0+64)
 		Return MessageBox( m.tcMessage,m.tnDialog,m.tcTitle,m.tnTimeOut )
 		
-	ENDPROC
-
-	PROCEDURE handledescription
-		#Define ccCR Chr(13)
-		Do Case
-		  Case This.nWindowType = 0 && Command window
-		    Wait Window 'Wait while Sidekick processes files!' at 10,25 nowait noclear
-		    This.ListDescript()
-		  Case Inlist(This.nWindowType, 1, 2) && Program or text file
-		    If this.nLineno < this.nMaxDescriptLine 
-		      If Empty(this.cParameter)
-		        lcText = this.cDescriptionMask1 + Space(3) + this.cDescriptionMask2 + ccCR
-		      Else 
-		        lcText = this.cDescriptionMask1 + ' ' + this.cParameter + ' ' + this.cDescriptionMask2 + ccCR
-		      EndIf
-		      this.oEditorWin.Delete()
-		      this.oEditorWin.Insert(m.lcText)
-		      If Empty(this.cParameter)
-		        this.oEditorWin.SetInsertionPoint(this.oEditorWin.GetSelStart() -4)
-		      EndIf
-		    Else 
-		      Wait Window Textmerge([Current line number is outside the Description range (1 to <<this.nMaxDescriptLine>>)!])
-		    Endif
-		Endcase
 	ENDPROC
 
 	PROCEDURE handlemrutable
@@ -5186,7 +4076,7 @@ DEFINE CLASS sidekick AS container
 		Lparameters tcCommand
 		
 		Local lnX
-		this.cVersion  = '1.05'
+		this.cVersion  = '1.20'
 		If !Pemstatus(_Screen, [lTest], 5)
 		  _Screen.AddProperty([lTest],.F.)
 		Endif
@@ -5251,165 +4141,6 @@ DEFINE CLASS sidekick AS container
 		
 	ENDPROC
 
-	PROCEDURE insertmethod
-		Local lcCode, lcMethod, lcProc, lcSource, lcText, lnProcs, lnSelect, lnX
-		
-		Local Array laProc[1]
-		
-		#Define crlf Chr(13)+Chr(10)
-		
-		If This.cCommand = [+] And Empty(This.cParameter ) And Len(This.cCommand) > 2
-		  lcMethod = Substr(This.cCommand, 2)
-		Else
-		  lcMethod = This.cParameter
-		Endif
-		lcCode = []
-		If Inlist(Lower(Justext(m.lcMethod)), [prg], [h])
-		  If File(m.lcMethod)
-		    lcCode = Filetostr(m.lcMethod)
-		  Else
-		    this.GiveMessage([File not found!], 48, Alltrim(m.lcMethod))
-		  Endif
-		Else
-		  lcText = []
-		  lnSelect = Select()
-		  Select 0
-		  Create Cursor CurMethods (Method c(240), Source c(240), Code m)
-		  Wait Window 'Wait while Sidekick processes files!' at 10,25 nowait noclear
-		  This.GetFilesInPath([prg], [curPrgs])
-		  Select curprgs
-		  Scan
-		    lcSource = curprgs.Fname
-		    lnProcs = Aprocinfo(laProc, curprgs.Fname, 0)
-		    For lnX = 1 To m.lnProcs
-		      If m.laProc(m.lnX, 3) = [Procedure] And (m.lcMethod $ Lower(m.laProc(m.lnX, 1)) Or Empty(m.lcMethod)) && And ![.] $ m.laProc(m.lnX, 1) 
-		        lcProc = m.laProc(m.lnX, 1)
-		        lcCode = this.GetMethdFromPrg(m.lcProc, m.lcSource)
-		        If '.'$m.lcProc 
-		          m.lcProc = JustExt(m.lcProc)
-		        Endif
-		        Insert Into CurMethods (Source, Method, Code) Values (m.lcSource, m.lcProc, m.lcCode )
-		      Endif
-		    Endfor
-		  Endscan
-		  Select CurMethods
-		  Index On Lower(Method) Tag Method
-		  Locate
-		  Wait clear
-		  If Reccount() > 0
-		    lcCode = This.GetDataFromGrid([Select method to insert], [curmethods.code])
-		  Else
-		    this.GiveMessage([No match found!], 48, m.lcMethod)
-		  Endif
-		  Select (m.lnSelect)
-		  lcMethod = Trim(CurMethods.Method)
-		  lcSource = Trim(CurMethods.Source )
-		  Use In Select([curmethods])
-		  Use In Select([curprgs])
-		Endif
-		If !Empty(m.lcCode)
-		  If This.nWindowType = 10
-		    This.ReplaceCurrentLine(This.removeProcEndproc(m.lcCode) + crlf)
-		  Else
-		    This.ReplaceCurrentLine(m.lcCode + crlf)
-		  Endif
-		Endif
-		
-		
-	ENDPROC
-
-	PROCEDURE insertresult
-		#Define ccCR Chr(13)
-		Local lcMethod, lcText
-		
-		If This.cCommand = [=] And Empty(This.cParameter) And Len(This.cCommand) > 1
-		  lcMethod = Substr(This.cCommand, 2)
-		Else
-		  lcMethod = This.cParameter
-		Endif
-		
-		lcText = []
-		If !Right(m.lcMethod, 1) = [)]
-		  lcMethod = m.lcMethod + [()]
-		Endif
-		Try
-		  lcText = Transform(Evaluate(m.lcMethod))
-		Catch
-		  this.GiveMessage([No or invalid result!], 0 + 48, m.lcMethod )
-		Endtry
-		If !Empty(m.lcText)
-		  This.ReplaceCurrentLine(m.lcText + ccCR)
-		Endif
-		
-		
-	ENDPROC
-
-	PROCEDURE listallcustomtools
-		m.lcFilename = this.cParameter
-		If Left(this.cCommand,1) = '!' and Len(this.cCommand)>1
-		  m.lcFilename = Substr(this.cCommand,2)
-		Endif
-		
-		
-		If Empty(m.lcFileName)
-		  lnSelect = Select()
-		  lcCursor = [curCustom]
-		  lnTools = this.GetFilesInPath([prg], m.lcCursor )
-		  Select Cast(Lower(Substr(Juststem(Fname), 4)) As c(30)) As Program, FileSize, Filedate, Cast([] As c(100)) As Descript, Fname;
-		    From (m.lcCursor) Into Cursor (m.lcCursor) Readwrite Where Lower(Left(Juststem(Fname), 3)) = [sk_]
-		  If _Tally = 0
-		    this.GiveMessage([No tool matching sk_ *.prg found], 0 + 48, [No custom tool defined])
-		  Else
-		    Scan
-		      lcFile = Alltrim(Fname)
-		      lcDescript = this.GetDescript(m.lcFile )
-		      If !Empty( m.lcDescript )
-		        Replace Descript With m.lcDescript
-		      Endif
-		    Endscan
-		    Go Top
-		    lcProg = this.GetDataFromGrid(Textmerge([My "<<this.cProgram>>" extensions (R/O) to run:]), [fname], 1)
-		    Use
-		    Select (m.lnSelect)
-		    If !Empty(m.lcProg)
-		      Do (m.lcProg)
-		    Endif
-		    If !this.lSKComment 
-		      this.CutCurrentLine()
-		    Endif
-		  Endif
-		Else
-		  lcFilename = Getwordnum(m.lcFileName, 1)
-		  lcPar = Getwordnum(m.lcFileName, 2)
-		  lcProg = Forceext([sk_] + m.lcFilename, [prg])
-		  If File(m.lcProg )
-		    If !Empty(m.lcPar)
-		      Do (m.lcProg ) With m.lcPar
-		    Else
-		      Do (m.lcProg )
-		    Endif
-		  Else
-		    If this.GiveMessage([File ] + m.lcProg + [ is not found], 4 + 48, [Create it?]) = 6
-		      Do Case
-		        Case Directory([prog])
-		          lcPath = [prog]
-		        Case Directory([prg])
-		          lcPath = [prg]
-		        Otherwise
-		          lcPath = []
-		      Endcase
-		      this.lSKComment = .F.
-		      Modify Command (Forcepath(m.lcProg, m.lcPath)) Nowait
-		    Endif
-		  Endif
-		Endif
-		If !this.lSKComment 
-		  this.CutCurrentLine()
-		Endif
-		
-		
-	ENDPROC
-
 	PROCEDURE listdescript
 		Local lcCursorfiles, lcDescript, lcFile, lcSelected, lcText, lnFiles, lnX
 		
@@ -5469,7 +4200,7 @@ DEFINE CLASS sidekick AS container
 	PROCEDURE listfiles
 		Lparameters tcFilter
 		Local lcCursorfiles, lcDescript, lcFile, lcFilter, lcMessage, lcText, lcWord, llRecords, lnFiles
-		Local lnX, loDummy
+		Local lnLen, lnX, loDummy
 		
 		Local Array laDummy[1]
 		
@@ -5484,6 +4215,7 @@ DEFINE CLASS sidekick AS container
 		Endif
 		tcFilter = Evl(m.tcFilter, [vfp])
 		tcFilter = Lower(m.tcFilter)
+		Wait Window [Wait while Sidekick processes files!] At 10, 25 Nowait Noclear
 		Select 0
 		If ![t] $ This.cOption
 		  lnFiles = This.GetFilesInPath([*], m.lcCursorfiles)
@@ -5505,6 +4237,10 @@ DEFINE CLASS sidekick AS container
 		    lcMessage = [Select a file to edit:]
 		Endcase
 		Do Case
+		  Case m.tcFilter = [ta] && Test area
+		    lcFilter = Lower(This.cTestArea)
+		    lnLen = Len(m.lcFilter)
+		    Select * From (m.lcCursorfiles) Into Cursor (m.lcCursorfiles) Readwrite Where Lower(Justext(Fname)) == [prg] And Left(Lower(Juststem(Fname)), m.lnLen) = m.lcFilter
 		  Case m.tcFilter = [dbf] And [s] $ This.cOption And !Empty(This.cParameter)
 		    lcFilter = Getwordnum(This.cParameter, 1)
 		    Select * From (m.lcCursorfiles) Into Cursor (m.lcCursorfiles) Readwrite Where Lower(Justext(Fname)) == [scx] And m.lcFilter $ Lower(Juststem(Fname))
@@ -5531,12 +4267,11 @@ DEFINE CLASS sidekick AS container
 		      Case [.v] $ This.cParameter
 		        This.AddOption([v])
 		        This.cParameter = Strtran(This.cParameter, [.v], [])
-		    Endcase
+		    EndCase
+		  Case Left(m.tcFilter,1) = '.'
+		    m.tcFilter = Substr(m.tcFilter,2)
+		    Select * From (m.lcCursorfiles) Into Cursor (m.lcCursorfiles) Readwrite Where Lower(Justext(Fname)) == m.tcFilter 
 		Endcase
-		*!*  For lnX = 1 To Getwordcount(This.cParameter)
-		*!*    lcWord = Getwordnum(This.cParameter, m.lnX)
-		*!*    Select * From (m.lcCursorfiles) Into Cursor (m.lcCursorfiles) Readwrite Where m.lcWord $ Lower(Fname)
-		*!*  Endfor
 		If Reccount(m.lcCursorfiles) = 0
 		  This.GiveMessage([No match found])
 		  Return .F.
@@ -5556,7 +4291,7 @@ DEFINE CLASS sidekick AS container
 		        Into Cursor (m.lcCursorfiles) Readwrite Where m.lcWord $ Lower(Fname);
 		        And Inlist(Lower(Justext(Fname)), ccVFPFilesToList)
 		    Endfor
-		  Case m.tcFilter = [dbf] && And !Empty(This.cParameter)
+		  Case m.tcFilter = [dbf] Or m.tcFilter = [ta] && And !Empty(This.cParameter)
 		    Select Fname, Cast(Justfname(Fname) As c(50)) As f1, Filedate, FileSize From (m.lcCursorfiles) ;
 		      Into Cursor (m.lcCursorfiles) Readwrite && Where Inlist(Lower(Justext(Fname)), ccVFPFilesToList)
 		  Otherwise
@@ -5573,7 +4308,7 @@ DEFINE CLASS sidekick AS container
 		    Endfor
 		Endcase
 		If Reccount(m.lcCursorfiles) = 0
-		  Wait clear
+		  Wait Clear
 		  This.RunEd(This.cParameter )
 		  Return
 		Endif
@@ -5597,7 +4332,6 @@ DEFINE CLASS sidekick AS container
 		  Alter Table (m.lcCursorfiles) Add Column Fields i
 		  Alter Table (m.lcCursorfiles) Add Column MemoSize i
 		Endif
-		
 		Do Case
 		  Case [a] $ This.cOption Or [e] $ This.cOption
 		    Set Filter To Inlist(Lower(Justext(Filename)), ccVFPTablesExtended)
@@ -5611,10 +4345,10 @@ DEFINE CLASS sidekick AS container
 		Endscan
 		Set Filter To
 		If [a] $ This.cOption Or [e] $ This.cOption
+		  Alter Table (m.lcCursorfiles) Add Column Descript c(100)
 		  Alter Table (m.lcCursorfiles) Add Column LineS i
 		  Alter Table (m.lcCursorfiles) Add Column Text m
 		  This.AddLinesAndText()
-		  Alter Table (m.lcCursorfiles) Add Column Descript c(100)
 		  Scan
 		    lcFile = Alltrim(FullName)
 		    lcDescript = This.GetDescript(m.lcFile )
@@ -5624,7 +4358,6 @@ DEFINE CLASS sidekick AS container
 		  Endscan
 		  Go Top
 		Endif
-		
 		If !Empty(This.cFilter)
 		  lcFilter = This.cFilter
 		  Alter Table (m.lcCursorfiles) Add Column (m.lcFilter) l
@@ -5654,32 +4387,41 @@ DEFINE CLASS sidekick AS container
 		    Enddo
 		
 		  Else
-		    Alter Table (m.lcCursorfiles) Add Column [classes] m
-		    Scan
-		      lcFile = Alltrim(FullName)
-		      Select ObjName From (m.lcFile) Where reserved1 == [Class] And !Deleted() Into Array laDummy
-		      Asort(m.laDummy)
-		      lcText = []
-		      For lnX = 1 To Alen(m.laDummy)
-		        lcText = m.lcText + Alltrim(m.laDummy(m.lnX)) + crlf
-		      Endfor
-		      lcText = Trim(m.lcText, 1, Chr(13), Chr(10))
-		      Replace Classes With m.lcText
-		    Endscan
+		    If this.cCommand # 'ed'
+		      Alter Table (m.lcCursorfiles) Add Column [classes] m
+		      Scan
+		        lcFile = Alltrim(FullName)
+		        Select ObjName From (m.lcFile) Where reserved1 == [Class] And !Deleted() Into Array laDummy
+		        Asort(m.laDummy)
+		        lcText = []
+		        For lnX = 1 To Alen(m.laDummy)
+		          lcText = m.lcText + Alltrim(m.laDummy(m.lnX)) + crlf
+		        Endfor
+		        lcText = Trim(m.lcText, 1, Chr(13), Chr(10))
+		        Replace Classes With m.lcText
+		      EndScan
+		    Endif
 		  Endif
-		Endif
-		This.DropFieldIfEmpty(m.lcCursorfiles, [records])
-		This.DropFieldIfEmpty(m.lcCursorfiles, [lines])
-		This.DropFieldIfEmpty(m.lcCursorfiles, [Fields])
-		This.DropFieldIfEmpty(m.lcCursorfiles, [text])
-		This.DropFieldIfEmpty(m.lcCursorfiles, [descript])
-		This.DropFieldIfEmpty(m.lcCursorfiles, [memosize])
-		This.IndexIfField(m.lcCursorfiles,'records',1)
-		This.IndexIfField(m.lcCursorfiles, [lines], 1)
-		This.IndexIfField(m.lcCursorfiles, [Fields], 1)
-		This.IndexIfField(m.lcCursorfiles, [descript], 2)
-		This.IndexIfField(m.lcCursorfiles, [memosize], 1)
-		
+		EndIf
+		*!*  Set Step On 
+		*!*  If this.ccommand # 'ed'
+		  This.DropFieldIfEmpty(m.lcCursorfiles, [records])
+		*!*    If ! InList(m.tcFilter , '.v', '.scx')
+		*!*    try
+		    This.DropFieldIfEmpty(m.lcCursorfiles, [lines])
+		*!*    Catch
+		*!*    Endtry
+		*!*    Endif
+		  This.DropFieldIfEmpty(m.lcCursorfiles, [Fields])
+		  This.DropFieldIfEmpty(m.lcCursorfiles, [text])
+		  This.DropFieldIfEmpty(m.lcCursorfiles, [descript])
+		  This.DropFieldIfEmpty(m.lcCursorfiles, [memosize])
+		  This.IndexIfField(m.lcCursorfiles, [records], 1)
+		  This.IndexIfField(m.lcCursorfiles, [lines], 1)
+		  This.IndexIfField(m.lcCursorfiles, [Fields], 1)
+		  This.IndexIfField(m.lcCursorfiles, [descript], 2)
+		  This.IndexIfField(m.lcCursorfiles, [memosize], 1)
+		*!*  Endif
 		If [l] $ This.cOption And Inlist(m.tcFilter, [dbf], [.vcx]) And [v] $ This.cOption && vcx
 		  Select * From (m.lcCursorfiles) Into Cursor (m.lcCursorfiles + [1]) Readwrite
 		  Use In (m.lcCursorfiles)
@@ -5693,13 +4435,19 @@ DEFINE CLASS sidekick AS container
 		Index On FileSize Tag FileSize
 		Set Order To
 		Wait Clear
-		lcText = This.GetDataFromGrid(m.lcMessage, [fullname], 0)
+		If m.tcFilter = 'ta'
+		  lcText = []
+		  return
+		Else
+		  lcText = This.GetDataFromGrid(m.lcMessage, [fullname], 0)
+		Endif
 		Do Case
 		  Case !Empty(This.cFilter)
 		  Case [e] $ This.cOption And Inlist(Lower(Justext(m.lcText)), [prg], [scx])
 		    This.RunProgram(m.lcText)
 		  Case Lower(Justext(m.lcText)) = [zip]
 		  Case This.cCommand == [us]
+		  Case This.cCommand = [ta]
 		  Case This.nWindowType = 0 And This.cCommand == [use]
 		  Case This.cCommand = [sf]
 		  Case Lower(Justext(m.lcText)) = [sk]
@@ -5711,82 +4459,6 @@ DEFINE CLASS sidekick AS container
 		    This.RunEd(Fullpath(m.lcText))
 		Endcase
 		Return m.lcText
-		
-		
-	ENDPROC
-
-	PROCEDURE listopentables
-		Local lcCursor, lnFiles, lnWorkArea, lnX
-		
-		Local Array laDummy[1]
-		
-		lnWorkArea = 0
-		lcCursor = This.cCursor && 'curOpenTables'
-		Create Cursor (m.lcCursor) (Workarea i, Alias c(20), Table c(50), RecordS i, Order c(50))
-		
-		lnFiles = Aused(laDummy)
-		For lnX = 1 To m.lnFiles
-		  Insert Into (m.lcCursor) (Workarea, Alias) Values (m.laDummy(m.lnX, 2), m.laDummy(m.lnX, 1))
-		Endfor
-		Scan
-		  Replace Table With This.ShowCase( This.FixPath( Dbf(Workarea))),;
-		    RecordS With Reccount(Workarea),;
-		    Order With Order(Workarea)
-		Endscan
-		Select * from (m.lcCursor) into cursor (m.lcCursor) readwrite where alias # Upper(m.lcCursor)
-		Index On Alias Tag Alias
-		Index On Table Tag Table
-		Index On Workarea Tag Workarea
-		
-		This.lNoMessage = .T.
-		If Reccount() > 1
-		  lnWorkArea = Val(This.GetDataFromGrid([List of open tables], [workarea]))
-		Else
-		  This.GiveMessage([No tables are open!])
-		Endif
-		If m.lnWorkArea > 0
-		  *!*    Select (m.lnWorkArea)
-		*!*    this.GiveMessage(Textmerge('Work area <<m.lnWorkArea >> is selected'))
-		  this.GiveMessage(Alltrim(alias) + ' is selected!')
-		  This.nSelect = m.lnWorkArea
-		Endif
-		
-	ENDPROC
-
-	PROCEDURE listprojects
-		Local lcClip, lcText, lcWord, lnSelect, lnWords, lnX
-		
-		lnSelect = Select()
-		lcClip = _Cliptext
-		If This.nWindowType = 0
-		  Select 0
-		  Create Cursor curProjects (text1 c(240), Projnotxt c(3), Project c(50), projno i)
-		  Append From (this.cSidekickFile) Sdf
-		  Replace All Projnotxt With Ltrim(Strextract(text1, [#], [ ], 1)),;
-		    projno With Val(Strextract(text1, [#], [ ], 1))
-		  Replace All Project With Strextract(text1, [ ], [], 1) For projno > 0
-		  Select Projnotxt, Project  From curProjects x;
-		    Where x.projno > 0 Order By projno;
-		    Into Cursor curProjects Readwrite
-		  If _Tally > 0
-		    Select Projnotxt As ProjectNo, Project  From curProjects Into Cursor curProjects Readwrite
-		    If !Empty(This.cParameter)
-		      lnWords = Getwordcount(This.cParameter)
-		      For lnX = 1 To m.lnWords
-		        lcWord = Getwordnum(This.cParameter, m.lnX)
-		        Select * From curProjects Into Cursor curProjects Readwrite Where m.lcWord $ Lower(ProjectNo + [|] + Project)
-		      Endfor
-		    Endif
-		    Go Top
-		    lcText = This.GetDataFromGrid([Select project from ] + This.cSidekickFile, [projectno])
-		    If !Empty(m.lcText)
-		      This.ProcessSidekickFile(m.lcText )
-		    Endif
-		  Endif
-		  This.CutCurrentLine()
-		  *!*    This.oEditorWin.Delete()
-		Endif
-		Select (m.lnSelect)
 		
 		
 	ENDPROC
@@ -5822,104 +4494,6 @@ DEFINE CLASS sidekick AS container
 		Return Reccount() > 0
 	ENDPROC
 
-	PROCEDURE makedodefault
-		Local lcResult
-		#Define ccCR Chr(13)
-		
-		lcResult = [DoDefault(] + _oPEMEditor.oUtils.oBeautifyX.FetchParametersList() + [)] + ccCR
-		this.ReplaceCurrentLine(m.lcResult)
-	ENDPROC
-
-	PROCEDURE makefieldpicker
-		Local lcAlias, lcFormFileName, lcReturn
-		
-		If !Empty(This.cParameter)
-		  lcAlias = This.cParameter
-		Else
-		  lcAlias = Alias()
-		Endif
-		If Empty(m.lcAlias)
-		  Wait Window [No table selected or specified] At 10, 25 Timeout 3
-		Else
-		  Execscript(_Screen.cThorDispatcher, [PEME_OpenTable], m.lcAlias)
-		  lcFormFileName = Execscript(_Screen.cThorDispatcher, [Full Path=PEME_Snippet_FP.SCX])
-		  Do Form (m.lcFormFileName) With m.lcAlias, [], [] To m.lcReturn
-		  this.ReplaceCurrentLine(m.lcReturn)
-		Endif
-		
-	ENDPROC
-
-	PROCEDURE makeloremtext
-		*!*  lnLength = Int(Val(GetWordNum(this.cParameter,1,', ' )))
-		*!*  lnParagraphs = Int(Val(GetWordNum(this.cParameter,2,', ')))
-		*!*  lcText = this.GetLoremText(m.lnLength,m.lnParagraphs  )
-		Local lcText, lnLength
-		
-		lnLength = Val(This.cParameter)
-		lnLength = Min(Evl(m.lnLength, 2),122)
-		Text To m.lcText Noshow Textmerge Pretext 1 + 2
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dictum semper quam id imperdiet. Ut et arcu eu felis euismod tristique. Aliquam varius rutrum nibh, ut rhoncus nisl commodo a. Maecenas nisi neque, sagittis non dolor et, finibus vestibulum dui. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aenean augue orci, dictum a consectetur nec, dictum sit amet mauris. Morbi vitae mollis metus, pellentesque aliquet nunc.
-		
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean consectetur, eros rhoncus eleifend porta, ipsum est fringilla nisi, vitae congue dui ante sit amet orci. Maecenas eget bibendum nibh, sit amet volutpat libero. Nulla a aliquam mi. Nullam mattis laoreet dapibus. Donec interdum est sit amet purus aliquet rutrum. Mauris ornare interdum malesuada. Vivamus a neque eu odio laoreet pellentesque eu ac felis.
-		
-		Nulla iaculis sem vestibulum elit pretium, quis imperdiet justo vulputate. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla facilisis tempus odio eu vulputate. Etiam tincidunt et metus quis dictum. Quisque non lectus fringilla, ullamcorper libero ut, scelerisque ex. Cras luctus erat sit amet rhoncus porttitor. Nam finibus volutpat arcu hendrerit dignissim. Proin bibendum nisl lacinia viverra fringilla. Vestibulum pellentesque quis mi non euismod. Etiam varius nibh et quam sagittis, nec hendrerit nisi elementum. Nulla aliquam turpis id orci suscipit, eu faucibus nisl venenatis. Duis lacinia felis nibh, sit amet consequat leo vestibulum vitae. Praesent eu sollicitudin nibh. Pellentesque iaculis non ipsum quis hendrerit. Donec ex est, malesuada vel ullamcorper vel, dapibus eget ligula.
-		
-		Etiam vel facilisis nunc. Cras sed nulla nec nunc mattis ullamcorper id nec augue. Curabitur vehicula orci sit amet odio facilisis semper. Praesent eu tempus ex. Fusce porttitor lectus dictum urna feugiat, nec aliquam dolor lacinia. Integer eget faucibus risus. Donec at purus quis tortor auctor fermentum aliquam sed elit. Quisque ac lorem in nibh fermentum tempor. In viverra odio ut neque tempus fringilla.
-		
-		Aenean quis sollicitudin eros. Nunc lacinia odio a velit feugiat, non posuere augue facilisis. Phasellus viverra justo risus, viverra facilisis nisi condimentum eu. Suspendisse nibh augue, aliquet nec efficitur nec, volutpat ac purus. Nunc vehicula ornare ornare. Nulla facilisi. Pellentesque quis enim quam. Maecenas mi felis, facilisis id enim laoreet, luctus bibendum mauris. Maecenas tincidunt non massa eget posuere. Donec ut efficitur tellus. Pellentesque massa mauris, laoreet in eleifend non, gravida at mi. Proin eu sem dignissim, rhoncus metus quis, ultricies odio. Nam at massa non sapien bibendum facilisis. Donec sit amet elementum nunc, sed pellentesque nunc. Maecenas aliquam nulla non elit varius, et varius justo auctor. Etiam neque leo, consequat quis luctus nec, sollicitudin sed ante.
-		
-		Vivamus tristique lacus nulla, dignissim rhoncus nisl lobortis vel. Donec nec lobortis nulla. Interdum et malesuada fames ac ante ipsum primis in faucibus. Morbi accumsan iaculis tellus ut volutpat. Vivamus a augue in nisi malesuada dignissim nec id lorem. Sed facilisis luctus sapien vitae venenatis. Morbi tempus elementum enim at placerat. Vestibulum pellentesque justo iaculis fermentum pulvinar. Donec venenatis imperdiet lectus, sed volutpat dolor porttitor eu. Sed sollicitudin vel sapien ullamcorper vehicula. Nunc placerat lobortis elit a vehicula. Etiam pulvinar congue enim eu tincidunt. Mauris nec dolor lobortis, ornare nunc a, pulvinar lorem. Cras congue ipsum eu aliquam eleifend. Nullam lobortis, mauris non pellentesque aliquet, nisi quam lacinia libero, et malesuada libero est sed risus.
-		
-		Pellentesque sit amet blandit velit, vitae pharetra nibh. Curabitur sed posuere libero. Ut lobortis, lectus a dignissim tincidunt, urna leo euismod dolor, eget dapibus ligula ante a mi. Quisque blandit efficitur suscipit. Praesent efficitur eros sit amet nunc elementum ornare. Quisque id nisi eros. Nulla facilisi. Pellentesque et neque orci. Ut arcu lorem, posuere a hendrerit vitae, blandit sed sapien. Donec vehicula, urna dignissim facilisis auctor, dui lectus venenatis elit, at eleifend tortor ligula eget tortor. Aenean blandit non neque eget tristique. Proin rhoncus eget massa quis posuere. Proin vel imperdiet magna. Vestibulum tincidunt condimentum scelerisque.
-		
-		Phasellus sem mauris, sagittis vel sapien et, commodo placerat ex. Suspendisse eu tellus tristique, bibendum arcu eu, venenatis purus. Ut egestas, leo id scelerisque dictum, mi leo venenatis libero, quis imperdiet quam elit eu quam. Aenean at sem lectus. Etiam id sem nisi. Donec ut ex velit. Nunc at nisi sit amet neque viverra blandit. Aenean nec venenatis nisl. Sed ullamcorper ipsum non finibus iaculis. Donec condimentum molestie nunc vel finibus. Maecenas quis lobortis risus, in luctus magna. Praesent elit leo, luctus ac commodo ac, tincidunt sed nisl. Pellentesque tristique arcu elit, vel cursus erat lacinia non. Etiam a molestie justo. Vivamus ullamcorper quam eu vulputate faucibus.
-		
-		Aenean pretium sit amet massa ac rutrum. Nunc eget commodo urna. Duis faucibus vitae lacus sed facilisis. Donec tincidunt sed elit a auctor. Proin rutrum leo id pretium molestie. Sed porta interdum dolor, nec lobortis dui convallis sit amet. Vestibulum congue turpis id est mollis, in iaculis nunc commodo. Vivamus nisi odio, fermentum non congue et, consequat non nulla. Sed eu blandit quam, et lacinia odio. Proin convallis viverra libero, vel finibus elit volutpat at. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-		
-		Nunc quis metus nec metus ornare pharetra id vel nulla. Cras varius faucibus elit a ultricies. Nam feugiat augue massa, eu sodales justo porta at. Vestibulum imperdiet, sem in ullamcorper malesuada, ipsum turpis elementum ex, at auctor ipsum orci vel quam. Maecenas sollicitudin ligula arcu, eget semper nibh scelerisque vitae. Suspendisse sed nunc tellus. Aenean dictum, ipsum vitae malesuada facilisis, augue augue vehicula odio, non tristique lorem tortor in mi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec elementum ante. Donec vitae tincidunt orci. Duis a accumsan erat.
-		EndText
-		m.lcText = Left(m.lcText, At([.], m.lcText, m.lnLength))
-		If 'c' $ this.cOption 
-		  this.CutCurrentLine()
-		  this.cClip = m.lcText 
-		Else   
-		  This.ReplaceCurrentLine(m.lcText )
-		Endif
-		
-		
-		
-	ENDPROC
-
-	PROCEDURE makerandowtext
-		Local lcText, lnParagraphs, lnSentences
-		
-		lnSentences = Val(Getwordnum(This.cParameter, 2, [, ]))
-		lnParagraphs = Val(Getwordnum(This.cParameter, 1, [, ]))
-		lnParagraphs = Evl(m.lnParagraphs, 1)
-		lnSentences = Evl(m.lnSentences, 1)
-		lcText = This.GetRandomText(m.lnParagraphs, m.lnSentences)
-		If 'c' $ this.cOption 
-		  this.CutCurrentLine()
-		  this.cClip = m.lcText 
-		Else   
-		  This.ReplaceCurrentLine(m.lcText )
-		Endif
-		
-	ENDPROC
-
-	PROCEDURE makesktestarea
-		lcTANumber = this.cParameter 
-		If InList(Left(this.cCommand,1),'.',',') and Len(this.cCommand) > 1
-		  m.lcTANumber = Substr(this.cCommand,2)
-		EndIf   
-		If !Empty(m.lcTANumber )
-		  m.lcTANumber = [_] + m.lcTANumber 
-		Endif
-		Modify Command Forceext([SKTestarea] + m.lcTANumber, [prg]) Nowait
-		
-		
-	ENDPROC
-
 	PROCEDURE makestringfromarray
 		Lparameters taArray, tcPath, tnColumn
 		m.tcPath = Evl(m.tcPath,'')
@@ -5930,75 +4504,6 @@ DEFINE CLASS sidekick AS container
 		  m.lcReturn = m.lcReturn + ForcePath(Trim(m.taArray(m.lnX,m.tnColumn)),m.tcPath) + ','
 		Endfor
 		Return Rtrim(m.lcReturn,0,',')
-	ENDPROC
-
-	PROCEDURE modifyform
-		Local lcCode, lcCursor, lcDBF, lcFile, lcMessage, lcMethod, lcProc, lcWord, lnProcs, lnWords, lnX
-		
-		Local Array laDummy[1]
-		Local Array laProc[1]
-		
-		lcCursor = This.cCursor
-		
-		If [.] $ This.cParameter Or !Pemstatus(_Screen, [sklastform], 5)
-		  This.cParameter = Chrtran(This.cParameter, [.], [])
-		  This.GetFilesInPath([scx], m.lcCursor )
-		  Select (m.lcCursor)
-		  Select Cast(Justfname(Fname) As c(50)) As Form, Fname, FileSize As Size, Filedate As Date;
-		    From (Alias()) Into Cursor ( Alias()) Readwrite
-		  Select Max(Len(Trim(Form))), Max(Len(Trim(Fname))) From (Alias()) Into Array laDummy
-		  Select Cast(Form As c(m.laDummy(1))) As Form, Cast(Fname As c(m.laDummy(2))) As Fname, Size, Date;
-		    From (Alias()) Into Cursor ( Alias()) Readwrite
-		  lnWords = Getwordcount(This.cParameter)
-		  For lnX = 1 To m.lnWords
-		    lcWord = Getwordnum(This.cParameter, m.lnX)
-		    Select * From (Alias()) Where m.lcWord $ Lower(Fname) Into Cursor (Alias()) Readwrite
-		  Endfor
-		  lcMessage = [Select a form to modify:]
-		  If Reccount() > 1
-		    lcDBF = This.GetDataFromGrid(m.lcMessage, [fname])
-		  Else
-		    lcDBF = Alltrim(Fname)
-		  Endif
-		  _Screen.AddProperty([sklastform], m.lcDBF)
-		Endif
-		If Pemstatus(_Screen, [sklastform], 5) And !Empty(_Screen.sklastform)
-		  lcDBF = _Screen.sklastform
-		  Select Methods From (m.lcDBF) Into Array laDummy Where BaseClass = [form]
-		  If _Tally > 0
-		    lcFile = Forceext([sk] + Sys(2015), [prg])
-		    Strtofile(m.laDummy(1, 2), m.lcFile)
-		    lnProcs = Aprocinfo(laProc, m.lcFile)
-		    If m.lnProcs > 0
-		      Create Cursor (m.lcCursor + [1]) (Function c(25), Code m)
-		      For lnX = 1 To m.lnProcs
-		        If m.laProc(m.lnX, 3) = [Procedure] && And (m.lcMethod $ Lower(m.laProc(m.lnX, 1)) Or Empty(m.lcMethod)) && And ![.] $ m.laProc(m.lnX, 1)
-		          lcProc = m.laProc(m.lnX, 1)
-		          lcCode = This.GetMethdFromPrg(m.lcProc, m.lcFile )
-		          If [.] $ m.lcProc
-		            lcProc = Justext(m.lcProc)
-		          Endif
-		          Insert Into (m.lcCursor + [1]) (Function, Code) Values (m.lcProc, m.lcCode)
-		        Endif
-		      Endfor
-		    Endif
-		    If File(m.lcFile)
-		      Erase (m.lcFile)
-		    Endif
-		    Select (m.lcCursor + [1])
-		    lcMessage = Proper(Juststem(m.lcDBF)) + [ - Select a method:]
-		    lcMethod = This.GetDataFromGrid(m.lcMessage, [Function])
-		    Wait Window m.lcMethod At 10, 25
-		    _Screen.AddProperty([sklastmethod], m.lcMethod )
-		  Else
-		    Wait Window [Nothing to do...] At 10, 25
-		  Endif
-		Endif
-		
-		
-		
-		
-		
 	ENDPROC
 
 	PROCEDURE notes
@@ -6046,30 +4551,6 @@ DEFINE CLASS sidekick AS container
 		If Vartype(this.oZip) # 'O'
 		  lcProcess = Execscript(_Screen.cThorDispatcher, [Full Path=] + [thor_proc_sidekick.VCX])
 		  this.oZip = NewObject('ozip', m.lcProcess)
-		Endif
-		
-	ENDPROC
-
-	PROCEDURE processsidekickfile
-		Lparameters tcProject
-		Local lcParam1
-		If !This.CheckOrCreateSidekickFile()
-		  Return
-		EndIf
-		lcParam1 = this.GetLineNo(this.cSidekickFile , 1)
-		If Lower(Getwordnum(m.lcParam1, 1)) = [default]
-		  lcParam1 = Getwordnum(m.lcParam1, Getwordcount(m.lcParam1 ))
-		Else
-		  this.GiveMessage([No Default group defined in ] + this.cSidekickFile , 0)
-		  Return
-		EndIf
-		If !Empty(m.tcProject)
-		  m.lcParam1 = m.tcProject
-		Endif
-		If Val(m.lcParam1) > 0
-		  this.GetLinesToProcess(Val(m.lcParam1))
-		Else
-		  this.RunEd(m.lcParam1)
 		Endif
 		
 	ENDPROC
@@ -6158,6 +4639,7 @@ DEFINE CLASS sidekick AS container
 		    m.loThor.SetOption('PathReturned',1,ccThorTool ) 
 		    m.loThor.SetOption('WaitTimeout',3,ccThorTool ) 
 		    m.loThor.SetOption('ZipDelay',100,ccThorTool ) 
+		    m.loThor.SetOption('TestArea','SKTest',ccThorTool ) 
 		  Endif
 		
 		  
@@ -6168,18 +4650,19 @@ DEFINE CLASS sidekick AS container
 		  AddProperty(m.loSk, [lNewFirst], m.loThor.GetOption([NewFirst],  ccThorTool))
 		  AddProperty(m.loSk, [nPathReturned], m.loThor.GetOption([PathReturned],  ccThorTool))
 		  AddProperty(m.loSk, [nDisplayCase], m.loThor.GetOption([DisplayCase],  ccThorTool))
-		  AddProperty(m.loSk, [cMRUTable], m.loThor.GetOption([MRUTable],  ccThorTool))
+		  AddProperty(m.loSk, [cMRUTable], Alltrim(m.loThor.GetOption([MRUTable],  ccThorTool)))
 		  AddProperty(m.loSk, [lNewFirst], m.loThor.GetOption([NewFirst],  ccThorTool))
 		  AddProperty(m.loSk, [nNextLength], m.loThor.GetOption([NextLength],  ccThorTool))
-		  AddProperty(m.loSk, [cBackupFolder], m.loThor.GetOption([BackupFolder],  ccThorTool))
-		  AddProperty(m.loSk, [cUnzipFolder], m.loThor.GetOption([UnzipFolder],  ccThorTool))
-		  AddProperty(m.loSk, [cZipTarget], m.loThor.GetOption([ZipTarget],  ccThorTool))
+		  AddProperty(m.loSk, [cBackupFolder], Alltrim(m.loThor.GetOption([BackupFolder],  ccThorTool)))
+		  AddProperty(m.loSk, [cUnzipFolder], Alltrim(m.loThor.GetOption([UnzipFolder],  ccThorTool)))
+		  AddProperty(m.loSk, [cZipTarget], Alltrim(m.loThor.GetOption([ZipTarget],  ccThorTool)))
 		  AddProperty(m.loSk, [nZipDelay], m.loThor.GetOption([ZipDelay],  ccThorTool))
-		  AddProperty(m.loSk, [cProject], m.loThor.GetOption([Project],  ccThorTool))
-		  AddProperty(m.loSk, [cRunCommand], m.loThor.GetOption([RunCommand],  ccThorTool))
+		  AddProperty(m.loSk, [cProject], Alltrim(m.loThor.GetOption([Project],  ccThorTool)))
+		  AddProperty(m.loSk, [cRunCommand], Alltrim(m.loThor.GetOption([RunCommand],  ccThorTool)))
 		  AddProperty(m.loSk, [nMaxDescriptLine], m.loThor.GetOption([MaxDescriptLine],  ccThorTool))
-		  AddProperty(m.loSk, [cHelpURL], m.loThor.GetOption([HelpUrl],  ccThorTool))
+		  AddProperty(m.loSk, [cHelpURL], Alltrim(m.loThor.GetOption([HelpUrl],  ccThorTool)))
 		  AddProperty(m.loSk, [nWaitTimeout], m.loThor.GetOption([WaitTimeout],  ccThorTool))
+		  AddProperty(m.loSk, [cTestArea], Alltrim(m.loThor.GetOption([TestArea],  ccThorTool)))
 		  _Screen.AddProperty([oSKOptions], m.loSk)
 		Endif
 		
@@ -6195,6 +4678,7 @@ DEFINE CLASS sidekick AS container
 		This.cSidekickHelp = Addbs(_Screen.oSKOptions.cHelpURL)
 		This.cMRUTable = Forceext(_Screen.oSKOptions.cMRUTable, [dbf])
 		This.cDefaultCommand = _Screen.oSKOptions.cDefaultCommand
+		this.cTestArea = _Screen.oSKOptions.cTestArea
 		If _Screen.oSKOptions.nFontSize < 6
 		  This.nFontSize = _Screen.FontSize
 		Else
@@ -6531,12 +5015,6 @@ DEFINE CLASS sidekick AS container
 		
 	ENDPROC
 
-	PROCEDURE setstepon
-		If 'z' $ this.cOption 
-		  Set step on
-		Endif
-	ENDPROC
-
 	PROCEDURE setupgrid
 		this.oGrid = CreateObject('pg')
 		this.oGrid.Visible = .t.
@@ -6572,7 +5050,987 @@ DEFINE CLASS sidekick AS container
 		
 	ENDPROC
 
-	PROCEDURE showcurrentpath
+	PROCEDURE skfactory
+		Local lcMethod, llSuccess
+		
+		lcMethod = [sk_] + This.cCommand
+		llSuccess = .F.
+		Do Case
+		  Case m.lcMethod = [sk_dr]
+		    This.sk_dr()
+		  Otherwise
+		    If Pemstatus(This, m.lcMethod, 5)
+		      lcMethod = [this.] + m.lcMethod + [()]
+		      Try
+		        Public goError
+		        Evaluate(m.lcMethod)
+		        llSuccess = .T.
+		      Catch To m.goError
+		        Wait Window [Can't evaluate ] + m.lcMethod At 10, 25
+		      Finally
+		      Endtry
+		    Endif
+		Endcase
+		If m.llSuccess
+		  Release m.goError
+		Endif
+		Return m.llSuccess
+	ENDPROC
+
+	PROCEDURE sk_be
+		If this.nWindowType = 0
+		  Return 
+		Endif
+		#Define crlf Chr(13)+Chr(10)
+		Local lcText, lcWord1, lcWord2
+		
+		lcWord1 = Getwordnum(This.cParameter, 1, [, ])
+		lcWord2 = Getwordnum(This.cParameter, 2, [, ])
+		If Empty(m.lcWord1) Or Empty(m.lcWord2) Or ![.] $ m.lcWord1 Or ![.] $ m.lcWord2
+		  this.GiveMessage([syntax: BE object1.event1,object2.event2], 0 + 64, [Invalid Parameters(s)], 5000)
+		Else
+		  lcText = Textmerge([Bindevent(<<Juststem(lcWord1)>>, "<<Justext(lcWord1)>>", <<Juststem(lcWord2)>>, "<<Justext(lcWord2)>>")])
+		  This.ReplaceCurrentLine(m.lcText + crlf)
+		Endif
+	ENDPROC
+
+	PROCEDURE sk_br
+		If !Empty(Dbf())
+		  this.DoBrowModal()
+		Else 
+		  This.GiveMessage('No table is open in the current work area.')
+		Endif
+		
+		    
+		  
+	ENDPROC
+
+	PROCEDURE sk_db
+		Local lcParameter, lcReturn, lldbo
+		
+		lldbo = [x] $ This.cOption
+		lcParameter = This.cParameter
+		If Left(m.lcParameter, 1) = [=]
+		  lcParameter = Substr(m.lcParameter, 2)
+		Endif
+		If Empty(m.lcParameter ) Or Getwordcount(m.lcParameter ) > 1
+		  Return
+		Endif
+		If !m.lldbo
+		  lcReturn = Textmerge([DebugOut '<<Strtran( m.lcParameter ,'m.','') >>', <<m.lcParameter >>])
+		Else
+		  lcReturn = Textmerge([?'<<Strtran( m.lcParameter ,'m.','') >>', <<m.lcParameter >>])
+		Endif
+		This.ReplaceCurrentLine(m.lcReturn)
+	ENDPROC
+
+	PROCEDURE sk_dd
+		If this.nWindowType # 10
+		  Return 
+		Endif
+		Local lcResult
+		#Define ccCR Chr(13)
+		
+		lcResult = [DoDefault(] + _oPEMEditor.oUtils.oBeautifyX.FetchParametersList() + [)] + ccCR
+		this.ReplaceCurrentLine(m.lcResult)
+	ENDPROC
+
+	PROCEDURE sk_def
+		Lparameters tcProject
+		Local lcParam1
+		If !This.CheckOrCreateSidekickFile()
+		  Return
+		EndIf
+		lcParam1 = this.GetLineNo(this.cSidekickFile , 1)
+		If Lower(Getwordnum(m.lcParam1, 1)) = [default]
+		  lcParam1 = Getwordnum(m.lcParam1, Getwordcount(m.lcParam1 ))
+		Else
+		  this.GiveMessage([No Default group defined in ] + this.cSidekickFile , 0)
+		  Return
+		EndIf
+		If !Empty(m.tcProject)
+		  m.lcParam1 = m.tcProject
+		Endif
+		If Val(m.lcParam1) > 0
+		  this.GetLinesToProcess(Val(m.lcParam1))
+		Else
+		  this.RunEd(m.lcParam1)
+		Endif
+		
+	ENDPROC
+
+	PROCEDURE sk_desc
+		#Define ccCR Chr(13)
+		Do Case
+		  Case This.nWindowType = 0 && Command window
+		    Wait Window 'Wait while Sidekick processes files!' at 10,25 nowait noclear
+		    This.ListDescript()
+		  Case Inlist(This.nWindowType, 1, 2) && Program or text file
+		    If this.nLineno < this.nMaxDescriptLine 
+		      If Empty(this.cParameter)
+		        lcText = this.cDescriptionMask1 + Space(3) + this.cDescriptionMask2 + ccCR
+		      Else 
+		        lcText = this.cDescriptionMask1 + ' ' + this.cParameter + ' ' + this.cDescriptionMask2 + ccCR
+		      EndIf
+		      this.oEditorWin.Delete()
+		      this.oEditorWin.Insert(m.lcText)
+		      If Empty(this.cParameter)
+		        this.oEditorWin.SetInsertionPoint(this.oEditorWin.GetSelStart() -4)
+		      EndIf
+		    Else 
+		      Wait Window Textmerge([Current line number is outside the Description range (1 to <<this.nMaxDescriptLine>>)!])
+		    Endif
+		Endcase
+	ENDPROC
+
+	PROCEDURE sk_dr
+		this.ListFiles(this.cParameter)
+	ENDPROC
+
+	PROCEDURE sk_ec
+		* Execute Clipboard
+		Do case
+		  Case !Empty(this.cParameter)
+		    Try 
+		      ExecScript(this.cParameter )
+		    Catch 
+		      this.GiveMessage(Textmerge('Unknown command "<<this.cParameter>>"!'))
+		    Endtry
+		  Case [C] = Vartype(This.cClip )
+		    Try 
+		      ExecScript(this.cClip)
+		    Catch 
+		      this.GiveMessage([Can't execute the clipboard], 48, [], 3000)
+		    Endtry
+		  Otherwise 
+		    this.GiveMessage('Illegal command!')
+		Endcase
+		
+	ENDPROC
+
+	PROCEDURE sk_ed
+		llSuccess = .T.
+		Do Case
+		  Case This.nWindowType = 0 And this.cParameter == [?] And [w] $ This.cOption
+		    Use (This.cMRUTable) In Select(JustStem( This.cMRUTable))
+		    Select (This.cMRUTable)
+		    This.DoBrowModal([W])
+		    Use In Select(This.cMRUTable)
+		  Case This.nWindowType > 0 And This.cParameter == [+] 
+		    This.HandleMRUTable([Add])
+		  Case This.nWindowType > 0 And This.cParameter == [-]
+		    This.HandleMRUTable([Delete])
+		  Case This.cParameter = [?] or 'w'$this.cOption 
+		    If [?] $ This.cParameter
+		      This.cParameter = Chrtran(This.cParameter, [?], [])
+		    Endif
+		    This.HandleMRUTable([List])
+		  Case !Empty(This.cParameter) And This.cParameter # [0] And Val(This.cParameter) = 0
+		    If This.cParameter # [*]
+		      This.AddOption([a])
+		    Endif
+		    This.ListFiles(This.cParameter)
+		  Case Empty(This.cParameter) Or This.cParameter == [*]
+		    This.ListFiles([*])
+		  Case This.cParameter = Transform(Val(This.cParameter))
+		    If This.cParameter = [0]
+		      Modify Command (This.cSidekickFile ) Nowait
+		    Else
+		      This.GetLinesToProcess(Val(This.cParameter))
+		    Endif
+		  Otherwise
+		    llSuccess = .F.
+		Endcase
+		  
+	ENDPROC
+
+	PROCEDURE sk_es
+		* EditSource builder
+		#Define crlf Chr(13)+Chr(10)
+		Local lcCallerName, lcCommand, lcFullName, lcProject, lcText, llClip, llNewProject, llTest
+		Local lnCallerHandle, lnCallerType, lnEdType, lnLength, lnProject, loWindows
+		
+		lcText = This.cParameter
+		lnCallerType = This.nWindowType
+		If m.lnCallerType > 0
+		  lcCallerName = Lower(This.oEditorWin.GetTitle())
+		  lcFullName = Fullpath(m.lcCallerName)
+		Endif
+		lnCallerHandle = This.nHandle
+		If m.lnCallerType < 0 Or (m.lnCallerType = 0 And Empty(m.lcCallerName))
+		  Wait Window [Not legal from this window] At 10, 25 Timeo 5
+		  Return
+		Endif
+		lnProject = 0
+		loWindows = This.oEditorWin.GetOpenWindows()
+		llTest = Pemstatus(_Screen, [lTest], 5) And _Screen.lTest
+		llClip = .T.
+		lnEdType = 1
+		llNewProject = .F.
+		Do Case
+		  Case Inlist( m.lnCallerType, 1, 2) And Pemstatus(_Screen, [cSidekickfile], 5) And m.lcCallerName = Lower(This.cSidekickFile)
+		    lnEdType = 4 && Only number, Ed syntax
+		    Do Case
+		      Case Left(m.lcText, 1) = [+] && find next project
+		        lnProject = This.GetNextProject()
+		        lcText = Substr(m.lcText, 2)
+		        If Empty(Left(m.lcText, 1))
+		          lcProject = Getwordnum(m.lcText, 1)
+		          lcText = []
+		        Else
+		          lcProject = Getwordnum(m.lcText, 2)
+		          lcText = Getwordnum(m.lcText, 1)
+		        Endif
+		        llNewProject = .T.
+		      Case Val(m.lcText) > 0
+		        lnProject = Int(Val(m.lcText))
+		        lnLength = Len(Transform(m.lnProject))
+		        lcText = Substr(m.lcText, m.lnLength + 1 )
+		      Otherwise
+		        lnProject = -1
+		    Endcase
+		    Do Case
+		      Case Inlist(Lower(m.lcText), [x], [editsourcex], [edx], [ex])
+		        lnEdType = 3
+		      Case Inlist(Lower(m.lcText), [s], [editsource], [eds], [es])
+		        lnEdType = 1
+		      Case Inlist(Lower(m.lcText), [e], [es])
+		        lnEdType = 2
+		    Endcase
+		    lcCommand  = This.ScanAllWIndows(m.loWindows, m.lnCallerHandle, m.lnProject, m.lnEdType)
+		    This.oEditorWin.SelectWindow(m.lnCallerHandle)
+		    This.CutCurrentLine()
+		    If m.llNewProject
+		      lcProject = Evl(m.lcProject, [New project])
+		      lcProject = Inputbox([Type new project name: ], [], m.lcProject)
+		      lcProject = Evl(m.lcProject, [New project])
+		      lcCommand = [#] + Transform(m.lnProject) + [ ] + m.lcProject + crlf + crlf + m.lcCommand
+		    Endif
+		    If !Empty(m.lcCommand) And This.GiveMessage([Paste the following code:] + crlf + m.lcCommand, 4 + 64, [Current file is ] + This.cSidekickFile ) = 6
+		      This.WriteCurrentLine(m.lcCommand)
+		    Else
+		      Wait Window At 10, 25 [Operation cancelled!] Timeout 2
+		    Endif
+		  Case m.lnCallerType >= 0
+		    Do Case
+		      Case [s] $ Lower(m.lcText) Or [s] $ This.cOption
+		        lnEdType = 1
+		      Case [e] $ Lower(m.lcText) Or [e] $ This.cOption
+		        lnEdType = 2
+		      Case [x] $ Lower(m.lcText) Or [x] $ This.cOption
+		        lnEdType = 3
+		      Case [n] $ Lower(m.lcText)
+		        lnEdType = 4
+		    Endcase
+		    If Left(Lower(m.lcText), 3) = [all]
+		      lcCommand  = This.ScanAllWIndows(m.loWindows, m.lnCallerHandle, m.lnProject, m.lnEdType)
+		      This.oEditorWin.SelectWindow(m.lnCallerHandle)
+		      This.CutCurrentLine()
+		      If !Empty(m.lcCommand) And  This.GiveMessage([Paste the following code:] + crlf + m.lcCommand, 4 + 64, [Current file is ] + This.cSidekickFile ) = 6
+		        This.WriteCurrentLine(m.lcCommand)
+		      Else
+		        Wait Window At 10, 25 [Operation cancelled!] Timeout 2
+		      Endif
+		    Else
+		      If m.lnCallerType > 0
+		        lcCommand = This.GetEditSourceCode(m.lnCallerHandle, m.lnEdType, [])
+		        This.CutCurrentLine()
+		        If !Empty(m.lcCommand)
+		          If This.GiveMessage( [Copy this code to the clipboard?] + crlf + m.lcCommand, 4 + 32, [Generated code!]) = 6
+		            This.cClip = m.lcCommand
+		          Else
+		            Wait Window At 10, 25 [Operation cancelled!] Timeout 2
+		          Endif
+		        Endif
+		      Endif
+		    Endif
+		  Case Empty(m.lcCallerName)
+		    This.GiveMessage( [Select a program or text file, or a method, first!], 0 + 48, [Not applicable from here!], 3000)
+		  Otherwise
+		    This.GiveMessage(ccCanNotUse, 0 + 48, [This function only works in code windows!], 3000)
+		Endcase
+		This.oEditorWin.SelectWindow(m.lnCallerHandle)
+		
+		
+	ENDPROC
+
+	PROCEDURE sk_eval
+		#Define ccCR Chr(13)
+		Local lcMethod, lcText
+		
+		If This.cCommand = [=] And Empty(This.cParameter) And Len(This.cCommand) > 1
+		  lcMethod = Substr(This.cCommand, 2)
+		Else
+		  lcMethod = This.cParameter
+		Endif
+		
+		lcText = []
+		If !Right(m.lcMethod, 1) = [)]
+		  lcMethod = m.lcMethod + [()]
+		Endif
+		Try
+		  lcText = Transform(Evaluate(m.lcMethod))
+		Catch
+		  this.GiveMessage([No or invalid result!], 0 + 48, m.lcMethod )
+		Endtry
+		If !Empty(m.lcText)
+		  This.ReplaceCurrentLine(m.lcText + ccCR)
+		Endif
+		
+		
+	ENDPROC
+
+	PROCEDURE sk_fp
+		*Field picker
+		Local lcAlias, lcFormFileName, lcReturn
+		
+		If !Empty(This.cParameter)
+		  lcAlias = This.cParameter
+		Else
+		  lcAlias = Alias()
+		Endif
+		If Empty(m.lcAlias)
+		  Wait Window [No table selected or specified] At 10, 25 Timeout 3
+		Else
+		  Execscript(_Screen.cThorDispatcher, [PEME_OpenTable], m.lcAlias)
+		  lcFormFileName = Execscript(_Screen.cThorDispatcher, [Full Path=PEME_Snippet_FP.SCX])
+		  Do Form (m.lcFormFileName) With m.lcAlias, [], [] To m.lcReturn
+		  this.ReplaceCurrentLine(m.lcReturn)
+		Endif
+		
+	ENDPROC
+
+	PROCEDURE sk_hei
+		this.GiveMessage('Hei!')
+	ENDPROC
+
+	PROCEDURE sk_help
+		this.RunEd(this.cSidekickHelp)
+	ENDPROC
+
+	PROCEDURE sk_hk
+		#Define ccTool         'Browse all Thor Tools'
+		Local lcDestAlias, lcHotkey, lcProg, llExcludeNotUsed, lnSelect
+		
+		Local Array laDummy[1]
+		
+		llExcludeNotUsed = Execscript(_Screen.cThorDispatcher, [Get Option=], ccTool, ccTool)
+		lcDestAlias = [curHotKeys]
+		Wait Window 'Wait while Sidekick processes files!' at 10,25 nowait noclear
+		Select 0
+		Execscript(_Screen.cThorDispatcher, [Thor_Proc_GetHotKeyDefs], m.lcDestAlias, m.llExcludeNotUsed )
+		Select Distinct Cast(Descript As c(100)) As Descript, Chrtran(HotKey, [-], [+]) As HotKey, Cast([] As c(10)) As sortkey, PRGName, StatusBar From (m.lcDestAlias);
+		  Where !Empty(HotKey ) And Substr(Descript, 3, 1) # [-] Into Cursor (m.lcDestAlias ) ;
+		  Readwrite
+		Scan
+		  lcHotkey = HotKey
+		  Select Recno() From (_Screen.Cthorfolder + [\source\hotkeys])  Hotkeys Where Hotkeys.Key = Substr(m.lcHotkey, 1 + Rat([+], m.lcHotkey ), 10) Into Array laDummy
+		  Replace sortkey With Padl(m.laDummy, 2, [ ]) + m.lcHotkey
+		Endscan
+		Select Distinct HotKey, Descript, PRGName, sortkey From (m.lcDestAlias) Into Cursor (m.lcDestAlias) Order By sortkey Readwrite
+		Select HotKey, Descript, PRGName From (m.lcDestAlias) Into Cursor (m.lcDestAlias) Readwrite
+		lnWords = GetWordCount(this.cParameter)
+		For lnX = 1 to m.lnWords 
+		  lcWord = GetWordNum(this.cParameter,m.lnX)
+		  Select * from (m.lcDestAlias) into cursor (m.lcDestAlias) readwrite where m.lcWord  $ Lower(hotkey + '|' + descript + '|' + prgname)
+		Endfor
+		Index On Lower(HotKey) Tag HotKey
+		Index On Lower(Descript) Tag Descript
+		Set Order To
+		lcProg = this.GetDataFromGrid([Thor tools], [prgname], 1)
+		Use
+		If !Empty(m.lcProg)
+		  Execscript(_Screen.cThorDispatcher, m.lcProg)
+		Endif
+		If !this.lSKComment 
+		  this.CutCurrentLine()
+		Endif
+		
+		
+	ENDPROC
+
+	PROCEDURE sk_inc
+		If this.nWindowType = 0
+		  Return 
+		Endif
+		Local lcClip, lcCursorfiles, lcParameter, lcText
+		
+		Local Array laHeaders[1]
+		Local Array laList[1]
+		
+		lcCursorfiles = This.cCursor
+		#Define ccCR Chr(13)
+		lcParameter = This.cParameter
+		If This.cCommand = [#] And Len(This.cCommand) > 1
+		  lcParameter = Substr(This.cCommand, 2)
+		Endif
+		lcClip = _Cliptext
+		Select 0
+		If this.GetFilesInPath([H], m.lcCursorfiles) = 0
+		  _Cliptext = _Screen.cClip
+		  Return
+		EndIf
+		Select (m.lcCursorfiles) 
+		Select *,Cast('' as memo) as data From (m.lcCursorfiles) Into Cursor (m.lcCursorfiles) Readwrite
+		Scan 
+		  Replace data with FileToStr(fname)
+		Endscan
+		If !Empty(m.lcParameter )
+		  Select * From (m.lcCursorfiles) Into Cursor (m.lcCursorfiles) Readwrite Where m.lcParameter  $ Lower(Fname)
+		Endif
+		lcText = This.GetDataFromGrid([Select file:], m.lcCursorfiles + [.fname])
+		If !Empty(m.lcText)
+		  This.ReplaceCurrentLine([#Include ] + m.lcText + ccCR)
+		Endif
+		
+		
+	ENDPROC
+
+	PROCEDURE sk_ins
+		If this.nWindowType = 0
+		  Return
+		Endif
+		Local lcCode, lcMethod, lcProc, lcSource, lcText, lnProcs, lnSelect, lnX
+		
+		Local Array laProc[1]
+		
+		#Define crlf Chr(13)+Chr(10)
+		lcMethod = This.cParameter
+		lcCode = []
+		If Inlist(Lower(Justext(m.lcMethod)), [prg], [h])
+		  If File(m.lcMethod)
+		    lcCode = Filetostr(m.lcMethod)
+		  Else
+		    this.GiveMessage([File not found!], 48, Alltrim(m.lcMethod))
+		  Endif
+		Else
+		  lcText = []
+		  lnSelect = Select()
+		  Select 0
+		  Create Cursor CurMethods (Method c(240), Source c(240), Code m)
+		  Wait Window 'Wait while Sidekick processes files!' at 10,25 nowait noclear
+		  This.GetFilesInPath([prg], [curPrgs])
+		  Select curprgs
+		  Scan
+		    lcSource = Alltrim(curprgs.Fname)
+		    lnProcs = Aprocinfo(laProc, curprgs.Fname, 0)
+		    For lnX = 1 To m.lnProcs
+		      If m.laProc(m.lnX, 3) = [Procedure] And (m.lcMethod $ Lower(m.laProc(m.lnX, 1)) Or Empty(m.lcMethod)) && And ![.] $ m.laProc(m.lnX, 1) 
+		        lcProc = m.laProc(m.lnX, 1)
+		        lcCode = this.GetMethdFromPrg(m.lcProc, m.lcSource)
+		        If '.'$m.lcProc 
+		          m.lcProc = JustExt(m.lcProc)
+		        Endif
+		        Insert Into CurMethods (Source, Method, Code) Values (m.lcSource, m.lcProc, m.lcCode )
+		      Endif
+		    Endfor
+		  Endscan
+		  Select CurMethods
+		  Index On Lower(Method) Tag Method
+		  Locate
+		  Wait clear
+		  If Reccount() > 0
+		    lcCode = This.GetDataFromGrid([Select method to insert], [curmethods.code])
+		  Else
+		    this.GiveMessage([No match found!], 48, m.lcMethod)
+		  Endif
+		  Select (m.lnSelect)
+		  lcMethod = Trim(CurMethods.Method)
+		  lcSource = Trim(CurMethods.Source )
+		  Use In Select([curmethods])
+		  Use In Select([curprgs])
+		Endif
+		If !Empty(m.lcCode)
+		  If This.nWindowType = 10
+		    This.ReplaceCurrentLine(This.removeProcEndproc(m.lcCode) + crlf)
+		  Else
+		    This.ReplaceCurrentLine(m.lcCode + crlf)
+		  Endif
+		Endif
+		
+		
+	ENDPROC
+
+	PROCEDURE sk_lor
+		*!*  lnLength = Int(Val(GetWordNum(this.cParameter,1,', ' )))
+		*!*  lnParagraphs = Int(Val(GetWordNum(this.cParameter,2,', ')))
+		*!*  lcText = this.GetLoremText(m.lnLength,m.lnParagraphs  )
+		Local lcText, lnLength
+		
+		lnLength = Val(This.cParameter)
+		lnLength = Min(Evl(m.lnLength, 2),122)
+		Text To m.lcText Noshow Textmerge Pretext 1 + 2
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dictum semper quam id imperdiet. Ut et arcu eu felis euismod tristique. Aliquam varius rutrum nibh, ut rhoncus nisl commodo a. Maecenas nisi neque, sagittis non dolor et, finibus vestibulum dui. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aenean augue orci, dictum a consectetur nec, dictum sit amet mauris. Morbi vitae mollis metus, pellentesque aliquet nunc.
+		
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean consectetur, eros rhoncus eleifend porta, ipsum est fringilla nisi, vitae congue dui ante sit amet orci. Maecenas eget bibendum nibh, sit amet volutpat libero. Nulla a aliquam mi. Nullam mattis laoreet dapibus. Donec interdum est sit amet purus aliquet rutrum. Mauris ornare interdum malesuada. Vivamus a neque eu odio laoreet pellentesque eu ac felis.
+		
+		Nulla iaculis sem vestibulum elit pretium, quis imperdiet justo vulputate. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla facilisis tempus odio eu vulputate. Etiam tincidunt et metus quis dictum. Quisque non lectus fringilla, ullamcorper libero ut, scelerisque ex. Cras luctus erat sit amet rhoncus porttitor. Nam finibus volutpat arcu hendrerit dignissim. Proin bibendum nisl lacinia viverra fringilla. Vestibulum pellentesque quis mi non euismod. Etiam varius nibh et quam sagittis, nec hendrerit nisi elementum. Nulla aliquam turpis id orci suscipit, eu faucibus nisl venenatis. Duis lacinia felis nibh, sit amet consequat leo vestibulum vitae. Praesent eu sollicitudin nibh. Pellentesque iaculis non ipsum quis hendrerit. Donec ex est, malesuada vel ullamcorper vel, dapibus eget ligula.
+		
+		Etiam vel facilisis nunc. Cras sed nulla nec nunc mattis ullamcorper id nec augue. Curabitur vehicula orci sit amet odio facilisis semper. Praesent eu tempus ex. Fusce porttitor lectus dictum urna feugiat, nec aliquam dolor lacinia. Integer eget faucibus risus. Donec at purus quis tortor auctor fermentum aliquam sed elit. Quisque ac lorem in nibh fermentum tempor. In viverra odio ut neque tempus fringilla.
+		
+		Aenean quis sollicitudin eros. Nunc lacinia odio a velit feugiat, non posuere augue facilisis. Phasellus viverra justo risus, viverra facilisis nisi condimentum eu. Suspendisse nibh augue, aliquet nec efficitur nec, volutpat ac purus. Nunc vehicula ornare ornare. Nulla facilisi. Pellentesque quis enim quam. Maecenas mi felis, facilisis id enim laoreet, luctus bibendum mauris. Maecenas tincidunt non massa eget posuere. Donec ut efficitur tellus. Pellentesque massa mauris, laoreet in eleifend non, gravida at mi. Proin eu sem dignissim, rhoncus metus quis, ultricies odio. Nam at massa non sapien bibendum facilisis. Donec sit amet elementum nunc, sed pellentesque nunc. Maecenas aliquam nulla non elit varius, et varius justo auctor. Etiam neque leo, consequat quis luctus nec, sollicitudin sed ante.
+		
+		Vivamus tristique lacus nulla, dignissim rhoncus nisl lobortis vel. Donec nec lobortis nulla. Interdum et malesuada fames ac ante ipsum primis in faucibus. Morbi accumsan iaculis tellus ut volutpat. Vivamus a augue in nisi malesuada dignissim nec id lorem. Sed facilisis luctus sapien vitae venenatis. Morbi tempus elementum enim at placerat. Vestibulum pellentesque justo iaculis fermentum pulvinar. Donec venenatis imperdiet lectus, sed volutpat dolor porttitor eu. Sed sollicitudin vel sapien ullamcorper vehicula. Nunc placerat lobortis elit a vehicula. Etiam pulvinar congue enim eu tincidunt. Mauris nec dolor lobortis, ornare nunc a, pulvinar lorem. Cras congue ipsum eu aliquam eleifend. Nullam lobortis, mauris non pellentesque aliquet, nisi quam lacinia libero, et malesuada libero est sed risus.
+		
+		Pellentesque sit amet blandit velit, vitae pharetra nibh. Curabitur sed posuere libero. Ut lobortis, lectus a dignissim tincidunt, urna leo euismod dolor, eget dapibus ligula ante a mi. Quisque blandit efficitur suscipit. Praesent efficitur eros sit amet nunc elementum ornare. Quisque id nisi eros. Nulla facilisi. Pellentesque et neque orci. Ut arcu lorem, posuere a hendrerit vitae, blandit sed sapien. Donec vehicula, urna dignissim facilisis auctor, dui lectus venenatis elit, at eleifend tortor ligula eget tortor. Aenean blandit non neque eget tristique. Proin rhoncus eget massa quis posuere. Proin vel imperdiet magna. Vestibulum tincidunt condimentum scelerisque.
+		
+		Phasellus sem mauris, sagittis vel sapien et, commodo placerat ex. Suspendisse eu tellus tristique, bibendum arcu eu, venenatis purus. Ut egestas, leo id scelerisque dictum, mi leo venenatis libero, quis imperdiet quam elit eu quam. Aenean at sem lectus. Etiam id sem nisi. Donec ut ex velit. Nunc at nisi sit amet neque viverra blandit. Aenean nec venenatis nisl. Sed ullamcorper ipsum non finibus iaculis. Donec condimentum molestie nunc vel finibus. Maecenas quis lobortis risus, in luctus magna. Praesent elit leo, luctus ac commodo ac, tincidunt sed nisl. Pellentesque tristique arcu elit, vel cursus erat lacinia non. Etiam a molestie justo. Vivamus ullamcorper quam eu vulputate faucibus.
+		
+		Aenean pretium sit amet massa ac rutrum. Nunc eget commodo urna. Duis faucibus vitae lacus sed facilisis. Donec tincidunt sed elit a auctor. Proin rutrum leo id pretium molestie. Sed porta interdum dolor, nec lobortis dui convallis sit amet. Vestibulum congue turpis id est mollis, in iaculis nunc commodo. Vivamus nisi odio, fermentum non congue et, consequat non nulla. Sed eu blandit quam, et lacinia odio. Proin convallis viverra libero, vel finibus elit volutpat at. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+		
+		Nunc quis metus nec metus ornare pharetra id vel nulla. Cras varius faucibus elit a ultricies. Nam feugiat augue massa, eu sodales justo porta at. Vestibulum imperdiet, sem in ullamcorper malesuada, ipsum turpis elementum ex, at auctor ipsum orci vel quam. Maecenas sollicitudin ligula arcu, eget semper nibh scelerisque vitae. Suspendisse sed nunc tellus. Aenean dictum, ipsum vitae malesuada facilisis, augue augue vehicula odio, non tristique lorem tortor in mi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec elementum ante. Donec vitae tincidunt orci. Duis a accumsan erat.
+		EndText
+		m.lcText = Left(m.lcText, At([.], m.lcText, m.lnLength))
+		If 'c' $ this.cOption 
+		  this.CutCurrentLine()
+		  this.cClip = m.lcText 
+		Else   
+		  This.ReplaceCurrentLine(m.lcText )
+		Endif
+		
+		
+		
+	ENDPROC
+
+	PROCEDURE sk_menu
+		Local lcAsk, lcDesc, lcFile, lcProg, lcSelect, lcSidekickOptions, lcTrigger, lcURL, lcVar, lcWindow
+		Local lnLines, lnX
+		
+		Local Array laSidekickChoices[1]
+		
+		lcSidekickOptions = This.GetHelpTopics()
+		lcSelect = Select()
+		Select 0
+		Create Cursor curSidekick (Trigger c(12), Descript c(50),  Window c(2), Ask c(25),  url c(100))
+		
+		lnLines = Alines(m.laSidekickChoices, m.lcSidekickOptions )
+		For lnX = 1 To m.lnLines
+		  lcWindow = Alltrim(Getwordnum( m.laSidekickChoices(m.lnX), 1, [|]))
+		  Do Case
+		    Case Left(m.lcWindow, 1) = [*]
+		      Loop
+		    Case m.lcWindow = [a]
+		    Case This.nWindowType = 0 And [c] $ m.lcWindow && Command window
+		    Case This.nWindowType > 0 And [e] $ m.lcWindow && Modify window/file
+		    Case This.nWindowType >= 10 And [f] $ m.lcWindow && Form or class window
+		    Case This.nWindowType < 0 And [m] $ m.lcWindow && Menu version
+		    Otherwise
+		      Loop
+		  Endcase
+		  lcTrigger = Alltrim(Getwordnum( m.laSidekickChoices(m.lnX), 2, [|]))
+		  If m.lcTrigger = [<blank>]
+		    lcTrigger = [ <blank>]
+		  Endif
+		  lcDesc = Alltrim(Getwordnum( m.laSidekickChoices(m.lnX), 3, [|]))
+		  lcAsk = Alltrim(Getwordnum( m.laSidekickChoices(m.lnX), 5, [|]))
+		  lcURL = Alltrim(Getwordnum( m.laSidekickChoices(m.lnX), 4, [|]))
+		  Do Case
+		    Case Left(m.lcURL, 2) = [sk] And [ #] $ m.lcURL
+		      lcURL = Strtran(m.lcURL, [#], [.md#])
+		      lcURL = Textmerge([<<this.cSidekickHelp>>blob/master/documents/<<m.lcURL>>])
+		    Case Left(m.lcURL, 2) = [sk]
+		      lcURL = Forceext(m.lcURL, [md])
+		      lcURL = Textmerge([<<this.cSidekickHelp>>blob/master/documents/<<m.lcURL>>])
+		    Case m.lcURL = [<default>]
+		      lcURL = Textmerge([<<this.cSidekickHelp>>])
+		    Case m.lcURL = [<ver>]
+		      lcDesc = [Version: ] + This.cVersion
+		      lcURL = Textmerge([<<this.cSidekickHelp>>/blob/master/Change%20Log.md])
+		  Endcase
+		
+		
+		  Insert Into curSidekick (Trigger, Descript, Ask, url) Values (m.lcTrigger, m.lcDesc, m.lcAsk, m.lcURL )
+		Endfor
+		Select Trigger, Descript, url, Ask From curSidekick Into Cursor curSidekick Readwrite
+		Index On Lower(Descript) Tag Descript
+		Index On Trigger Tag Trigger
+		If [x] $ This.cOption
+		  Browse Normal
+		Endif
+		lcProg = This.GetDataFromGrid(Textmerge([<<this.cProgram>> "commands", Ctrl+Enter opens url]), [trigger], 1)
+		lcAsk = Alltrim(Ask)
+		
+		Use
+		Select (m.lcSelect)
+		If Getwordnum(m.lcProg, 1) # [0]
+		  lcProg = Getwordnum( m.lcProg, 1)
+		Endif
+		If !Empty(m.lcProg)
+		  Do Case
+		    Case Lower(m.lcAsk) == [na]
+		      lcProg = []
+		    Case m.lcProg = [<blank>]
+		      lcProg = [menu] && [ed]
+		    Case m.lcProg = [2-9999]
+		      lcProg = Alltrim(Inputbox(m.lcAsk), [Empty for list])
+		      m.lcProg = Evl(m.lcProg,'*')
+		    Case m.lcProg = [0 <file>]
+		      lcFile = Alltrim(Inputbox(m.lcAsk, [Specify .sk file name!]))
+		      If Empty(m.lcFile)
+		        This.GiveMessage([No Sidekick file is specified!], 0 + 48)
+		        Return
+		      Endif
+		      lcFile = Forceext(m.lcFile, [sk])
+		      lcProg = [0 ] + m.lcFile
+		    Case m.lcProg = [?=]
+		      lcVar = Alltrim(Inputbox(m.lcAsk, [Value is required!]))
+		      If Empty(m.lcVar)
+		        This.GiveMessage([No variable given], 0 + 48)
+		        Return
+		      Endif
+		      lcProg = m.lcProg + m.lcVar
+		    Case Lower(m.lcAsk) = [filename or url:]
+		      lcProg = m.lcProg + [ ] + Inputbox(m.lcAsk, [Enter a value or press Enter for list!])
+		    Case !Empty(m.lcAsk)
+		      lcProg = m.lcProg + [ ] + Inputbox(m.lcAsk, [Value is required!])
+		    Case Inlist(Lower(m.lcProg), [sk], [sked], [eval])
+		      lcProg = m.lcProg + [ ] + Inputbox([Name of file:], [Empty gives picklist])
+		  Endcase
+		  If This.lSKComment
+		    lcProg = [*] + m.lcProg
+		  Endif
+		  If !Empty(m.lcProg)
+		    Execscript(_Screen.cThorDispatcher, [thor_tool_sidekick], m.lcProg )
+		  Else
+		    This.GiveMessage([This command is not available via Help menu!])
+		  Endif
+		Endif
+		If This.lSKComment
+		  This.CutCurrentLine()
+		Endif
+		
+		
+	ENDPROC
+
+	PROCEDURE sk_mf
+		* Modify file
+		Local lcCode, lcCursor, lcDBF, lcFile, lcMessage, lcMethod, lcProc, lcWord, lnProcs, lnWords, lnX
+		
+		Local Array laDummy[1]
+		Local Array laProc[1]
+		
+		lcCursor = This.cCursor
+		
+		If [.] $ This.cParameter Or !Pemstatus(_Screen, [sklastform], 5)
+		  This.cParameter = Chrtran(This.cParameter, [.], [])
+		  This.GetFilesInPath([scx], m.lcCursor )
+		  Select (m.lcCursor)
+		  Select Cast(Justfname(Fname) As c(50)) As Form, Fname, FileSize As Size, Filedate As Date;
+		    From (Alias()) Into Cursor ( Alias()) Readwrite
+		  Select Max(Len(Trim(Form))), Max(Len(Trim(Fname))) From (Alias()) Into Array laDummy
+		  Select Cast(Form As c(m.laDummy(1))) As Form, Cast(Fname As c(m.laDummy(2))) As Fname, Size, Date;
+		    From (Alias()) Into Cursor ( Alias()) Readwrite
+		  lnWords = Getwordcount(This.cParameter)
+		  For lnX = 1 To m.lnWords
+		    lcWord = Getwordnum(This.cParameter, m.lnX)
+		    Select * From (Alias()) Where m.lcWord $ Lower(Fname) Into Cursor (Alias()) Readwrite
+		  Endfor
+		  lcMessage = [Select a form to modify:]
+		  If Reccount() > 1
+		    lcDBF = This.GetDataFromGrid(m.lcMessage, [fname])
+		  Else
+		    lcDBF = Alltrim(Fname)
+		  Endif
+		  _Screen.AddProperty([sklastform], m.lcDBF)
+		Endif
+		If Pemstatus(_Screen, [sklastform], 5) And !Empty(_Screen.sklastform)
+		  lcDBF = _Screen.sklastform
+		  Select Methods From (m.lcDBF) Into Array laDummy Where BaseClass = [form]
+		  If _Tally > 0
+		    lcFile = Forceext([sk] + Sys(2015), [prg])
+		    Strtofile(m.laDummy(1, 2), m.lcFile)
+		    lnProcs = Aprocinfo(laProc, m.lcFile)
+		    If m.lnProcs > 0
+		      Create Cursor (m.lcCursor + [1]) (Function c(25), Code m)
+		      For lnX = 1 To m.lnProcs
+		        If m.laProc(m.lnX, 3) = [Procedure] && And (m.lcMethod $ Lower(m.laProc(m.lnX, 1)) Or Empty(m.lcMethod)) && And ![.] $ m.laProc(m.lnX, 1)
+		          lcProc = m.laProc(m.lnX, 1)
+		          lcCode = This.GetMethdFromPrg(m.lcProc, m.lcFile )
+		          If [.] $ m.lcProc
+		            lcProc = Justext(m.lcProc)
+		          Endif
+		          Insert Into (m.lcCursor + [1]) (Function, Code) Values (m.lcProc, m.lcCode)
+		        Endif
+		      Endfor
+		    Endif
+		    If File(m.lcFile)
+		      Erase (m.lcFile)
+		    Endif
+		    Select (m.lcCursor + [1])
+		    lcMessage = Proper(Juststem(m.lcDBF)) + [ - Select a method:]
+		    lcMethod = This.GetDataFromGrid(m.lcMessage, [Function])
+		    Wait Window m.lcMethod At 10, 25
+		    _Screen.AddProperty([sklastmethod], m.lcMethod )
+		  Else
+		    Wait Window [Nothing to do...] At 10, 25
+		  Endif
+		Endif
+		
+		
+		
+		
+		
+	ENDPROC
+
+	PROCEDURE sk_no
+		#Define Stripextension 'BIZ,$$$'
+		#Define ccCursor 'CurObjects'
+		
+		Local lcClass, lcClassFilter, lcClassInfo, lcClassLib, lcFilter, lcNewText, lcParameter
+		Local lcPasteText, lcPrefix, lcSource, lcText, lcVariable, llClipboard, llMethod, llPartOfClass
+		Local llPartOfClasslib, llRefresh, lnClasses, lnHits, lnI, lnSelect, lnX, ltTimestamp
+		lnSelect = Select()
+		lcFilter = []
+		lcParameter = This.cParameter
+		lcClassFilter = Getwordnum(m.lcParameter, 2, [= ])
+		lcParameter = Getwordnum(m.lcParameter, 1, [= ] )
+		If Empty(m.lcClassFilter)
+		  lcClassFilter = Evl(m.lcParameter, [lo])
+		  lcParameter = []
+		Endif
+		llMethod = [.] $ m.lcParameter
+		
+		If m.llMethod
+		  lcPrefix = Getwordnum(m.lcParameter, 1, [.])
+		  lcVariable = Getwordnum(This.cParameterOriginal, 2, [.])
+		Else
+		  lcPrefix = []
+		  If Empty(m.lcParameter)
+		    lcVariable = m.lcClassFilter && []
+		  Else
+		    lcVariable = This.cParameterOriginal
+		  Endif
+		Endif
+		
+		If ![o] $ This.cOption
+		  This.GetFilesInPath([vcx], [curdummy])
+		  If Reccount([curdummy]) > 0
+		    Create Cursor (ccCursor) (Classname c(50), LibName c(240), Timestamp T, Classinfo c(254) )
+		    Select curDummy
+		    Scan
+		      lcSource = Trim(curDummy.Fname)
+		      Use In Select([tempsource])
+		      Use (m.lcSource) Again In 0 Alias tempsource
+		      Select tempsource
+		      Scan For reserved1 == [Class] And !Deleted()
+		        lcClass = tempsource.ObjName
+		        lcClassLib = m.lcSource
+		        ltTimestamp = This.DecodeTimeStamp(tempsource.Timestamp)
+		        If  ! [r] $ This.cOption
+		          lcClassInfo = This.ShowCase(m.lcClass) + [|] + This.ShowCase(Sys(2014, m.lcClassLib, Curdir()))
+		        Else
+		          lcClassInfo = This.ShowCase(m.lcClass) + [|] + This.ShowCase(m.lcClassLib)
+		        Endif
+		        Insert Into (ccCursor) (Classname, LibName, Classinfo, Timestamp) Values (;
+		            This.ShowCase( tempsource.ObjName), This.ShowCase(m.lcSource), m.lcClassInfo, m.ltTimestamp )
+		      Endscan
+		      Use In tempsource
+		    Endscan
+		    Use In curDummy
+		  Endif
+		  Select (ccCursor)
+		  lnClasses = Reccount()
+		
+		
+		  Do Case
+		    Case (Left(m.lcClassFilter, 1) == [*] Or Right(m.lcClassFilter, 1) == [*]) And Len(m.lcClassFilter) > 1
+		      If Getwordcount(This.cParameter) = 1
+		        lcFilter = Chrtran(m.lcClassFilter, [*], [])
+		        lcVariable = [lo] + Proper(m.lcFilter)
+		      Endif
+		      Select * From (ccCursor) Where m.lcFilter $ Lower(Classname) Into Cursor (ccCursor) Readwrite Order By 1, 2
+		    Case Getwordcount(This.cParameter ) = 2
+		      lcVariable = Getwordnum(This.cParameterOriginal, 1)
+		      lcFilter = Getwordnum(This.cParameter, 2)
+		      Select * From (ccCursor) Where m.lcFilter $ Lower(Classname) Into Cursor (ccCursor) Readwrite Order By 1, 2
+		    Case Empty(This.cParameter );
+		        Or This.cParameter == [*];
+		        Or m.lcClassFilter == [*];
+		        Or Empty(m.lcParameter)
+		      Select * From (ccCursor) Into Cursor (ccCursor) Readwrite Order By 1, 2
+		    Otherwise
+		      Select * From (ccCursor) Where m.lcClassFilter = Lower(Classname)  Into Cursor (ccCursor) Readwrite Order By 1, 2
+		  Endcase
+		  lnHits = Reccount()
+		Else
+		  Private llNoProject
+		  llPartOfClass = [*] $ m.lcClassFilter
+		  llRefresh = [!] $ m.lcClassFilter
+		  llPartOfClasslib = [+] $ m.lcClassFilter
+		  llClipboard = [-] $ m.lcClassFilter
+		  lcClassFilter = Chrtran(m.lcClassFilter, [*!+-], [])
+		
+		  lcParameter = Evl(m.lcParameter, [*]) && TB
+		
+		  Do Case
+		    Case m.llMethod And Len(m.lcClassFilter) = 0
+		      This.GiveMessage([Illegal input!], 0, [], 5000)
+		      Return
+		  Endcase
+		  llNoProject = Type([_vfp.activeproject.name]) = [U] Or Empty(_vfp.ActiveProject.Name)
+		  lcNewText = []
+		  Do Case
+		    Case m.llNoProject
+		      This.readClassLibs()
+		    Case m.llRefresh Or !Pemstatus(_vfp, [noClasses], 5) Or Empty(_vfp.noClasses);
+		        Or !Pemstatus(_vfp, [noLenClasses], 5) Or _vfp.noLenClasses = 1
+		      lnClasses = This.readClassLibs()
+		    Otherwise
+		      lnClasses = _vfp.noLenClasses
+		  Endcase
+		  lcClassFilter = Lower(m.lcClassFilter)
+		  Do Case
+		    Case Type([_vfp.activeproject.name]) = [U] And !Pemstatus(_vfp, [noProject], 5)
+		      AddProperty(_vfp, [noProject], [])
+		    Case !Pemstatus(_vfp, [noProject], 5)
+		      AddProperty(_vfp, [noProject], _vfp.ActiveProject.Name)
+		  Endcase
+		  Do Case
+		    Case m.llNoProject
+		      _vfp.Noproject = []
+		      lnClasses = This.readClassLibs()
+		    Case m.llRefresh
+		      If Type([_vfp.activeproject.name]) = [C]
+		        _vfp.Noproject = _vfp.ActiveProject.Name
+		      Endif
+		      This.readClassLibs()
+		    Case Type([_vfp.activeproject.name]) # [U] And !_vfp.Noproject == _vfp.ActiveProject.Name
+		      _vfp.Noproject = _vfp.ActiveProject.Name
+		      This.readClassLibs()
+		  Endcase
+		  If m.lnClasses > 1
+		    Select 0
+		    Create Cursor (ccCursor) (Classname c(50), LibName c(240), Classinfo c(254) )
+		    Index On LibName Tag LibName
+		    Index On Classname Tag Classname
+		    lnHits = 0
+		    For lnI = 1 To _vfp.noLenClasses
+		      lcClassLib  = _vfp.noClasses(m.lnI, 2)
+		      lcClass     = _vfp.noClasses(m.lnI, 1)
+		      Do Case
+		        Case m.llPartOfClass And Len(m.lcClassFilter) > 0 And m.lcClassFilter $ Lower(m.lcClass)
+		        Case m.llPartOfClasslib And Len(m.lcClassFilter) > 0 And;
+		            (m.lcClassFilter $ Lower(m.lcClass) Or m.lcClassFilter $ Lower(m.lcClassLib))
+		        Case Len(m.lcClassFilter) > 0 And m.lcClass = Lower(m.lcClassFilter)
+		        Case Empty(This.cParameter) && or m.lcParameter == [*] && TBCheck
+		        Case This.cParameter == [*]
+		        Otherwise
+		          Loop
+		      Endcase
+		      lnHits = m.lnHits + 1
+		      If ! [r] $ This.cOption
+		        lcClassInfo = This.ShowCase(m.lcClass) + [|] + This.ShowCase(Sys(2014, m.lcClassLib, Curdir()))
+		      Else
+		        lcClassInfo = This.ShowCase(m.lcClass) + [|] + This.ShowCase(m.lcClassLib)
+		      Endif
+		      Insert Into (ccCursor) (Classname, LibName, Classinfo) Values (This.ShowCase(m.lcClass), This.ShowCase(Sys(2014, m.lcClassLib)), m.lcClassInfo )
+		    Endfor
+		    Go Top
+		  Endif
+		Endif
+		If Reccount() = 0
+		  Wait Window [No match found] At 10, 25 Timeout 2
+		  Return
+		Endif
+		If [n] $ This.cOption && Newest first
+		  Select * From (ccCursor) Into Cursor (ccCursor) Order By Classname, Timestamp Desc Readwrite
+		Endif
+		
+		lcClassInfo =  This.GetDataFromGrid([Pick a class], [Classinfo], 1)
+		If Empty(m.lcClassInfo)
+		  Return
+		Endif
+		If m.lnHits > 0
+		  lcClassInfo = Alltrim(Evaluate(ccCursor + [.ClassInfo]))
+		  lcClass  = Getwordnum (m.lcClassInfo, 1, [|])
+		  lcClassLib     = Getwordnum (m.lcClassInfo, 2, [|])
+		  lcPasteText = []
+		  If Empty(m.lcVariable) Or Right(m.lcVariable, 1) = [*]
+		    lcVariable = [lo] + Proper(Juststem(m.lcClass))
+		    For lnX = 1 To Getwordcount(Stripextension, [,])
+		      lcText = Getwordnum(Stripextension, m.lnX, [,])
+		      If Lower(Right(m.lcVariable, Len(m.lcText))) == Lower(m.lcText)
+		        lcVariable = Left(m.lcVariable, Len(m.lcVariable) - Len(m.lcText))
+		        Exit
+		      Endif
+		    Endfor
+		  Endif
+		  If m.llMethod
+		    If ! [r] $ This.cOption
+		      lcPasteText = m.lcPrefix + [.NewObject('] + m.lcVariable + [','] + Juststem(m.lcClass) + [', '] + Alltrim(m.lcClassLib) + [')]
+		    Else
+		      lcPasteText = m.lcPrefix + [.NewObject('] + m.lcVariable + [','] + Juststem(m.lcClass) + [', '] + Justfname (m.lcClassLib) + [')]
+		    Endif
+		  Else
+		    If ! [r] $ This.cOption
+		      If This.nWindowType # 0
+		        lcPasteText = [Local ] + m.lcVariable + [ as ] + m.lcClass + [ of ] + Alltrim(m.lcClassLib) + crlf
+		      Endif
+		      lcPasteText = m.lcPasteText + m.lcVariable + [ = NewObject('] + Juststem(m.lcClass) + [', '] + Alltrim(m.lcClassLib) + [')]
+		    Else
+		      If This.nWindowType = 0
+		        lcPasteText = m.lcPasteText + m.lcVariable + [ = NewObject('] + Juststem(m.lcClass) + [', '] + m.lcClassLib + [')]
+		      Else
+		        lcPasteText = [Local ] + m.lcVariable + [ as ] + m.lcClass + [ of ] + Justfname (m.lcClassLib) + crlf
+		        lcPasteText = m.lcPasteText + m.lcVariable + [ = NewObject('] + Juststem(m.lcClass) + [', '] + Justfname (m.lcClassLib) + [')]
+		      Endif
+		    Endif
+		  Endif
+		  If m.llClipboard
+		    _Cliptext = Iif(Empty(m.lcPrefix), m.lcVariable, m.lcPrefix + [.] + m.lcVariable)
+		  Endif
+		  If This.nWindowType # 0
+		    lcPasteText = m.lcPasteText + crlf
+		  Endif
+		  This.oEditorWin.Paste(m.lcPasteText)
+		Else
+		  This.GiveMessage([No match found!], 0 + 48, [], 5000)
+		Endif
+		Select (m.lnSelect)
+		Return
+		
+		
+	ENDPROC
+
+	PROCEDURE sk_ot
+		Local lcCursor, lnFiles, lnWorkArea, lnX
+		
+		Local Array laDummy[1]
+		
+		lnWorkArea = 0
+		lcCursor = This.cCursor && 'curOpenTables'
+		Create Cursor (m.lcCursor) (Workarea i, Alias c(20), Table c(50), RecordS i, Order c(50))
+		
+		lnFiles = Aused(laDummy)
+		For lnX = 1 To m.lnFiles
+		  Insert Into (m.lcCursor) (Workarea, Alias) Values (m.laDummy(m.lnX, 2), m.laDummy(m.lnX, 1))
+		Endfor
+		Scan
+		  Replace Table With This.ShowCase( This.FixPath( Dbf(Workarea))),;
+		    RecordS With Reccount(Workarea),;
+		    Order With Order(Workarea)
+		Endscan
+		Select * from (m.lcCursor) into cursor (m.lcCursor) readwrite where alias # Upper(m.lcCursor)
+		Index On Alias Tag Alias
+		Index On Table Tag Table
+		Index On Workarea Tag Workarea
+		
+		This.lNoMessage = .T.
+		If Reccount() > 1
+		  lnWorkArea = Val(This.GetDataFromGrid([List of open tables], [workarea]))
+		Else
+		  This.GiveMessage([No tables are open!])
+		Endif
+		If m.lnWorkArea > 0
+		  *!*    Select (m.lnWorkArea)
+		*!*    this.GiveMessage(Textmerge('Work area <<m.lnWorkArea >> is selected'))
+		  this.GiveMessage(Alltrim(alias) + ' is selected!')
+		  This.nSelect = m.lnWorkArea
+		Endif
+		
+	ENDPROC
+
+	PROCEDURE sk_pa
 		Local lcFolder, lcPath, lnElements, lnFiles, lnI, lnSize, lnX
 		
 		Local Array laDummy[1]
@@ -6612,13 +6070,724 @@ DEFINE CLASS sidekick AS container
 		This.GetDataFromGrid([Current path],,,,'N')
 	ENDPROC
 
-	PROCEDURE tryexecscript
-		Try 
-		  ExecScript(this.cClip)
-		Catch 
-		  this.GiveMessage([Can't execute the clipboard], 48, [], 3000)
-		Endtry
+	PROCEDURE sk_proj
+		If this.nWindowType > 0
+		  Return .f. 
+		Endif
+		Local lcClip, lcText, lcWord, lnSelect, lnWords, lnX
 		
+		lnSelect = Select()
+		lcClip = _Cliptext
+		If This.nWindowType = 0
+		  Select 0
+		  Create Cursor curProjects (text1 c(240), Projnotxt c(3), Project c(50), projno i)
+		  Append From (this.cSidekickFile) Sdf
+		  Replace All Projnotxt With Ltrim(Strextract(text1, [#], [ ], 1)),;
+		    projno With Val(Strextract(text1, [#], [ ], 1))
+		  Replace All Project With Strextract(text1, [ ], [], 1) For projno > 0
+		  Select Projnotxt, Project  From curProjects x;
+		    Where x.projno > 0 Order By projno;
+		    Into Cursor curProjects Readwrite
+		  If _Tally > 0
+		    Select Projnotxt As ProjectNo, Project  From curProjects Into Cursor curProjects Readwrite
+		    If !Empty(This.cParameter)
+		      lnWords = Getwordcount(This.cParameter)
+		      For lnX = 1 To m.lnWords
+		        lcWord = Getwordnum(This.cParameter, m.lnX)
+		        Select * From curProjects Into Cursor curProjects Readwrite Where m.lcWord $ Lower(ProjectNo + [|] + Project)
+		      Endfor
+		    Endif
+		    Go Top
+		    lcText = This.GetDataFromGrid([Select project from ] + This.cSidekickFile, [projectno])
+		    If !Empty(m.lcText)
+		      This.sk_def(m.lcText )
+		    Endif
+		  Endif
+		  This.CutCurrentLine()
+		  *!*    This.oEditorWin.Delete()
+		Endif
+		Select (m.lnSelect)
+		
+		
+	ENDPROC
+
+	PROCEDURE sk_rt
+		* Random Text
+		Local lcText, lnParagraphs, lnSentences
+		
+		lnSentences = Val(Getwordnum(This.cParameter, 2, [, ]))
+		lnParagraphs = Val(Getwordnum(This.cParameter, 1, [, ]))
+		lnParagraphs = Evl(m.lnParagraphs, 1)
+		lnSentences = Evl(m.lnSentences, 1)
+		lcText = This.GetRandomText(m.lnParagraphs, m.lnSentences)
+		If 'c' $ this.cOption 
+		  this.CutCurrentLine()
+		  this.cClip = m.lcText 
+		Else   
+		  This.ReplaceCurrentLine(m.lcText )
+		Endif
+		
+	ENDPROC
+
+	PROCEDURE sk_sk
+		If Left(This.cParcedText, 1) = [*]
+		  Return .F.
+		Endif
+		m.lcFilename = this.cParameter
+		If Left(this.cCommand,1) = '!' and Len(this.cCommand)>1
+		  m.lcFilename = Substr(this.cCommand,2)
+		Endif
+		
+		
+		If Empty(m.lcFileName)
+		  lnSelect = Select()
+		  lcCursor = [curCustom]
+		  lnTools = this.GetFilesInPath([prg], m.lcCursor )
+		  Select Cast(Lower(Substr(Juststem(Fname), 4)) As c(30)) As Program, FileSize, Filedate, Cast([] As c(100)) As Descript, Fname;
+		    From (m.lcCursor) Into Cursor (m.lcCursor) Readwrite Where Lower(Left(Juststem(Fname), 3)) = [sk_]
+		  If _Tally = 0
+		    this.GiveMessage([No tool matching sk_ *.prg found], 0 + 48, [No custom tool defined])
+		  Else
+		    Scan
+		      lcFile = Alltrim(Fname)
+		      lcDescript = this.GetDescript(m.lcFile )
+		      If !Empty( m.lcDescript )
+		        Replace Descript With m.lcDescript
+		      Endif
+		    Endscan
+		    Go Top
+		    lcProg = this.GetDataFromGrid(Textmerge([My "<<this.cProgram>>" extensions (R/O) to run:]), [fname], 1)
+		    Use
+		    Select (m.lnSelect)
+		    If !Empty(m.lcProg)
+		      Do (m.lcProg)
+		    Endif
+		    If !this.lSKComment 
+		      this.CutCurrentLine()
+		    Endif
+		  Endif
+		Else
+		  lcFilename = Getwordnum(m.lcFileName, 1)
+		  lcPar = Getwordnum(m.lcFileName, 2)
+		  lcProg = Forceext([sk_] + m.lcFilename, [prg])
+		  If File(m.lcProg )
+		    If !Empty(m.lcPar)
+		      Do (m.lcProg ) With m.lcPar
+		    Else
+		      Do (m.lcProg )
+		    Endif
+		  Else
+		    If this.GiveMessage([File ] + m.lcProg + [ is not found], 4 + 48, [Create it?]) = 6
+		      Do Case
+		        Case Directory([prog])
+		          lcPath = [prog]
+		        Case Directory([prg])
+		          lcPath = [prg]
+		        Otherwise
+		          lcPath = []
+		      Endcase
+		      this.lSKComment = .F.
+		      Modify Command (Forcepath(m.lcProg, m.lcPath)) Nowait
+		    Endif
+		  Endif
+		Endif
+		If !this.lSKComment 
+		  this.CutCurrentLine()
+		Endif
+		
+		
+	ENDPROC
+
+	PROCEDURE sk_sked
+		Local lcCursor, lcDescript, lcFile, lcMessage, lcProg, lcProgFile, lnSelect, lnTools
+		If [z] $ This.cOption
+		  Set Step On
+		Endif
+		lcProg = This.cParameter
+		If This.cCommand = [!!] And Len(This.cCommand ) > 2
+		  lcProg = Substr(This.cCommand, 3)
+		Endif
+		If !Lower(m.lcProg) = this.cSKFile 
+		  lcProg = this.cSKFile + m.lcProg
+		Endif
+		lcProgFile = Forceext(m.lcProg, [prg])
+		If !Empty(m.lcProg) And !m.lcProg == this.cSKFile 
+		  If File(m.lcProgFile)
+		    Modify Command (m.lcProgFile) Nowait
+		  Else
+		    This.GiveMessage([File ] + m.lcProgFile + [ is not found!], 0 + 48, [Nothing to do])
+		  Endif
+		Else
+		  lnSelect = Select()
+		  lcCursor = [curCustom]
+		  lnTools = This.GetFilesInPath([prg], m.lcCursor )
+		  Select Cast(Lower(Substr(Juststem(Fname), 4)) As c(30)) As Program, FileSize, Filedate, Cast([] As c(100)) As Descript, Fname;
+		    From (m.lcCursor) Into Cursor (m.lcCursor) Readwrite Where Lower(Left(Juststem(Fname), 3)) = this.cSKFile 
+		  If _Tally = 0
+		    lcMessage = [No tool matching ] + this.cSKFile + [ found]
+		    This.GiveMessage(m.lcMessage, 0 + 48, [No custom tool defined])
+		  Else
+		    Scan
+		      lcFile = Alltrim(Fname)
+		      lcDescript = This.GetDescript(m.lcFile )
+		      If !Empty( m.lcDescript )
+		        Replace Descript With m.lcDescript
+		      Endif
+		    Endscan
+		    Go Top
+		    lcProg = This.GetDataFromGrid(Textmerge([My "<<this.cProgram>>" extensions to edit:]), [fname], 1)
+		    Use
+		    Select (m.lnSelect)
+		    If !Empty(m.lcProg)
+		      Modify Command (m.lcProg) Nowait
+		    Endif
+		    If !This.lSKComment
+		      This.CutCurrentLine()
+		    Endif
+		  Endif
+		Endif
+	ENDPROC
+
+	PROCEDURE sk_ta
+		Local lcExt, lcFile, lcText, lnHandle
+		lcMessage = 'Select file to open:'
+		lnLen = Len(Trim(this.cTestArea)) + 1
+		Do Case
+		  Case Empty(This.cParameter)
+		    lcExt = []
+		  Case Val(This.cParameter) > 0
+		    lcExt = Alltrim(Transform( This.cParameter))
+		*!*    Case Inlist(Left(This.cParameter, 1), [,], [.], [-], [+])
+		*!*      This.GiveMessage([Illegal parameter])
+		*!*      Return .F.
+		  Case InList(This.cParameter, [?], ',', '.')
+		    this.AddOption('a')
+		    this.ListFiles('ta')
+		    lcFile = This.GetDataFromGrid(m.lcMessage, [fullname], 0)
+		    If Empty(m.lcFile)
+		      Return 
+		    Endif
+		  Case InList(This.cParameter, [+])
+		    this.AddOption('a')
+		    this.ListFiles('ta')
+		    Calculate Max(Val(Substr(filename,m.lnLen ))) to lnMax
+		    lcExt = Transform(m.lnMax + 1)
+		  Case InList(This.cParameter, [-])
+		    this.AddOption('a')
+		    this.ListFiles('ta')
+		    lnX=1
+		    Do while .T.
+		      Locate for Val(Substr(filename,m.lnLen )) = m.lnX
+		      If Found()
+		        m.lnX = m.lnX + 1 
+		        Loop
+		      EndIf
+		      Exit
+		    Enddo
+		    lcExt = Transform(m.lnX)
+		  Otherwise
+		    lcExt = [_] + Getwordnum(This.cParameter, 1)
+		EndCase
+		If Empty(m.lcFile)
+		  lcFile = Forceext(This.cTestArea + m.lcExt, [.prg])
+		Endif
+		If !File(m.lcFile)
+		  If this.GiveMessage('File ' + m.lcFile + ' does not exist,' + Chr(13) + Chr(10) + 'create it?',4+32, 'New file?') = 6
+		    lcText = This.cDescriptionMask1 + [  ] + This.cDescriptionMask2
+		    Strtofile(m.lcText, m.lcFile)
+		    Modify Command (m.lcFile) Nowait
+		    lnHandle = This.oEditorWin.Findlastwindow()
+		    This.oEditorWin.SelectWindow(m.lnHandle)
+		    This.oEditorWin.SetInsertionPoint(15)
+		  Endif
+		Else
+		  Modify Command (m.lcFile) Nowait
+		Endif
+		
+		
+		
+	ENDPROC
+
+	PROCEDURE sk_tools
+		#Define ccTool         'Browse all Thor Tools'
+		Local lcDesc, lcDestAlias, lcHotkey, lcProg, llExcludeNotUsed, lnSelect
+		
+		Local Array laDummy[1]
+		
+		llExcludeNotUsed = Execscript(_Screen.cThorDispatcher, [Get Option=], ccTool, ccTool)
+		lcDestAlias = [curHotKeys]
+		Select 0
+		Wait Window 'Wait while Sidekick processes files!' at 10,25 nowait noclear
+		Execscript(_Screen.cThorDispatcher, [Thor_Proc_GetHotKeyDefs], m.lcDestAlias, m.llExcludeNotUsed )
+		Select Distinct Cast(Ltrim(Descript) As c(100)) As Descript, Chrtran(HotKey, [-], [+]) As HotKey, Cast([] As c(10)) As sortkey, PRGName, StatusBar From (m.lcDestAlias);
+		  Into Cursor (m.lcDestAlias ) Where Left(Descript, 1) # [ ] And Substr(Descript, 3, 1) # [-];
+		  Readwrite
+		Scan
+		  lcHotkey = HotKey
+		  Select Recno() From (_Screen.Cthorfolder + [\source\hotkeys])  Hotkeys Where Hotkeys.Key = Substr(m.lcHotkey, 1 + Rat([+], m.lcHotkey ), 10) Into Array laDummy
+		  If _Tally > 0
+		    Replace sortkey With Padl(m.laDummy, 2, [ ]) + m.lcHotkey
+		  Endif
+		Endscan
+		Select HotKey, Descript, PRGName From (m.lcDestAlias) Into Cursor (m.lcDestAlias) Readwrite
+		lcDesc = []
+		lcHotkey = []
+		Scan
+		  If Lower(Descript) == m.lcDesc And Lower(HotKey) = m.lcHotkey
+		    Delete
+		  Endif
+		  lcDesc = Lower(Descript)
+		  lcHotkey = Lower(HotKey)
+		EndScan
+		If !Empty(this.cparameter)
+		  For lnX = 1 to GetWordCount(this.cparameter)
+		    lcWord = GetWordNum(this.cparameter, m.lnX)
+		    Select * From (m.lcDestAlias ) Into Cursor (m.lcDestAlias ) Readwrite where m.lcWord  $ Lower( descript + '|' + prgname)
+		  Endfor
+		Endif
+		Select * From (m.lcDestAlias ) Into Cursor (m.lcDestAlias ) Readwrite order by descript Where !Deleted()
+		Index On HotKey Tag HotKey
+		Index On Upper(Descript) Tag Descript
+		Set Order To 
+		Go top
+		Wait clear
+		lcProg = this.GetDataFromGrid([Thor tools], [prgname], 1)
+		Use
+		If !Empty(m.lcProg)
+		  Execscript(_Screen.cThorDispatcher, m.lcProg)
+		Endif
+		
+		
+	ENDPROC
+
+	PROCEDURE sk_unzip
+		Local lcZipFile, lcTargetFolder, llOK
+		
+		lcZipFile = GetWordNum(this.cParameter,1)
+		lcTargetFolder = GetWordNum(this.cParameter,2)
+		
+		If Vartype(This.oZip) # [O]
+		  This.oZipInit()
+		EndIf
+		If m.lcZipFile = '?' or Empty(m.lcZipFile)
+		  m.lcZipFile = this.ListFiles('.zip')
+		Endif
+		
+		If Empty(m.lcZipFile) 
+		  This.GiveMessage([You must specify a zip file!])
+		  Return .F.
+		Endif
+		If Empty(Justext(m.lcZipFile))
+		  lcZipFile = Forceext(m.lcZipFile, [.zip])
+		Endif
+		lcTargetFolder = Evl(m.lcTargetFolder, this.cUnzipFolder)
+		llOK = .T.
+		lcNew = 'already existing'
+		If !Directory(m.lcTargetFolder)
+		  Try
+		    Md (m.lcTargetFolder)
+		    m.lcNew = 'new'
+		  Catch
+		    llOK = .F.
+		    This.GiveMessage([Can't create folder ] + m.lcTargetFolder)
+		  Endtry
+		Endif
+		If !File(m.lcZipFile)
+		  This.GiveMessage([No file called ] + m.lcZipFile)
+		  llOK = .F.
+		Endif
+		If !m.llOK
+		  Return .T.
+		Else
+		  If !This.oZip.Unzip(m.lcZipFile, m.lcTargetFolder)
+		    this.GiveMessage(this.oZip.cErrorMessage)
+		  Else
+		    this.GiveMessage(m.lcZipFile + ' is unzipped into ' + m.lcNew + ' folder ' + m.lcTargetFolder)
+		  Endif
+		Endif 
+		
+	ENDPROC
+
+	PROCEDURE sk_us
+		Local lcCursorfiles, lcDBF, lcFullName, lcMessage, lcTable, lcText, llListfiles, lnPos
+		
+		lcCursorfiles = This.cCursor
+		llListfiles = .T.
+		Do Case
+		  Case File(This.cParameter)
+		    llListfiles = .F.
+		  Case [.dbf] $ This.cParameter
+		    This.cParameter = Strtran(This.cParameter, [.dbf], [])
+		  Case [.d] $ This.cParameter
+		    This.cParameter = Strtran(This.cParameter, [.d], [])
+		  Case [.vcx] $ This.cParameter
+		    This.AddOption([v])
+		    This.cParameter = Strtran(This.cParameter, [.vcx], [])
+		  Case [.vc] $ This.cParameter
+		    This.AddOption([v])
+		    This.cParameter = Strtran(This.cParameter, [.vc], [])
+		  Case [.v] $ This.cParameter
+		    This.AddOption([v])
+		    This.cParameter = Strtran(This.cParameter, [.v], [])
+		  Case [.scx] $ This.cParameter
+		    This.AddOption([s])
+		    This.cParameter = Strtran(This.cParameter, [.scx], [])
+		  Case [.sc] $ This.cParameter
+		    This.AddOption([s])
+		    This.cParameter = Strtran(This.cParameter, [.sc], [])
+		  Case [.s] $ This.cParameter
+		    This.AddOption([s])
+		    This.cParameter = Strtran(This.cParameter, [.s], [])
+		Endcase
+		If This.nWindowType # 0 And ([s] $ This.cOption Or [v] $ This.cOption)
+		  Return
+		Endif
+		Do Case
+		  Case [u] $ This.cOption Or This.cParameter == [-]
+		    This.AddOption([-b])
+		    This.AddOption([u])
+		    lcMessage = [List if tables in use:]
+		  Otherwise
+		    lcMessage = [Pick a table to use:]
+		Endcase
+		If [c] $ This.cOption Or [u] $ This.cOption
+		  If This.ListUsedTables()
+		    lcMessage = [Pick a table to close:]
+		    this.lNoMessage = .T.
+		    lcDBF = This.GetDataFromGrid(m.lcMessage, [fullname], 0)
+		    If Lastkey() = 27
+		      m.lcDBF = ''
+		    Endif
+		  Else
+		    This.GiveMessage([No tables are currently in use], , , This.nTimeOut )
+		  Endif
+		Else
+		  If m.llListfiles
+		    lcDBF = This.ListFiles([dbf])
+		  Else
+		    lcDBF = This.cParameter
+		  Endif
+		Endif
+		If Vartype(m.lcDBF) = [C] And !Empty(m.lcDBF)
+		  This.lNoSelectOnExit = .T.
+		  If m.llListfiles
+		    lcTable = Trim(Juststem(Evaluate(m.lcCursorfiles + [.fullname])))
+		    lcFullName = Trim(Evaluate(m.lcCursorfiles + [.fullname]))
+		  Else
+		    lcTable = Juststem(m.lcDBF)
+		    lcFullName = m.lcDBF
+		  Endif
+		  lcFullName = This.FixPath( m.lcFullName )
+		  This.cTableSelected = m.lcTable
+		  Do Case
+		    Case 'g' $ this.cOption && Close table
+		
+		      Text To m.lcText Noshow Textmerge Pretext 1 + 2 + 4
+		        Select  from <<StrExtract(this.FixPath(lcFullName),'','.')>>
+		      Endtext
+		      lnPos = This.oEditorWin.nCurrentLineStart
+		      This.ReplaceCurrentLine(m.lcText )
+		      This.oEditorWin.SetInsertionPoint(m.lnPos + 7)
+		    Case [u] $ This.cOption
+		      Select Trim(Evaluate(This.cCursor + [.alias]))
+		      This.GiveMessage(Trim(Evaluate(This.cCursor + [.alias])) + [ is selected], , , This.nTimeOut )
+		    Case [c] $ This.cOption and !Empty(m.lcDBF)
+		      Use In Select(Trim(Evaluate(This.cCursor + [.alias])))
+		      This.GiveMessage(Trim(Evaluate(This.cCursor + [.alias])) + [ is closed], , , This.nTimeOut )
+		    Otherwise
+		      If This.nWindowType = 0
+		        Text To m.lcText Noshow Textmerge Pretext 1 + 2 + 4
+		          * Select Select("<<m.lcTable>>" )
+		          * Use "<<m.lcFullName>>"
+		        Endtext
+		        Select Select(m.lcTable )
+		        If Select([query]) > 0 And  Lower(Juststem(Dbf(Select([query])))) = Lower(m.lcTable)
+		          Use In Query
+		        Endif
+		
+		        Use (m.lcFullName )
+		        This.CutCurrentLine()
+		        This.ReplaceCurrentLine(m.lcText + Chr(13))
+		        If [b] $ This.cOption
+		          this.DoBrowModal()
+		        Else
+		          Return
+		        Endif
+		      Else
+		        If ! [s] $ This.cOption And ! [v] $ This.cOption && Len(This.cOption) = Len(Chrtran(This.cOption, [sv], []))   && Empty(This.cOption)
+		          Text To m.lcText Noshow Textmerge Pretext 1 + 2 + 4
+		            Use "<<m.lcFullName>>" in Select("<<m.lcTable>>")
+		          Endtext
+		          This.ReplaceCurrentLine(m.lcText)
+		        Endif
+		      Endif
+		  Endcase
+		Else
+		  If ! 'c' $ this.cOption 
+		    This.GiveMessage([No files matches], , , 3000)
+		  Endif
+		  Return .T.
+		
+		Endif
+		
+	ENDPROC
+
+	PROCEDURE sk_ver
+		This.CutAndGiveMessage([Version: ] + This.cVersion, 64, This.cProgram )
+	ENDPROC
+
+	PROCEDURE sk_zero
+		Do case
+		  Case this.cParcedText = '**'
+		    this.cParameter = '*'
+		    this.ChangeSidekickFile()
+		  Case Empty(This.cParameter)
+		    this.CutCurrentLine()
+		    Modify Command (This.cSidekickFile ) Nowait
+		  Case this.cParameter = '?'
+		    This.CutAndGiveMessage(Textmerge([Active "<<this.cProgram>>" file is <<this.cSidekickFile>>]), 64, This.cProgram )
+		  Case Inlist(This.cParameter, [*], [-], [+], [/])
+		    this.ChangeSidekickFile()
+		  Case Getwordnum(This.cParameter, 1) # This.cRun
+		    this.ChangeSidekickFile()
+		Endcase
+		
+	ENDPROC
+
+	PROCEDURE sk_zip
+		Local lcDestination, lcFileList, lcFiles, lcFolder, lcText, llSuccess, lnFails, lnFiles, lnLines
+		Local lnX
+		
+		Local Array laDummy[1]
+		
+		If Vartype(This.oZip) # [O]
+		  This.oZipInit()
+		EndIf
+		This.cParameter = Evl(This.cParameter, [?])
+		lcFiles = Getwordnum(This.cParameter, 1)
+		lcDestination = Getwordnum(This.cParameter, 2)
+		If !'d' $ this.cOption
+		  lcDestination = Forceext(m.lcDestination, [zip])
+		  If Empty(m.lcDestination)
+		    lcDestination = This.GetLastFile(Forceext(This.cZipTarget, [.zip]))
+		    lcDestination = This.GetNextFile(m.lcDestination, This.nNextLength)
+		  Endif
+		  Do Case
+		    Case  Inlist(This.GetLastCharacter(m.lcDestination), [!], [*])
+		      lcDestination = Juststem(Chrtran( m.lcDestination, [*!], []))
+		      lcDestination = This.GetLastFile(Forceext(m.lcDestination, [zip]))
+		      lcDestination = This.GetNextFile(m.lcDestination, This.nNextLength)
+		    Case This.GetLastCharacter(m.lcDestination) = [?]
+		      lcDestination = Chrtran(m.lcDestination, [?], []) + This.GetSortableDate()
+		  Endcase
+		Endif
+		If m.lcFiles # [?] And Empty(Getwordnum(This.cParameter, 2)) And ![,] $ m.lcFiles And (Empty(Justext(m.lcFiles)) Or Lower(Justext(m.lcFiles)) = [zip]) And !File(m.lcFiles)
+		  lcDestination = Forceext(m.lcFiles, [.zip])
+		  lcFiles = []
+		Endif
+		lcFiles = Evl(m.lcFiles, [?])
+		Do Case
+		  Case [?] $ m.lcFiles
+		    If 'd' $ this.cOption
+		      This.lAddExtraExtensions = .T.
+		    Endif
+		    lcFiles = Chrtran(m.lcFiles, [?], [])
+		    This.cFilter = [Include]
+		    lcFiles = This.ListFiles(m.lcFiles )
+		  Case Len(m.lcFiles) # Len(Chrtran(m.lcFiles,'*',''))
+		    lnFiles = Adir(laDummy, m.lcFiles)
+		    If m.lnFiles > 0
+		      lcFolder = Justpath(m.lcFiles)
+		      lcFiles = Lower(This.MakeStringFromArray(@m.laDummy, m.lcFolder ))
+		    Else
+		      This.GiveMessage( [No match found], 0 + 48 )
+		    Endif
+		  Otherwise
+		Endcase
+		If !Empty(m.lcFiles)
+		  lcFileList = This.GetFilelistToProcess(Lower(m.lcFiles))
+		Endif
+		If !Empty(m.lcFileList)
+		  lcText = [added]
+		  If !'d' $ this.cOption
+		    lnLines = Alines(m.laDummy, m.lcFileList, 0, [,])
+		    lnFails = 0
+		    For lnX = 1 To m.lnLines
+		      Wait Window [Zipping ] + m.laDummy(m.lnX) At 10, 25 nowait noclear
+		      If !This.oZip.Zip(m.laDummy(m.lnX), m.lcDestination)
+		        This.GiveMessage(This.oZip.cErrorMessage, 48, [Fail!])
+		        lnFails = m.lnFails + 1
+		      Else
+		        If [d] $ This.cOption
+		          Erase (m.laDummy(m.lnX))
+		          lcText = [moved]
+		        Endif
+		      Endif
+		    Endfor
+		
+		    This.CutAndGiveMessage(Textmerge([<<m.lnLines - m.lnFails>> files <<m.lcText>> to file <<m.lcDestination >>]), ,;
+		        Textmerge([<<this.cProgram>> zip utility]), This.nTimeOut)
+		  Else
+		    lcDestination = Evl(m.lcDestination, Alltrim(This.cBackupFolder))
+		    If This.GetLastCharacter(m.lcDestination) = [?]
+		      lcDestination = Strtran(m.lcDestination, [?], This.GetSortableDate())
+		    Endif
+		    llSuccess = .T.
+		    If !Directory(m.lcDestination )
+		      Try
+		        Md (m.lcDestination )
+		      Catch
+		        This.GiveMessage([Can't create folder ] + m.lcDestination, 16, [Something went wrong])
+		        llSuccess = .F.
+		      Endtry
+		    Endif
+		    If !m.llSuccess
+		      Return
+		    Endif
+		    lnLines = Alines(m.laDummy, m.lcFileList, 0, [,])
+		    lnFails = 0
+		    For lnX = 1 To m.lnLines
+		      Wait Window [Moving ] + m.laDummy(m.lnX) At 10, 25 nowait noclear
+		      Try
+		        Rename (m.laDummy(m.lnX)) To Forcepath( m.laDummy(m.lnX), m.lcDestination )
+		      Catch
+		        This.GiveMessage([Can't move file ] + m.laDummy(m.lnX))
+		        lnFails = m.lnFails + 1
+		      Endtry
+		    EndFor
+		    This.CutAndGiveMessage(Textmerge([<<m.lnLines - m.lnFails>> files moved to folder <<m.lcDestination >>]), ,;
+		        Textmerge([<<this.cProgram>> move utility]), This.nTimeOut)
+		  Endif
+		Else
+		  This.CutAndGiveMessage([Nothing to do!], , , This.nTimeOut)
+		Endif
+		Return
+		
+		
+	ENDPROC
+
+	PROCEDURE splitcommand
+		Local lcCommand, lcParameter, lcText, lnColumn, lnLen, lnLines, lnX, lnY
+		
+		Local Array laCommands[1]
+		Local Array laDummy[1]
+		
+		lcCommand = This.cCommand
+		lnLen = Len(m.lcCommand)
+		lcParameter = []
+		Text To m.lcText Noshow Textmerge Pretext 1 + 2
+		  ?       | menu
+		  =       | eval
+		  !       | sk
+		  !!      | sked
+		  ,       | ta
+		  .       | ta
+		  ++      | dr    | a
+		  +++     | dr    | e
+		  ?=      | db    | x
+		  ??      | ed    | w
+		  br      | br
+		  cl      | us    | c
+		  db 
+		  desc
+		  descript    | desc  |
+		  description | desc  |
+		  dre     | dr    | e
+		  drr     | dr    | e
+		  drx     | dr    | a
+		  ec
+		  ed
+		  fp
+		  help
+		  hk
+		  hotkeys | hk
+		  lo      | ot
+		  lor
+		  lorem   | lor
+		  menu
+		  no
+		  ot
+		  path    | pa
+		  rt
+		  sk
+		  sked
+		  ta
+		  test    | ta
+		  tidy    | zip   | d
+		  th      | tools
+		  thor    | tools
+		  tool    | tools
+		  tools
+		  zip       
+		  unzip
+		  uz      | unzip
+		  ver
+		  version | ver
+		  
+		Endtext
+		Do Case
+		  Case This.nWindowType = 0 && Command window
+		    Text To m.lcText Additive Noshow Textmerge Pretext 1 + 2
+		      0    | zero
+		      **   | zero
+		      -    | def
+		      +    | dr
+		      *    | proj
+		      pr   | proj
+		      default | def
+		      defa | def
+		      proj
+		      us
+		      Use  | us
+		      zero
+		      
+		    Endtext
+		  Case This.nWindowType > 0 && Code editor
+		    Text To m.lcText Additive Noshow Textmerge Pretext 1 + 2
+		      +      | ins  |
+		      #      | inc  |
+		      #inc   | inc  |
+		      ins
+		      Insert | ins  |
+		      sf     | us   | g
+		
+		    Endtext
+		Endcase
+		If This.nWindowType > 2 && Form or class method
+		  Text To m.lcText Additive Noshow Textmerge Pretext 1 + 2
+		      be
+		      dd
+		
+		  Endtext
+		Endif
+		
+		lnLines = Alines(laDummy, m.lcText, 1 + 4)
+		Dimension m.laCommands(m.lnLines, 3)
+		For lnX = 1 To m.lnLines
+		  For lnY = 1 To 3
+		    laCommands(m.lnX, m.lnY) = Alltrim(Getwordnum(m.laDummy(m.lnX), m.lnY, [|]), 0, Chr(9), Chr(32), Chr(0))
+		    If Empty(laCommands(m.lnX, 2))
+		      laCommands(m.lnX, 2) = Alltrim(Getwordnum(m.laDummy(m.lnX), 1, [|]), 0, Chr(9), Chr(32), Chr(0))
+		    Endif
+		  Endfor
+		Endfor
+		
+		For lnX = m.lnLen To 1 Step - 1
+		  lnColumn = Ascan(m.laCommands, Left(m.lcCommand, m.lnX), 1, -1, 1, 1 + 2 + 4 + 8)
+		  If m.lnColumn > 0
+		    Exit
+		  Endif
+		Endfor
+		If m.lnColumn > 0
+		  This.cCommand = Evl( m.laCommands(m.lnColumn, 2),  m.laCommands(m.lnColumn, 1))
+		  lcParameter = Substr(m.lcCommand, Len(m.laCommands(m.lnColumn, 1)) + 1)
+		  If !Empty(m.laCommands(m.lnColumn, 3))
+		    This.cOption = This.cOption + m.laCommands(m.lnColumn, 3)
+		  Endif
+		Endif
+		If !Empty(m.lcParameter)
+		  This.cParameter = Trim(m.lcParameter + ' ' + Alltrim(This.cParameter))
+		Endif
 	ENDPROC
 
 	PROCEDURE tryexecute

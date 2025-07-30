@@ -1,7 +1,7 @@
 
 [![How Sidekick works](documents/Images/SKLogo.png)](documents/skhow.md)
 
-SideKick version 1.00 released June 30, 2025.
+SideKick version 1.20 released June 30, 2025.
 
 [What's new in this release](Change%20Log.md)
 
@@ -54,7 +54,7 @@ In addition to the "commands" listed above, these work **only** in the **Command
 |[0 (zero)](documents/skorg.md) | [Opens active .pan file for editing](documents/skorg.md)|
 |[De (or Desc)](documents/skdesc.md)| [List of all prg's which have a description](documents/skdesc.md)|
 |[Dr](documents/skdir.md)  |[List all VFP files in the path](documents/skdir.md)|
-|[Pr (or Project)](documents/skorg.md#proj) | [List of projects in active .pan file](documents/skorg.md#proj)|
+|[Pr (or Project, *)](documents/skorg.md#proj) | [List of projects in active .pan file](documents/skorg.md#proj)|
 |[Tidy](documents/sktidy.md)  | [Easily move one or several files ](documents/sktidy.md)|
 |[Zip](documents/skzip.md)  | [Easily zip one or several files ](documents/skzip.md)|
 |Help |This document|
@@ -75,7 +75,7 @@ Likewise, these "commands" **only** work in VFP's code editors (**Modify Command
 |[Es](documents/skes.md)| [Creates EditSource() command for open windows](documents/skes.md)|
 |[Eval](documents/skeval.md)|[Insert returned value from a function](documents/skeval.md)|
 |[Inc](documents/skinc.md)| [Insert #Include statement](documents/skinc.md)|
-|[Insert (or Ins)](documents/skins.md) | [Insert contents from a prg](documents/skins.md)|
+|[Insert (or Ins, +)](documents/skins.md) | [Insert contents from a prg](documents/skins.md)|
 |[Menu](documents/skmnu.md)  | [Menu of relevant `Sidekick` options](documents/skmnu.md)|
 
 **Note 2:** `DD` only works in VFP's **Form or Class Designer**, and **not** in *Modify Command*.

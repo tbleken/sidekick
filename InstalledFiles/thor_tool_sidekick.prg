@@ -2,7 +2,7 @@
 
 Lparameters lxParam1
 
-#Define ccVersion '1.01'
+#Define ccVersion '1.20'
 
 #Define ccXToolName        'Sidekick'
 #Define ccSidekickHelp 'https://github.com/tbleken/Pandora'
@@ -42,7 +42,7 @@ A tool with many features
     .OptionClasses = 'clsSKDefaultCommand,clsSKFontSize,clsSKGridAuto,clsSKNewFirst,clsSKPathReturned,';
       + "clsSKDisplayCase,clsSKMRUTable, clsSKNextLength, clsSKBackupFolder, clsSKUnzipFolder, clsSKZipTarget, clsSKZipDelay,";
       + "clsSKProject, clsSKRun, clsSKMaxDescriptLine, clsSKHelpURL ,clsSKWaitTimeout"
-
+    .OptionClasses = .OptionClasses + ', clsSKTestArea'
   Endwith
 
   Return m.lxParam1
@@ -59,13 +59,7 @@ Return
 Procedure ToolCode
   Lparameters tcCommand
   m.tcCommand = Evl(m.tcCommand , '') 
-*!*    ExecScript(_screen.cthordispatcher,'thor_proc_getsidekickoptions')
   lcVcxFile = Execscript(_Screen.cThorDispatcher, [Full Path=] + [thor_proc_sidekick.VCX])
-*!*    If Fdate(Execscript(_Screen.cThorDispatcher, [Full Path=] + [sidekick.h]),1) > Fdate(m.lcVcxFile,1);
-*!*      or Fdate(Execscript(_Screen.cThorDispatcher, [Full Path=] + [sidekick_override.h]),1) > Fdate(m.lcVcxFile,1)
-*!*      Clear Classlib (m.lcVcxFile)
-*!*      Compile classlib (m.lcVcxFile)
-*!*    Endif
   Local loSidekick as sidekick of "tools\Procs\thor_proc_sidekick.vcx"
   loSidekick = NewObject('sidekick', m.lcVcxFile ,'',m.tcCommand )
 EndProc
@@ -182,6 +176,13 @@ Define Class clsSKHelpURL as Custom
   Tool      = 'SideKick'
   Key        = 'HelpUrl'
   Value      = 'https://github.com/tbleken/sidekick'
+  EditClassName = 'skoptions of Thor_Options_Sidekick.VCX'
+EndDefine
+
+Define Class clsSKTestArea as Custom 
+  Tool      = 'SideKick'
+  Key        = 'TestArea'
+  Value      = 'SKTest'
   EditClassName = 'skoptions of Thor_Options_Sidekick.VCX'
 EndDefine
 

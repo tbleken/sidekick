@@ -10,6 +10,8 @@
 |:-------------------------|:----------------------------------------------------------|
 | `hotkeys` | A picklist of all your assigned hotkeys |
 | `hk`    | Same as above|  
+| `hk br` | Only tools where `br` is anywhere in one of the fields |
+| `hk br su` | Only tools where both `br` and `su` is anywhere in one of the fields |
 
 Locate the wanted tool by using the up/down keys, or type parts of the description.  
 Press **Enter** to run the selected tool  

@@ -38,7 +38,7 @@ with m.toUpdateObject
 	.Component            = 'No'
 	.Link                 = m.lcRepositoryURL
 	.LinkPrompt           = 'Sidekick Home Page'
-	.ProjectCreationDate  = date(2025, 6, 30)
+	.ProjectCreationDate  = date(2025, 7, 30)
 	.Dependencies         = ''	&& a comma or space delimited list of other Thor applications (ApplicationName) that this project depends on
 	.RegisterWithThor     = m.lcRegisterWithThor
   .InstallInTools        = .T.

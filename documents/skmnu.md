@@ -4,6 +4,12 @@
 
 This "command" shows a list of all the `Sidekick` tools that are relevant from where in the IDE you are. 
 
+| You type:                |        Result after pressing ![`F8`](Images/F8.png) |
+|:-------------------------|:----------------------------------------------------------|
+| `menu`                       | A list of all relevant `Sidekick` commands is shown.  |
+| `?` | Same as above |  
+  
+
 ![menu](Images/skmenu.png)
 
 Select the option you want, and press `Enter`.  

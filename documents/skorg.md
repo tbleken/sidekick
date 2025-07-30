@@ -85,7 +85,9 @@ Note that in the `Sidekick` "organizer" file `Sidekick.sk`, the keyword `ed` mus
 
 | You type:                |        Result after pressing ![`F8`](Images/F8.png)        |
 |:-------------------------|:----------------------------------------------------------|
-| `-` (hyphen/minus)           | Group of files defined in line 1 of `Sidekick.sk` are opened |
+| `def`          | Group of files defined as default in line 1 of `Sidekick.sk` are opened |
+| `default`            | Same as above|
+| `-` (hyphen/minus)           | Same as above|
 | `ed x (x=integer,>0)`          | Group of matching files in `Sidekick.sk` are opened       |
 | `x (x=integer)`                | Same as above                           |
 | `ed 0 (zero)`                  | File `Sidekick.sk` is opened in editor   |

@@ -1,3 +1,12 @@
+### 2025-07-30, Version 1.20
+This version includes a complete remake of how SideKick separates the different "commands" into designated methods. Earlier this was done in a series of Case statements. The new routine involves a "Factory model" which makes maintenance much easier.  
+
+One side effect of this new model, is that it's not necessary to have a space between a `Sidekick` "command" and the first parameter.  
+
+The [TA (Test area)](documents/skta.md) tool has been vastly improved, and several options has been added. Over all, this has been a much more appealing feature. See [the documentation](documents/skta.md) for more.  
+
+
+
 ### 2025-07-04, Version 1.05
 Added option to the `EC` command, making it possible to execute commands when the Command Window is not available. Super handy for instance when your code hangs.
 
