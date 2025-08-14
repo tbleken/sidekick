@@ -51,6 +51,7 @@ To get quick access to your "favorite places", `Sidekick` creates a table, defau
 | `ed?`  | You get a picklist of earlier entries in the table | 
 | `??` | Same as above |
 | `ed? init`  | Same as above, only entries with `init` in any field are shown  |
+| `?? init`  | Same as above|
 | `ed? .prg`  | Same as above, only .prg files are shown  |
 | `ed? /a` | Shows all records, also where Active = .F. |
 | `ed? /e` | Shows only records where External = .T. |

@@ -72,7 +72,7 @@ This program, `sk_4k.prg`, changes the screen resolution to 3840x2160.
 
 To run it, type `4k` in the command window, and press ![`F8`](Images/F8.png).
 
-This is the contents of `sk_use.prg`:
+This is the contents of `sk_4k.prg`:
 
 ```foxpro
 * Description: Change screen resolution to 3840x2160 *
@@ -123,3 +123,19 @@ Function LongToStr
   Return m.lcRetStr
 Endfunc
 ```
+
+## Override `Sidekick's` built in features. 
+
+If you are not happy with any of `Sidekick's` features, you can replace it with your own solution! All you have to do, is create a new `prg` with the name of the built in method. 
+
+| Function | Method name | Name of file to override `Sidekick`: |
+|:---|:--------------------|:--------------------------------------|
+| Browse | sk_br | sk_br.prg |
+| Field picker | sk_fp | sk_fp.br |
+| List of open tables | sk_ot | sk_ot.prg |
+| Show the current path | sk_pa | sk_pa.prg |
+| Sidekick Test Area | sk_ta | sk_ta.prg |
+| Zip files | sk_zip | sk_zip.prg |
+| Unzip files | sk_unzip | sk_unzip.prg |
+
+Many of `Siekick's` method have bindings which makes them extremely difficult to override. Instead it's recommended to use a similar, but different name for the extension, to avoid conflicts.

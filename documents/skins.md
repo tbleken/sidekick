@@ -1,4 +1,4 @@
-[![Sidekick](Images/SKLogo.png)](../README.md)
+![Sidekick](Images/SKLogo.png)](../README.md)
 
 ## `INS` (or `+`) (INSert) 
 
@@ -15,7 +15,7 @@ With `Sidekick` this is extremely simple.
 |:----------|:--------------------|
 | `ins` | A list of all procedures in all the prgs in the path  |
 | `+` | Same as above |
-| `+xxx` | Same as above, only procedures with xxx in its name|
+| `+xxx` | Same as above, only procedures and prg's with xxx in its name|
 | `ins xxx.prg`|The whole contents of xxx.prg is inserted|
 | `+ xxx.prg` | Same as above'
 | `+xxx.h`  | The complete contents of xxx.h is inserted |

@@ -59,6 +59,7 @@ DEFINE CLASS skoptions AS container
 	*</DefinedPropArrayMethod>
 
 	*<PropValue>
+		Comment = "My very own skoptions"
 		Height = 314
 		Name = "skoptions"
 		Width = 386
@@ -87,6 +88,7 @@ DEFINE CLASS skoptions AS container
 		*< END OBJECT: BaseClass="line" />
 
 	ADD OBJECT 'pgf1' AS pageframe WITH ;
+		Comment = "My comment pageframe", ;
 		ErasePage = .T., ;
 		Height = 285, ;
 		Left = 1, ;
@@ -102,6 +104,7 @@ DEFINE CLASS skoptions AS container
 		Page3.Name = "Page3", ;
 		Page3.ToolTipText = "Specifies the length of automatically increased numbers which can be used in Sidekick'szip and tidy features.", ;
 		Page4.Caption = "Projects", ;
+		Page4.Comment = "My comment page4", ;
 		Page4.Name = "Page4", ;
 		Page5.Caption = "Special", ;
 		Page5.Name = "Page5"
@@ -500,6 +503,7 @@ DEFINE CLASS skoptions AS container
 		*< END OBJECT: BaseClass="textbox" />
 
 	ADD OBJECT 'pgf1.Page4.cboSKProject' AS combobox WITH ;
+		Comment = "Something is missing", ;
 		Height = 25, ;
 		Left = 167, ;
 		Name = "cboSKProject", ;

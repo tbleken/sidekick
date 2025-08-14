@@ -1,8 +1,8 @@
 lparameters toUpdateObject
 
 with toUpdateObject
-	.VersionNumber    = '1.20 - 20250730'
-	.AvailableVersion = 'Sidekick-1.20-09342-20250730'
+	.VersionNumber    = '1.20 - 20250814'
+	.AvailableVersion = 'Sidekick-1.20-09357-20250814'
 	.Component        = 'No'
 	.Notes            = GetNotes()
 endwith
@@ -13,6 +13,21 @@ return toUpdateObject
 procedure GetNotes
 local lcNotes
 text to lcNotes noshow
+### 2025-08-14, Version 1.25
+
+Some bugs have been fixed.  
+
+New command [ER (Error)](documents/skerr.md) is implemented. This command will show details about the last generated error in a grid.  
+
+Added the possibility to override `Sidekick's` features. For instance if you don't like the functionality of the command `br`, you create `sk_br.prg`. `Sidekick` will find this file, and run it instead of the built in function. See [Create your own Sidekick extensions](documents/skext.md) for more.
+
+Necessary changes have been done to make sure that most of `SideKick's` commands can be run from an inputbox when the cursor is on a blank line or over the desktop.  
+
+A nice side effect of this is that you in many situations get an "emergency exit". For instance if you can't access the command window because your program is running, you can press the dedicated `SideKick` key, type `Cancel` followed by `Enter`. Or `Set Step On` to activate the Debugger. Or `clear event` and similar commands.
+
+### 2025-07-31, Version 1.21
+Fixed a long lasting bug in the grids which made PgDn and PgUp behave "strangely". 
+
 ### 2025-07-30, Version 1.20
 This version includes a complete remake of how SideKick separates the different "commands" into designated methods. Earlier this was done in a series of Case statements. The new routine involves a "Factory model" which makes maintenance much easier.  
 

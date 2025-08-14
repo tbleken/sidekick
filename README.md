@@ -21,7 +21,7 @@ These "commands" work in **all** of VFP's code editors, including the command wi
 
 |Command | Result after pressing `Sidekick` hotkey, e.g. ![`F8`](documents/Images/F8.png)|
 |:--|:-------------|
-| \<blank>  | Opens inputbox so you can type in `Sidekick` or VFP commands| TBFix
+|[(-nothing-)](documents/skf8.md)| [Opens inputbox so you can type in `Sidekick` or VFP commands](documents\skf8.md)| 
 |[. (dot)](documents/skta.md)| [Easily accessible "test area"](documents/skta.md)| 
 |[!](documents/skext.md)| [Create and run your own `Sidekick` extensions](documents/skext.md)|
 |[!!](documents/skext.md#paned)| [Edit your own `Sidekick` extensions](documents/skext.md#paned)|
@@ -31,6 +31,7 @@ These "commands" work in **all** of VFP's code editors, including the command wi
 |[Hk](documents/skhk.md) |[List of all assigned hot keys](documents/skhk.md)|
 |[Lorem](documents/skrt.md) | [Generate random "Lorem Ipsum" text](documents/skrt.md)|
 |[NO <sub>Note 1</sub>](documents/skno.md)     |[NewObject() syntax builder](documents/skno.md)|
+|[Pa](documents/skpa.md) | [Show the current Path plus some more](documents/skpa.md)|
 |[Sk](documents/skext.md) | [Create and run your own `Sidekick` extensions](documents/skext.md)|
 |[Sked](documents/skext.md#paned) | [Edit your own `Sidekick` extensions](documents/skext.md#paned)|
 |[RT](documents/skrt.md) | [Generate random readable text](documents/skrt.md)|

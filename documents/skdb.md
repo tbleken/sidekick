@@ -19,3 +19,5 @@ These commands behaves similarly. Both creates code to list variable names and t
 These "commands" takes advantage of IntellisenseX, if you use the `m.` version. This means that you only need to type `m.` plus a few letters, select the wanted variable name and press ![`F8`](Images/F8.png).
 
 No rocket science, but a real time saver. :grin:
+
+**Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as the hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 

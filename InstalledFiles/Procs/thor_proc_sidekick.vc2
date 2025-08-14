@@ -4,6 +4,220 @@
 *< FOXBIN2PRG: Version="1.21" SourceFile="thor_proc_sidekick.vcx" CPID="1252" /> (Solo para binarios VFP 9 / Only for VFP 9 binaries)
 *
 *
+DEFINE CLASS msg AS custom 
+ 	*< CLASSDATA: Baseclass="custom" Timestamp="" Scale="Pixels" Uniqueid="" />
+
+	*<DefinedPropArrayMethod>
+		*m: centerwindow
+		*m: showmsg
+		*m: timerproc
+		*m: wndproc
+		*p: hwnd		&& Specifies the Window handle of the Window.
+		*p: hwnd_msgbox
+		*p: lchangebutton
+		*p: ltimeout
+		*p: ltransparent
+		*p: ntimeout
+		*p: ntransvalue
+		*p: porgproc
+		*a: abuttons[3,0]
+		*p: _memberdata		&& XML Metadata for customizable properties
+	*</DefinedPropArrayMethod>
+
+	*<PropValue>
+		Height = 105
+		hwnd = 0
+		hwnd_msgbox = 0
+		lchangebutton = .F.
+		ltimeout = .F.
+		ltransparent = .F.
+		Name = "msg"
+		ntimeout = 0
+		ntransvalue = 0
+		porgproc = 0
+		Width = 306
+		_memberdata = <VFPData>
+			<memberdata name="hwnd" display="hWnd"/>
+			<memberdata name="hwnd_msgbox" display="hWnd_MsgBox"/>
+			<memberdata name="lchangebutton" display="lChangeButton"/>
+			<memberdata name="ltransparent" display="lTransparent"/>
+			<memberdata name="ntimeout" display="nTimeOut"/>
+			<memberdata name="ltimeout" display="lTimeOut"/>
+			<memberdata name="ntransvalue" display="nTransValue"/>
+			<memberdata name="showmsg" display="ShowMsg"/>
+			<memberdata name="centerwindow" display="CenterWindow"/>
+			<memberdata name="wndproc" display="WndProc"/>
+			<memberdata name="timerproc" display="TimerProc"/>
+			<memberdata name="porgproc" display="pOrgProc"/>
+		</VFPData>
+	*</PropValue>
+	
+	PROCEDURE centerwindow
+		Lparameters th_WndParent, th_WndChild
+		Local ln_Bottom, ln_Height, ln_Left, ln_Right, ln_TargetLeft, ln_TargetTop, ln_Top, ln_Width
+		Local ls_Rect
+		
+		ls_Rect = Space( 16 )
+		** Get container area (parent)
+		GetWindowRect( m.th_WndParent, @m.ls_Rect )
+		ln_TargetLeft = CToBin( Substr( m.ls_Rect, 1, 4 ), [4rs] )
+		ln_TargetTop = CToBin( Substr( m.ls_Rect, 5, 4 ), [4rs] )
+		ln_Right = CToBin( Substr( m.ls_Rect, 9, 4 ), [4rs] ) + 1
+		ln_Bottom = CToBin( Substr( m.ls_Rect, 13, 4 ), [4rs] ) + 1
+		ln_Width = m.ln_Right - m.ln_TargetLeft
+		ln_Height = m.ln_Bottom - m.ln_TargetTop
+		
+		** Get contained area (child)
+		GetWindowRect( m.th_WndChild, @m.ls_Rect )
+		ln_Left = CToBin( Substr( m.ls_Rect, 1, 4 ), [4rs] )
+		ln_Top = CToBin( Substr( m.ls_Rect, 5, 4 ), [4rs] )
+		ln_Right = CToBin( Substr( m.ls_Rect, 9, 4 ), [4rs] ) + 1
+		ln_Bottom = CToBin( Substr( m.ls_Rect, 13, 4 ), [4rs] ) + 1
+		
+		** Get Left & Top position (XY coordinate)
+		ln_Left = ((m.ln_Width - (m.ln_Right - m.ln_Left)) / 2) + m.ln_TargetLeft
+		ln_Top = (m.ln_Height - (m.ln_Bottom - m.ln_Top)) / 2 + m.ln_TargetTop
+		SetWindowPos( m.th_WndChild, 0, m.ln_Left, m.ln_Top, 0, 0, Bitor( 0x1, 0x10, 0x400 ))
+	ENDPROC
+
+	PROCEDURE Destroy
+		Clear Dlls
+	ENDPROC
+
+	PROCEDURE Init
+		Declare Long SetLayeredWindowAttributes in User32 ;
+		Long nhWnd, Long crKey, Short bAlpha, Long dwFlags
+		
+		Declare Long GetDesktopWindow in User32
+		
+		Declare Long GetWindowLong in User32 ;
+		Long nhWnd, Integer nIndex
+		
+		Declare Long SetWindowLong in User32 ;
+		Long nhWnd, Integer nIndex, Long dwNewLong
+		
+		Declare Long GetWindowRect in User32 ;
+		Long nhWnd, String @O_lpRect
+		
+		Declare Long SetWindowPos in User32 ;
+		Long nhWnd, Long hWndInsertAfter, ;
+		Integer nX, Integer nY, Integer nWidth, Integer nHeight, Long nFlags
+		
+		Declare Long CallWindowProc in User32 ;
+		Long lpPrevWndFunc, Long nhWnd, ;
+		Long uMsg, Long wParam, Long lParam
+		
+		Declare Long FindWindowEx in User32 ;
+		Long hWndParent, Long hWndChildAfter, ;
+		String lpszClass, String lpszWindow
+		
+		Declare Long SendMessage in User32 as SendMessageStr ;
+		Long nhWnd, Long uMsg, Long wParam, String @lParam
+		Declare Long SetTimer in User32 ;
+		Long nhWnd, Long nEventId, Long uElapse, Long lpTimerFunc
+		
+		Declare Long KillTimer in User32 Long nhWnd, Long nEventId
+		
+		This.hWnd = iif( (VarType( th_Wnd )== 'N'), ;
+		iif( th_Wnd != 0, th_Wnd, GetDesktopWindow() ), _VFP.hWnd )
+		This.pOrgProc = GetWindowLong( _VFP.hWnd, -4 )
+	ENDPROC
+
+	PROCEDURE showmsg
+		Lparameters tc_Msg, tn_Type, tc_Title, tn_Timeout
+		Local ln_Return
+		
+		#Define WM_TIMER  0x0113
+		#Define IDT_TIMER 1
+		
+		If (Vartype( m.tn_Timeout ) == [N])
+		  This.nTimeOut = Iif( m.tn_Timeout < 1000, 1000, m.tn_Timeout )
+		Endif
+		Bindevent( 0, 0x06, This, [WndProc] )
+		If (Vartype( m.tc_Title ) == [C])
+		  ln_Return = Messagebox( m.tc_Msg, m.tn_Type, m.tc_Title )
+		Else
+		  ln_Return = Messagebox( m.tc_Msg, m.tn_Type )
+		Endif
+		Unbindevents( 0, 0x06 )
+		
+		If (This.nTimeOut > 0)
+		  If ( This.lTimeout )
+		    ln_Return = -1
+		    KillTimer( This.hWnd_MsgBox, IDT_TIMER )
+		    Unbindevents( This.hWnd_MsgBox, IDT_TIMER )
+		  Else
+		    KillTimer( This.HWnd, IDT_TIMER )
+		    Unbindevents( This.HWnd, IDT_TIMER )
+		  Endif
+		Endif
+		
+		Store 0 To This.nTimeOut, This.hWnd_MsgBox
+		This.lTimeout = .F.
+		Return m.ln_Return
+	ENDPROC
+
+	PROCEDURE timerproc
+		Lparameters th_Wnd, tn_Msg, t_wParam, t_lParam
+		#Define WM_TIMER  0x0113
+		#Define IDT_TIMER 1
+		
+		KillTimer( m.th_Wnd, IDT_TIMER)
+		Unbindevents( m.th_Wnd, IDT_TIMER )
+		
+		SetTimer( This.hWnd_MsgBox, IDT_TIMER, This.nTimeOut, 0 )
+		This.lTimeout = .T.
+		Return 0
+	ENDPROC
+
+	PROCEDURE wndproc
+		Lparameters th_Wnd, tn_Msg, t_wParam, t_lParam
+		Local lh_WndChild, ln_Transparent, ln_X
+		
+		#Define WM_TIMER  0x0113
+		#Define IDT_TIMER 1
+		
+		If (m.tn_Msg == 0x06) And (m.t_wParam == 0)
+		  If (This.nTimeOut > 0)
+		    This.hWnd_MsgBox = m.t_lParam
+		    Bindevent( m.th_Wnd, WM_TIMER, This, [TimerProc] )
+		    SetTimer( m.th_Wnd, IDT_TIMER, This.nTimeOut - 60, 0 )
+		    This.nTimeOut = 200
+		  Endif
+		
+		  With This
+		    .CenterWindow( .HWnd, m.t_lParam )
+		
+		    If ( .lChangeButton )
+		      lh_WndChild = 0
+		      For ln_X = 1 To 3
+		        lh_WndChild = FindWindowEx( m.t_lParam, m.lh_WndChild, [Button], 0 )
+		        If (m.lh_WndChild == 0)
+		          ln_X = 4
+		        Else
+		          If !Empty( .aButtons[ m.ln_X ] )
+		            SendMessageStr( m.lh_WndChild, 0x0C, 0, .aButtons[ m.ln_X ] )
+		          Endif
+		        Endif
+		      Next
+		    Endif
+		
+		    If ( .lTransparent ) And (.nTransValue > 0)
+		      ln_Transparent = Int((255 * This.nTransValue) / 100)
+		      SetWindowLong( m.t_lParam, -20, ;
+		          Bitor( GetWindowLong( m.t_lParam, -20 ), 0x80000 ))
+		      SetLayeredWindowAttributes( m.t_lParam, 0, m.ln_Transparent, 2 )
+		    Endif
+		  Endwith
+		
+		  Return 0
+		Endif
+		
+		Return CallWindowProc( This.pOrgProc, m.th_Wnd, m.tn_Msg, m.t_wParam, m.t_lParam )
+	ENDPROC
+
+ENDDEFINE
+
 DEFINE CLASS oapi_apprun AS custom 
  	*< CLASSDATA: Baseclass="custom" Timestamp="" Scale="Pixels" Uniqueid="" />
 
@@ -1884,83 +2098,86 @@ DEFINE CLASS pg AS form
 	ENDPROC
 
 	PROCEDURE txtFind.KeyPress
-		LPARAMETERS nKeyCode, nShiftAltCtrl
-		lnSelstart = this.SelStart 
+		Lparameters nKeyCode, nShiftAltCtrl
+		Local llGrid, lnSelStart
+		
+		lnSelStart = This.SelStart
 		llGrid = .F.
-		NoDefault 
-		Do case
-			Case m.nKeyCode = 5 and m.nShiftAltCtrl = 0 && Up
-				Try 
-					Skip -1
-			catch
+		Nodefault
+		Do Case
+		  Case m.nKeyCode = 5 And m.nShiftAltCtrl = 0 && Up
+		    Try
+		      Skip - 1
+		    Catch
 		
-				Endtry
-				m.llGrid = .T.
-			Case m.nKeyCode = 24 and m.nShiftAltCtrl = 0 && Down
-				Try 
-				  Skip 1
-				catch
-				EndTry
+		    Endtry
+		    llGrid = .T.
+		  Case m.nKeyCode = 24 And m.nShiftAltCtrl = 0 && Down
+		    Try
+		      Skip 1
+		    Catch
+		    Endtry
 		
-				m.llGrid = .T.
-			Case m.nKeyCode = 18 and m.nShiftAltCtrl = 0 && PgUp
-				try
-					Skip -50
-				Catch
-					Go top
-				Endtry
-				m.llGrid = .T.
-			Case m.nKeyCode = 3 and m.nShiftAltCtrl = 0 && PgDn
-				try
-					Skip 50
-				Catch
-					Go bott
-				Endtry
-				m.llGrid = .T.
-			Case m.nKeyCode = 29 and m.nShiftAltCtrl = 2 && CtrlHome
-				Go top
-				m.llGrid = .T.
-			Case m.nKeyCode = 23 and m.nShiftAltCtrl = 2 && CtrlEnd
-				Go bott
-				m.llGrid = .T.
-		*!*    Case m.nKeyCode = 127 && Backspace
-		*!*      DoDefault(m.nKeyCode,m.nShiftAltCtrl)
-		*!*      thisform.doFilterGrid(this.Value)
-			Case m.nKeyCode = 13 and m.nShiftAltCtrl = 0 && Enter
-				If thisform.lEnter 
-					thisform.Release
-				else
-					thisform.lIncInProcess = .F.
-					thisform.doFilterGrid(this.Value)
-		*!*				thisform.Grd.SetFocus()
-				this.SetFocus()
-				Endif
-			Case Chr(m.nKeyCode)='*' and m.nShiftAltCtrl = 1
-				thisform.lIncrementalSeek = !thisform.lIncrementalSeek 
-				thisform.chkInc.Refresh() 
-				this.Refresh()
+		    llGrid = .T.
+		  Case m.nKeyCode = 18 And m.nShiftAltCtrl = 0 && PgUp
+		    Try
+		      Skip - 50
+		    Catch
+		      Go Top
+		    Endtry
+		    llGrid = .T.
+		  Case m.nKeyCode = 3 And m.nShiftAltCtrl = 0 && PgDn
+		    Try
+		      Skip 50
+		    Catch
+		      Go Bott
+		    Endtry
+		    llGrid = .T.
+		  Case m.nKeyCode = 29 And m.nShiftAltCtrl = 2 && CtrlHome
+		    Go Top
+		    llGrid = .T.
+		  Case m.nKeyCode = 23 And m.nShiftAltCtrl = 2 && CtrlEnd
+		    Go Bott
+		    llGrid = .T.
+		    *!*    Case m.nKeyCode = 127 && Backspace
+		    *!*      DoDefault(m.nKeyCode,m.nShiftAltCtrl)
+		    *!*      thisform.doFilterGrid(this.Value)
+		  Case m.nKeyCode = 13 And m.nShiftAltCtrl = 0 && Enter
+		    If Thisform.lEnter
+		      Thisform.Release
+		    Else
+		      Thisform.lIncInProcess = .F.
+		      Thisform.doFilterGrid(This.Value)
+		      *!*        thisform.Grd.SetFocus()
+		      This.SetFocus()
+		    Endif
+		  Case Chr(m.nKeyCode) = [*] And m.nShiftAltCtrl = 1
+		    Thisform.lIncrementalSeek = !Thisform.lIncrementalSeek
+		    Thisform.chkInc.Refresh()
+		    This.Refresh()
 		  Case m.nKeyCode = 27 && Escape
-		    thisform.Release()
-			Case Chr(m.nKeyCode)='!'
-				thisform.chkUseIndex.Value = !thisform.chkUseIndex.Value 
-			Case thisform.lIncrementalSeek
-				DoDefault(m.nKeyCode, m.nShiftAltCtrl ) 
-					lnSelstart = this.SelStart 
-				If Len(Trim(this.Value))>thisform.nIncStart
-					thisform.lIncInProcess = .T.
-				EndIf
-				If thisform.lIncInProcess 
-					thisform.doFilterGrid(this.value)
-				Endif
-					this.SelStart = m.lnSelstart 
-				this.SetFocus()
-			Otherwise 
-				DoDefault(m.nKeyCode, m.nShiftAltCtrl)
+		    Thisform.Release()
+		  Case Chr(m.nKeyCode) = [!]
+		    Thisform.chkUseIndex.Value = !Thisform.chkUseIndex.Value
+		  Case Thisform.lIncrementalSeek
+		    DoDefault(m.nKeyCode, m.nShiftAltCtrl )
+		    lnSelStart = This.SelStart
+		    If Thisform.lIncInProcess
+		      Thisform.doFilterGrid(This.Value)
+		    Endif
+		    If Len(Trim(This.Value)) > Thisform.nIncStart
+		      Thisform.lIncInProcess = .T.
+		    Endif
+		    This.SelStart = m.lnSelStart
+		    This.SetFocus()
+		  Otherwise
+		    DoDefault(m.nKeyCode, m.nShiftAltCtrl)
 		Endcase
 		
-		If m.llGrid 
-			thisform.Grd.Refresh()
-			this.SetFocus()
+		If m.llGrid
+		  Thisform.doFilterGrid(This.Value)
+		  Thisform.Grd.Refresh()
+		  This.SetFocus()
 		Endif
 		
 	ENDPROC
@@ -2069,6 +2286,7 @@ DEFINE CLASS sidekick AS container
 		*m: sk_dr
 		*m: sk_ec
 		*m: sk_ed
+		*m: sk_err
 		*m: sk_es
 		*m: sk_eval
 		*m: sk_fp
@@ -2097,6 +2315,7 @@ DEFINE CLASS sidekick AS container
 		*m: splitcommand
 		*m: tryexecute
 		*m: writecurrentline
+		*p: calias
 		*p: cbackupfolder		&& Name of folder for "deleted" files
 		*p: cclip
 		*p: ccommand
@@ -2135,6 +2354,7 @@ DEFINE CLASS sidekick AS container
 		*p: cziptarget		&& Default name for zip target, if none is specified
 		*p: laddextraextensions
 		*p: lcomment
+		*p: linputbox		&& Date comes from editbox activated by SK hotkey
 		*p: lnobrowse
 		*p: lnointerface
 		*p: lnomessage		&& If true, no message is given if Esc is pressed from grid
@@ -2145,6 +2365,7 @@ DEFINE CLASS sidekick AS container
 		*p: nfilesize
 		*p: nfontsize
 		*p: nhandle
+		*p: nlastwindow		&& WIndow handle for last used window
 		*p: nlineno
 		*p: nmaxdescriptline
 		*p: nnextlength		&& Length of numeric extension for automatically incremented file names, like panzip_00001 where value is 5
@@ -2162,11 +2383,13 @@ DEFINE CLASS sidekick AS container
 		*p: ogrid
 		*p: oregistry
 		*p: ozip
+		*a: ainerror[1,0]
 		*a: ainuse[1,0]
 		*p: _memberdata		&& XML Metadata for customizable properties
 	*</DefinedPropArrayMethod>
 
 	*<PropValue>
+		calias = 
 		cclip = 
 		ccommand = 
 		ccommandoriginal = 
@@ -2205,6 +2428,7 @@ DEFINE CLASS sidekick AS container
 		Height = 330
 		laddextraextensions = .F.
 		lcomment = .F.
+		linputbox = .F.
 		lnobrowse = .F.
 		lnointerface = .F.
 		lnomessage = .F.
@@ -2216,6 +2440,7 @@ DEFINE CLASS sidekick AS container
 		nfilesize = 0
 		nfontsize = 10
 		nhandle = 0
+		nlastwindow = 0
 		nlineno = 0
 		nmaxdescriptline = 15
 		nnextlength = 4
@@ -2327,6 +2552,10 @@ DEFINE CLASS sidekick AS container
 			<memberdata name="skfactory" display="SKFactory"/>
 			<memberdata name="ctestarea" display="cTestArea"/>
 			<memberdata name="splitcommand" display="SplitCommand"/>
+			<memberdata name="nlastwindow" display="nLastWindow"/>
+			<memberdata name="linputbox" display="lInputBox"/>
+			<memberdata name="ainerror" display="aInError"/>
+			<memberdata name="calias" display="cAlias"/>
 		</VFPData>
 	*</PropValue>
 
@@ -2563,7 +2792,7 @@ DEFINE CLASS sidekick AS container
 	PROCEDURE cutcurrentline
 		Local lcClip, lcText
 		
-		If !This.lNoInterface
+		If !This.lNoInterface and !this.lInputBox 
 		  If Vartype(This.oEditorWin) # [O]
 		    This.oEditorWinInit()
 		  Endif
@@ -2621,7 +2850,7 @@ DEFINE CLASS sidekick AS container
 		  Case !this.lNoSelectOnExit 
 		    Select (this.nSelect)    
 		Endcase
-		
+		Clear Error 
 		If this.cExact = 'ON'
 		  Set Exact On 
 		EndIf
@@ -2669,8 +2898,9 @@ DEFINE CLASS sidekick AS container
 	PROCEDURE dropfieldifempty
 		Lparameters tcCursor, tcField
 		
-		Local llDrop
-		lcCurTemp = m.tcCursor + 'tmp'
+		Local lcCurTemp, lcFields, llDrop, lnX
+		
+		lcCurTemp = m.tcCursor + [tmp]
 		If !Empty(Field(m.tcField, m.tcCursor))
 		  Select (m.tcCursor)
 		  llDrop = .T.
@@ -2681,18 +2911,17 @@ DEFINE CLASS sidekick AS container
 		    Endif
 		  Endscan
 		  If m.llDrop
-		    lcFields = ''
-		    For lnX = 1 to Fcount()
+		    lcFields = []
+		    For lnX = 1 To Fcount()
 		      If Lower(Field(m.lnX)) # Lower(m.tcField)
-		        m.lcFields = m.lcFields + Field(m.lnX) + ','
+		        lcFields = m.lcFields + Field(m.lnX) + [,]
 		      Endif
-		    EndFor
-		    m.lcFields = Trim(m.lcFields ,0,',',Chr(32))
-		    Use in (Select(m.lcCurTemp))
-		    Select &lcFields from (m.tcCursor) into cursor (m.lcCurTemp ) readwrite
-		    Use in (Select(m.tcCursor))
-		    Select * from (m.lcCurTemp) into cursor (m.tcCursor) readwrite
-		*!*      Alter Table (m.tcCursor) Drop Column (m.tcField)
+		    Endfor
+		    lcFields = Trim(m.lcFields, 0, [,], Chr(32))
+		    Select &lcFields From (m.tcCursor) Into Cursor (m.lcCurTemp ) Readwrite
+		    Use In (Select(m.tcCursor))
+		    Select * From (m.lcCurTemp) Into Cursor (m.tcCursor) Readwrite
+		    Use In (Select(m.lcCurTemp))
 		  Endif
 		Endif
 		
@@ -2824,8 +3053,14 @@ DEFINE CLASS sidekick AS container
 
 	PROCEDURE findfunction
 		Local lcParameter, lcProg
-		
-		This.SplitCommand()
+		Do case
+		  Case Len(Trim(this.cParcedText)) > 3 and Left(this.cParcedText,3) = '???'
+		  Case Len(Trim(this.cParcedText)) > 2 and Left(this.cParcedText,2) = '??'
+		  Case Len(Trim(this.cparcedtext)) > 1 and Left(this.cparcedtext,1) = '?' and Left(this.cparcedtext,2) # '?=' and Left(this.cparcedtext,2) # '??'
+		  Case ALines(laDummy, this.cParcedText) > 1
+		Otherwise 
+		  This.SplitCommand()
+		Endcase
 		Do Case
 		  Case This.SKFactory()
 		  Case This.FindSKOptions()
@@ -3061,10 +3296,9 @@ DEFINE CLASS sidekick AS container
 
 	PROCEDURE getdatafromgrid
 		Lparameters tcCaption, tcReturnField, tnHideColumns, tlModeless, tcPGParameter
-		Local loPg As pg Of thor_proc_sidekick.vcx
-		
+		Local loPg As pg Of THOR_PROC_Sidekick.vcx
 		Local lcCurrent, lcF3, lcF4, lcF5, lcFilter, lcHideColumns, lcParameter, lcProcess, lcReturn
-		Local lnModeless
+		Local lnLastKey, lnModeless
 		
 		tcCaption = Evl(m.tcCaption, [Testing])
 		tcReturnField = Evl(m.tcReturnField, Field(1))
@@ -3072,7 +3306,7 @@ DEFINE CLASS sidekick AS container
 		lnModeless = Iif(Empty(m.tlModeless), 1, 2)
 		tcPGParameter = Evl(m.tcPGParameter, [])
 		lcReturn = []
-		Wait clear
+		Wait Clear
 		If !Empty(Dbf())
 		  If Reccount() = 1
 		    If Vartype(Evaluate(m.tcReturnField)) = [N]
@@ -3133,15 +3367,17 @@ DEFINE CLASS sidekick AS container
 		        On Key Label F4 Execscript(m.lcF4)
 		        On Key Label F5 Execscript(m.lcF5)
 		    Endcase
-		    *!*      Set Step On 
 		    m.loPg.Show(m.lnModeless )
 		    If m.lnModeless = 2
 		      Read Events
 		    Endif
 		    Pop Key
-		    If Lastkey() = 27 And ! This.lNoMessage  && Escape
+		    lnLastKey = Lastkey()
+		    If m.lnLastKey = 27 And ! This.lNoMessage  && Escape
 		      lcReturn = []
-		      This.GiveMessage([Nothing selected!], , , This.nTimeOut)
+		      If !InList(this.cCommand, 'ot')
+		        This.GiveMessage([Nothing selected!], , , This.nTimeOut)
+		      Endif
 		    Else
 		      If !Inlist(Lastkey(), 97, 33) And !Empty(m.tcReturnField)
 		        If !Empty(This.cFilter)
@@ -3234,30 +3470,45 @@ DEFINE CLASS sidekick AS container
 
 	PROCEDURE getdescript
 		Lparameters tcFile
-		Local lcContents, lcDescript, lnHandle, lnX1
-		lnHandle = Fopen(m.tcFile )
+		Local lcContents, lcDeleted, lcDescript, lcExt, lcMethod, lnHandle, lnX, lnX1
+		
+		Local Array laDummy[1]
+		
 		lcDescript = []
-		For lnX1 = 1 To this.nMaxDescriptLine 
-		  lcContents = Fgets(m.lnHandle)
-		  If Occurs(this.cDescriptionMask1 , m.lcContents) > 0
-		    lcDescript = Alltrim(Strextract(m.lcContents, this.cDescriptionMask1 , this.cDescriptionMask2 ))
-		    Exit
-		  Endif
-		Endfor
-		Fclose(m.lnHandle)
+		lcExt = Lower(Justext(m.tcFile))
+		lcDeleted = Set([Deleted])
+		Set Deleted On
+		Do Case
+		  Case m.lcExt = [prg]
+		    lnHandle = Fopen(m.tcFile )
+		    For lnX1 = 1 To This.nMaxDescriptLine
+		      lcContents = Fgets(m.lnHandle)
+		      If Occurs(This.cDescriptionMask1, m.lcContents) > 0
+		        lcDescript = Alltrim(Strextract(m.lcContents, This.cDescriptionMask1, This.cDescriptionMask2 ))
+		        Exit
+		      Endif
+		    Endfor
+		    Fclose(m.lnHandle)
+		Endcase
+		If m.lcDeleted = [OFF]
+		  Set Deleted Off
+		Endif
 		Return m.lcDescript
 	ENDPROC
 
 	PROCEDURE geteditsourcecode
 		Lparameters tnHandle, tnEdType, tcPrefix
 		Local lcClassName, lcFilename, lcMethod, lcName, lcObject, lcObjectPath, lcReturn, lcType, llTest
-		Local lnHandle, lnLineNo, lnWindowType, loE, loFile, loObject, loTools
-		#define crlf Chr(13)+Chr(10)
+		Local lnHandle, lnLineNo, lnVersion, lnWindowType, loE, loFile, loObject, loTools
+		
+		#Define crlf Chr(13)+Chr(10)
 		tcPrefix = Evl(m.tcPrefix, [])
 		tnHandle = Evl(m.tnHandle, Val(_Cliptext))
 		Store [] To m.lcMethod, m.lcObjectPath, m.lcClassName
 		Store 0 To m.lnLineNo, m.lnHandle
 		llTest = Pemstatus(_Screen, [lTest], 5) And _Screen.lTest
+		*!*  lcProcess = Execscript(_Screen.cThorDispatcher, [Full Path=] + [thor_proc_sidekick.VCX])
+		*!*  loE = NewObject('Editorwin', m.lcProcess )
 		loE = Execscript(_Screen.cThorDispatcher, [Thor_Proc_EditorWin])
 		m.loE.SelectWindow(m.tnHandle)
 		lnWindowType = m.loE.FindWindow()
@@ -3281,26 +3532,26 @@ DEFINE CLASS sidekick AS container
 		    lcFilename = Fullpath(m.loE.GetTitle())
 		    If  Left(m.lcFilename, 7) = [PROGRAM] And Empty(Justext(m.lcFilename)) && Modi Comm, not saved
 		      Return
-		    EndIf
-		    m.lcFilename = this.FixPath(m.lcFilename)
+		    Endif
+		    lcFilename = This.FixPath(m.lcFilename)
 		  Otherwise && Method
 		    loObject = m.loTools.GetThis()
 		    lcObject = [loObject]
-		    m.lcFilename = this.FixPath(m.loFile.Filename)
+		    lcFilename = This.FixPath(m.loFile.Filename)
 		    If m.lnHandle > 0
 		      lcMethod = m.loE.GetTitle()
 		    Endif
 		    Do While .T.
 		      If Inlist(Type(m.lcObject), [U], [L])
 		        Exit
-		      EndIf
-		      If Lower(JustExt(m.lcFilename)) = 'vcx' and Evaluate(m.lcobject+'.parent.baseclass') = 'Form' And Evaluate(m.lcobject+'.parent.parent.baseclass') = [Formset]
-		        If PemStatus(Evaluate(m.lcobject + '.parent'),'buffermode',5) && vcx form
-		          m.lnVersion = 1
-		          m.lcClassName = Evaluate(m.lcObject + '.parent.name')
+		      Endif
+		      If Lower(Justext(m.lcFilename)) = [vcx] And Evaluate(m.lcObject + [.parent.baseclass]) = [Form] And Evaluate(m.lcObject + [.parent.parent.baseclass]) = [Formset]
+		        If Pemstatus(Evaluate(m.lcObject + [.parent]), [buffermode], 5) && vcx form
+		          lnVersion = 1
+		          lcClassName = Evaluate(m.lcObject + [.parent.name])
 		        Else && vcx container
-		          m.lnVersion = 2
-		          m.lcClassName = Evaluate(m.lcObject + '.name')
+		          lnVersion = 2
+		          lcClassName = Evaluate(m.lcObject + [.name])
 		        Endif
 		        Exit
 		      Endif
@@ -3317,12 +3568,12 @@ DEFINE CLASS sidekick AS container
 		      If Type(m.lcObject + [.parent]) = [U]
 		        Exit
 		      Endif
-		    EndDo
+		    Enddo
 		    If Empty(m.lcClassName)
 		      lcClassName = Strextract(m.lcObjectPath, [], [.])
 		      lcClassName = Evl(m.lcClassName, m.lcObjectPath)
 		    Endif
-		    If [.] $ m.lcObjectPath and m.lnVersion # 2
+		    If [.] $ m.lcObjectPath And m.lnVersion # 2
 		      lcObjectPath = Strextract(m.lcObjectPath, [.]) && remove first element which is the classname
 		    Endif
 		Endcase
@@ -3355,9 +3606,9 @@ DEFINE CLASS sidekick AS container
 		      Endtext
 		    Else
 		      lcReturn = m.tcPrefix + m.lcType + m.lcFilename
-		        If !Empty(m.lcMethod)
-		          m.lcReturn = m.lcReturn + '.' + m.lcMethod 
-		        Endif
+		      If !Empty(m.lcMethod)
+		        lcReturn = m.lcReturn + [.] + m.lcMethod
+		      Endif
 		    Endif
 		    If m.lnLineNo > 0
 		      lcReturn = m.lcReturn + [:] + Transform(m.lnLineNo)
@@ -3375,11 +3626,29 @@ DEFINE CLASS sidekick AS container
 		    Endif
 		    Text To m.lcReturn Noshow Textmerge Pretext 1 + 2 + 4
 		      EditSourceX('<<m.lcFilename>>', '<<m.lcClassName>>','<<m.lcMethod>>',<<m.lnLineNo >>)
-		    EndText
+		    Endtext
 		  Otherwise && File|class|method|lineno
-		    Text To m.lcReturn  Noshow Textmerge Pretext 1+2+4
-		      <<m.lcFilename >> <<m.lcClassName >> <<m.lcMethod >> <<m.lnLineNo >>
-		    EndText  
+		    *!*      Set Step On 
+		    If Lower(Justext(m.lcFilename)) = [prg]
+		      Text To m.lcReturn  Noshow Textmerge Pretext 1 + 2 + 4
+		        <<m.lcFilename >> <<m.lnLineNo >>
+		      Endtext
+		    Else
+		      If Empty(m.lcObjectPath)
+		        Text To m.lcReturn  Noshow Textmerge Pretext 1 + 2 + 4
+		        <<m.lcFilename >> <<m.lcClassName >> <<JustExt(m.lcMethod)>> <<m.lnLineNo >>
+		        Endtext
+		      Else
+		        Text To m.lcReturn  Noshow Textmerge Pretext 1 + 2 + 4
+		        <<m.lcFilename >> <<m.lcClassName >> <<m.lcObjectPath>>.<<JustExt(m.lcMethod)>> <<m.lnLineNo >>
+		        Endtext
+		      Endif
+		
+		    Endif
+		    *!*      Text To m.lcReturn  Noshow Textmerge Pretext 1+2+4
+		    *!*        <<m.lcFilename >> <<m.lcClassName >> <<m.lcMethod >> <<m.lnLineNo >>
+		    *!*      EndText  
+		
 		Endcase
 		Return Alltrim(m.lcReturn)
 		
@@ -3532,47 +3801,50 @@ DEFINE CLASS sidekick AS container
 		
 		Text To m.lcSidekickOptions Noshow Textmerge Pretext 7
 		 a   | <blank>     | Menu                                                   | skorg
+		 ef  | # <file>    |-Insert #Include statement from Picklist of .h files    | skinc   | na
 		 a   | !           | Create and run Sidekick extensions                     | skta
 		 a   | !!          | Edit Sidekick extensions                               | skta
 		 c   | *           | Picklist of projects in active .sk file                | skorg
 		 c   | **          | Picklist of Sidekick files in the path                 | skorg
-		 ef  | * <number>  | Repeat * characters to split code into segments        | skorg| Number of characters: 
+		 ef  | * <number>  |-Repeat * characters to split code into segments        | skorg| Number of characters: 
 		 c   | +           | Picklist of all VFP files in the path, edit            | skdir
-		 ef  | +           | Inserts contents from prg                              | skins   | Name of file to include:
+		 ef  | + <file>    |-Inserts contents from prg                              | skins   | Name of file to include:
 		 a   | ++          | Picklist of VFP files with more information, edit      | skdir#dirc
 		 a   | +++         | Picklist of VFP files with more information, run       | skdir#dirrun
 		 c   | -           | Opens default files listed in active .sk               | skorg
 		 a   | . (dot)     | Opens Sidekick "test area"                             | skta
-		 ef  | = <func>    | Inserts return value from function                     | skeval  | Function name to evaluate:
+		 ef  | = <func>    |-Inserts return value from function                     | skeval  | Function name to evaluate:
 		 a   | ?           | Menu                                                   | skmnu
-		 cef | ?= <var>    | Returns ?'memvar',mvar                                 | skdb  | Variable name:
+		 cef | ?= <var>    |-Returns ?'memvar',mvar                                 | skdb  | Variable name:
 		 c   | 0           | Opens active .sk file for editing                      | skorg
 		 c   | 0 *         | Picklist of Sidekick files in the path                 | skorg
 		 c   | 0 <file>    | Makes filename.sk the active Sidekick file             | skorg | .sk file to become active:
 		 c   | 1           | Items in group 1 are opened or run                     | skorg
 		 c   | 2-9999      | Items in specified group opened or run                 | skorg | Group number to process:
+		 f   | Be          | BindEvent syntax builder                               | skbe
 		 a   | Br          | Browse the currently selected table or cursor          | skbr
-		 ef  | Db <var>    | Returns DebugOut 'memvar',mvar                         | skdb  | Variable name:
+		 ef  | Db <var>    |-Returns DebugOut 'memvar',mvar                         | skdb  | Variable name:
 		 f   | DD          | DoDefault() syntax builder                             | skdd  | NA
 		 c   | De          | Picklist of prg files with a description               | skdesc
-		 ef  | De          | Adds "* Description *" template to the active file     | skdesc
+		 ef  | De          |-Adds "* Description *" template to the active file     | skdesc
 		 a   | Dr          | Picklist of all VFP files in the path, edit            | skdir
 		 cef | Ec          | The content of the clipboard is executed               | skec
 		 cef | Ed          | Easy way to open most files                            | sked    | Filename or URL:
 		 cef | Es          | Creates EditSource command for the opened window(s)    | skes
-		 ef  | Eval <func> | Inserts return value from function                     | skeval  | Function name to evaluate:
-		 cef | Fp          | Opens SuperBrowse as a Field Picker                    | skfp    | Specify table name:
+		 ef  | Eval <func> |-Inserts return value from function                     | skeval  | Function name to evaluate:
+		 cef | Fp <table>  | Opens SuperBrowse as a Field Picker                    | skfp    | Table name:
 		 cef | Help        | Opens Sidekick page in the default Browser             | <default> 
 		 cef | Hk          | Picklist of all assigned hot keys                      | skhk
-		 ef  | Inc         | Insert #Include statement from Picklist of .h files    | skinc   | na 
-		 ef  | Ins         | Inserts contents from prg                              | skins   | na 
+		 ef  | Inc <file>  |-Insert #Include statement from Picklist of .h files    | skinc   | na 
+		 ef  | Ins         |-Inserts contents from prg                              | skins   | na 
 		 a   | Lo          | Shows all open tables and cursors in active datasession| sklo
-		 cef | Lorem       | Random "Lorem Ipsum" text generator                    | skrt    | Number of sentences (2):
+		 cef | Lorem       |-Random "Lorem Ipsum" text generator                    | skrt    | Number of sentences (2):
 		 ef  | Menu        | Menu                                                   | skmnu
-		 cef | No          | NewObject syntax builder                               | skno    | na  
+		 cef | No          |-NewObject syntax builder                               | skno    | na  
+		 a   | Ot          | List of open tables                                    | skpa  
 		 a   | Pa          | Shows the current Set Path setting plus some more      | skpa  
 		 c   | Pr          | Picklist of projects in active .sk file                | skorg
-		 cef | Rt          | Random readable text generator                         | skrt
+		 cef | Rt          |-Random readable text generator                         | skrt
 		 a   | SF          | Select From syntax helper                              | sksf
 		 cef | Sk          | Run or create custom made Sidekick extensions          | skext
 		 cef | Sked        | Edit custom made Sidekick extensions                   | skext
@@ -3915,19 +4187,33 @@ DEFINE CLASS sidekick AS container
 
 	PROCEDURE givemessage
 		Lparameters tcMessage, tnDialog, tcTitle, tnTimeOut
-		Wait clear
-		m.tcMessage = Evl(m.tcMessage,'No text given')
-		m.tcTitle = Evl(m.tcTitle, this.cProgram)
-		m.tnTimeOut = Evl(m.tnTimeOut,0)
-		m.tnDialog = Evl(m.tnDialog,0+64)
-		Return MessageBox( m.tcMessage,m.tnDialog,m.tcTitle,m.tnTimeOut )
+		Local loMsg As Msg Of Tools\Procs\THOR_PROC_Sidekick.vcx
+		Local lcProcess
+		
+		Wait Clear
+		tcMessage = Evl(m.tcMessage, [No text given])
+		tcTitle = Evl(m.tcTitle, This.cProgram)
+		tnTimeOut = Evl(m.tnTimeOut, 0)
+		tnDialog = Evl(m.tnDialog, 0 + 64)
+		If .F.
+		  Return Messagebox( m.tcMessage, m.tnDialog, m.tcTitle, m.tnTimeOut )
+		Else
+		  lcProcess = Execscript(_Screen.cThorDispatcher, [Full Path=] + [thor_proc_sidekick.VCX])
+		  loMsg = Newobject([Msg], m.lcProcess )
+		  If m.tnTimeOut = 0
+		    Return m.loMsg.ShowMsg(m.tcMessage, m.tnDialog, m.tcTitle)
+		  Else
+		    Return m.loMsg.ShowMsg(m.tcMessage, m.tnDialog, m.tcTitle, m.tnTimeOut)
+		  Endif
+		Endif
+		
 		
 	ENDPROC
 
 	PROCEDURE handlemrutable
 		Lparameters tcCommand
-		Local lcClause, lcCommand, lcData, lcFilter, lcFullName, lcMRU, lcMethod, lcModule, lcSQL, lcSelect
-		Local lcTable, lcWord, lnIgnoreFields, lnLineNo, lnWords, lnX
+		Local lcCommand, lcData, lcFilter, lcFullName, lcMRU, lcMethod, lcModule, lcSQL, lcSelect, lcTable
+		Local lcWord, lnIgnoreFields, lnLineNo, lnWords, lnX
 		
 		lnIgnoreFields = 2
 		
@@ -3937,6 +4223,13 @@ DEFINE CLASS sidekick AS container
 		  lcModule = Lower(Getwordnum(m.lcData, 2))
 		  lcMethod = Lower(Getwordnum(m.lcData, 3))
 		  lnLineNo = Val(Getwordnum(m.lcData, 4))
+		  Do case
+		    Case Lower(JustExt(m.lcFullName)) = 'prg'
+		      lnLineNo = Val(Getwordnum(m.lcData, 2))
+		      lcModule = []
+		    Case Lower(JustExt(m.lcFullName)) = 'scx'
+		*!*        lcModule = []
+		  Endcase
 		Endif
 		Do Case
 		  Case m.tcCommand = [Add]
@@ -3981,6 +4274,14 @@ DEFINE CLASS sidekick AS container
 		        into cursor <<this.cCursor>> readwrite
 		    Endtext
 		    Execscript(m.lcSQL)
+		    If _tally>0
+		      Scan
+		        lcFile = fullname
+		        lcModule = Alltrim(module)
+		        lcMethod = Alltrim(method)
+		        replace description with this.GetDescript(m.lcFile)
+		      EndScan
+		    Endif
 		    lcTable = This.GetDataFromGrid([Select what to edit:], [fullname], m.lnIgnoreFields )
 		    If Lastkey() = 27
 		      Return .T.
@@ -3996,7 +4297,7 @@ DEFINE CLASS sidekick AS container
 		        lcCommand = Alltrim(Module)
 		        lcCommand = Evl(m.lcCommand, Alltrim(Method))
 		        lcData = Alltrim(FullName)
-		        This.shellX(m.lcCommand, , m.lcData)
+		        This.ShellX(m.lcCommand, , m.lcData)
 		      Case Empty(Module) And Empty(Method) And !External
 		        lcData = Alltrim(FullName)
 		        lnLineNo = Evl(Lineno, 1)
@@ -4041,8 +4342,10 @@ DEFINE CLASS sidekick AS container
 	ENDPROC
 
 	PROCEDURE highlightcurrentline
-		Local lnEndPos, loEditorWin
+		Local lcProcess, lnEndPos, loEditorWin
 		
+		*!*  lcProcess = Execscript(_Screen.cThorDispatcher, [Full Path=] + [thor_proc_sidekick.VCX])
+		*!*  loEditorWin = Newobject([Editorwin], m.lcProcess )
 		loEditorWin  = Execscript(_Screen.cThorDispatcher, [Thor_Proc_EditorWin])
 		If m.loEditorWin.FindWindow() < 0
 		  Return
@@ -4075,26 +4378,28 @@ DEFINE CLASS sidekick AS container
 	PROCEDURE Init
 		Lparameters tcCommand
 		
-		Local lnX
-		this.cVersion  = '1.20'
+		Local lcCommand, lnX
+		
+		This.cVersion  = [1.20]
 		If !Pemstatus(_Screen, [lTest], 5)
 		  _Screen.AddProperty([lTest],.F.)
 		Endif
 		This.cExact = Set([Exact])
 		Set Exact Off
+		Aerror(This.aInError)
 		This.nSelect = Select()
+		this.cAlias = Alias()
 		This.cClip = _Cliptext
 		This.Cpoint = Set([Point])
 		Set Point To [.]
 		This.lNoInterface = Vartype(m.tcCommand) = [L]
 		This.cCommentString = Evl(This.ReadRegistryOption([EditorCommentString]), [*!*])
-		Use in (Select(this.cCursor))
-		this.ReadOptions()
+		Use In (Select(This.cCursor))
+		This.ReadOptions()
 		Aused(This.aInUse)
-		this.HandleMRUTable('Check')
+		This.HandleMRUTable([Check])
 		If Empty(m.tcCommand) And !This.lNoInterface
 		  This.oEditorWinInit()
-		
 		  This.oEditor = Execscript(_Screen.cThorDispatcher, [class= HighlightedText from Thor_Proc_HighlightedText.PRG])
 		  For lnX = 1 To 2
 		    This.oEditor.GetHighlightedText([Statement], .T.)
@@ -4108,25 +4413,29 @@ DEFINE CLASS sidekick AS container
 		Else
 		  This.cCommand = m.tcCommand
 		  This.cParcedText = Evl(m.tcCommand, [])
-		EndIf
-		If Empty(this.cparcedtext) 
-		  lcCommand = InputBox('Type command:','Sidekick', this.cDefaultCommand ,0,'','<>')
-		  If m.lcCommand = '<>' && Cancel
+		Endif
+		If Empty(This.cParcedText)
+		  This.lInputBox = .T.
+		  This.nLastWindow = This.oEditorWin.Findlastwindow()
+		  If This.nLastWindow > 1
+		    This.oEditorWin.SetHandle(This.nLastWindow)
+		  Endif
+		  lcCommand = Inputbox([Type command:], [Sidekick], This.cDefaultCommand, 0, [], [<>])
+		  If m.lcCommand = [<>] && Cancel
 		    Return
-		  Else 
-		    this.cParcedText = Alltrim(Lower(m.lcCommand))
+		  Else
+		    This.cParcedText = Alltrim(Lower(m.lcCommand))
 		  Endif
 		Endif
-		
 		This.cParcedText = Trim(This.cParcedText, 0, Chr(13), Chr(10), Chr(0))
-		this.cParcedText = Chrtran(This.cParcedText, [|], [ ])
+		This.cParcedText = Chrtran(This.cParcedText, [|], [ ])
 		tcCommand = This.cParcedText
 		This.cParameterOriginal = This.cParcedText
-		If !Empty(this.cParcedText) or !This.lNoInterface 
+		If !Empty(This.cParcedText) Or !This.lNoInterface
 		  This.FindSwitch()
 		  This.FindCommand()
 		  This.FindParameters()
-		  If Inlist(This.nWindowType, 0, 1) And This.cTitle == This.cSidekickFile And !Inlist(m.tcCommand, [es], [es all], [de], [desc], [descript], [description], [+],'us')
+		  If Inlist(This.nWindowType, 0, 1) And This.cTitle == This.cSidekickFile And !Inlist(m.tcCommand, [es], [es all], [de], [desc], [descript], [description], [+], [us])
 		    This.RunSidekickLine(This.cParcedText )
 		  Else
 		    If This.cTitle == This.cSidekickFile And This.cCommand == [+]
@@ -4136,7 +4445,7 @@ DEFINE CLASS sidekick AS container
 		    This.cParameter = Trim(This.cParameter)
 		    This.FindFunction()
 		  Endif
-		EndIf
+		Endif
 		_Cliptext = This.cClip
 		
 	ENDPROC
@@ -4403,15 +4712,8 @@ DEFINE CLASS sidekick AS container
 		    Endif
 		  Endif
 		EndIf
-		*!*  Set Step On 
-		*!*  If this.ccommand # 'ed'
 		  This.DropFieldIfEmpty(m.lcCursorfiles, [records])
-		*!*    If ! InList(m.tcFilter , '.v', '.scx')
-		*!*    try
-		    This.DropFieldIfEmpty(m.lcCursorfiles, [lines])
-		*!*    Catch
-		*!*    Endtry
-		*!*    Endif
+		  This.DropFieldIfEmpty(m.lcCursorfiles, [lines])
 		  This.DropFieldIfEmpty(m.lcCursorfiles, [Fields])
 		  This.DropFieldIfEmpty(m.lcCursorfiles, [text])
 		  This.DropFieldIfEmpty(m.lcCursorfiles, [descript])
@@ -4421,7 +4723,6 @@ DEFINE CLASS sidekick AS container
 		  This.IndexIfField(m.lcCursorfiles, [Fields], 1)
 		  This.IndexIfField(m.lcCursorfiles, [descript], 2)
 		  This.IndexIfField(m.lcCursorfiles, [memosize], 1)
-		*!*  Endif
 		If [l] $ This.cOption And Inlist(m.tcFilter, [dbf], [.vcx]) And [v] $ This.cOption && vcx
 		  Select * From (m.lcCursorfiles) Into Cursor (m.lcCursorfiles + [1]) Readwrite
 		  Use In (m.lcCursorfiles)
@@ -4532,17 +4833,21 @@ DEFINE CLASS sidekick AS container
 	ENDPROC
 
 	PROCEDURE oeditorwininit
+		Local lcProcess
+		
+		*!*  lcProcess = Execscript(_Screen.cThorDispatcher, [Full Path=] + [thor_proc_sidekick.VCX])
 		This.oEditorWin = Execscript(_Screen.cThorDispatcher, [Thor_Proc_EditorWin])
+		*!*  This.oEditorWin = Newobject([EditorWin],m.lcProcess)
 		This.nWindowType = This.oEditorWin.FindWindow()
-		This.nSelStart = This.oEditorWin.GetSelStart()
-		This.nSelEnd = This.oEditorWin.GetSelend()
-		This.nFileSize = This.oEditorWin.GetFileSize()
 		This.nHandle = This.oEditorWin.GetWindowHandle()
-		If this.nwindowtype >= 0
+		If This.nWindowType >= 0
+		  This.nSelStart = This.oEditorWin.GetSelStart()
+		  This.nSelEnd = This.oEditorWin.GetSelend()
+		  This.nFileSize = This.oEditorWin.GetFileSize()
 		  This.cTitle = This.oEditorWin.GetTitle()
 		  This.nLineno = This.oEditorWin.GetLineNumber(This.nSelStart)
-		Else 
-		  This.cTitle = 'No active window!'
+		Else
+		  This.cTitle = [No active window!]
 		Endif
 		
 	ENDPROC
@@ -5055,20 +5360,32 @@ DEFINE CLASS sidekick AS container
 		
 		lcMethod = [sk_] + This.cCommand
 		llSuccess = .F.
+		If !Pemstatus(_Screen, [lTry], 5)
+		  _Screen.AddProperty([lTry],.F.)
+		EndIf
 		Do Case
-		  Case m.lcMethod = [sk_dr]
-		    This.sk_dr()
+		  Case File(ForceExt( m.lcMethod,'.prg'))
+		    If Empty(this.cParameter)
+		      Do (m.lcMethod ) 
+		    Else 
+		      Do (m.lcMethod ) with this.cParameter 
+		    EndIf
+		    m.llSuccess = .T.
 		  Otherwise
 		    If Pemstatus(This, m.lcMethod, 5)
 		      lcMethod = [this.] + m.lcMethod + [()]
-		      Try
-		        Public goError
+		      If _Screen.ltry
+		        Try
+		          Public goError
+		          Evaluate(m.lcMethod)
+		          llSuccess = .T.
+		        Catch To m.goError
+		          Wait Window [Can't evaluate ] + m.lcMethod At 10, 25
+		        Finally
+		        Endtry
+		      Else
 		        Evaluate(m.lcMethod)
-		        llSuccess = .T.
-		      Catch To m.goError
-		        Wait Window [Can't evaluate ] + m.lcMethod At 10, 25
-		      Finally
-		      Endtry
+		      Endif
 		    Endif
 		Endcase
 		If m.llSuccess
@@ -5100,7 +5417,6 @@ DEFINE CLASS sidekick AS container
 		Else 
 		  This.GiveMessage('No table is open in the current work area.')
 		Endif
-		
 		    
 		  
 	ENDPROC
@@ -5244,6 +5560,67 @@ DEFINE CLASS sidekick AS container
 		  
 	ENDPROC
 
+	PROCEDURE sk_err
+		Local lcCursor, lcMessage, lnErrors, lnX
+		
+		lnErrors = Alen(This.aInError)
+		If m.lnErrors < 2
+		  Messagebox( [No error to report])
+		  Return
+		Endif
+		lcCursor = [CurError]
+		If This.aInError(1, 1) = 1526 && ODBC error
+		  Create Cursor (m.lcCursor) (No i, Element N(1), Descript c(30), Message c(200) Null)
+		Else
+		  Create Cursor (m.lcCursor) (Element N(1), Descript c(30), Message c(200) Null)
+		Endif
+		lnX = 1
+		Do Case
+		  Case This.aInError(1, 1) = 1526 && ODBC error
+		    For lnX = 1 To m.lnErrors
+		      Insert Into (m.lcCursor) Values (m.lnX, 1, [Error number], Transform(This.aInError(m.lnX, 1)))
+		      Insert Into (m.lcCursor) Values (m.lnX, 2, [Error message], This.aInError(m.lnX, 2))
+		      Insert Into (m.lcCursor) Values (m.lnX, 3, [ODBC error message], This.aInError(m.lnX, 3))
+		      Insert Into (m.lcCursor) Values (m.lnX, 4, [ODBC SQL state], This.aInError(m.lnX, 4))
+		      Insert Into (m.lcCursor) Values (m.lnX, 5, [ODBC error no.], Transform(This.aInError(m.lnX, 5)))
+		      Insert Into (m.lcCursor) Values (m.lnX, 6, [ODBC connection handle], Transform(This.aInError(m.lnX, 6)))
+		    Endfor
+		  Case Inlist(This.aInError(1, 1), 1427, 1429) && Ole error
+		    Insert Into (m.lcCursor) Values (1, [Error number], Transform(This.aInError(m.lnX, m)))
+		    Insert Into (m.lcCursor) Values (2, [VFP error message], This.aInError(m.lnX, 2))
+		    Insert Into (m.lcCursor) Values (3, [OLE error message], This.aInError(m.lnX, 3))
+		    Insert Into (m.lcCursor) Values (4, [Application name], This.aInError(m.lnX, 4))
+		    If !Isnull(This.aInError(m.lnX, 5))
+		      Insert Into (m.lcCursor) Values (5, [Application help file], This.aInError(m.lnX, 5))
+		      Insert Into (m.lcCursor) Values (6, [Application help context id], This.aInError(m.lnX, 6))
+		    Endif
+		    Insert Into (m.lcCursor) Values (7, [OLE 2.0 exception number], Transform(This.aInError(m.lnX, 7)))
+		  Otherwise
+		    Insert Into (m.lcCursor) Values (1, [Error number], Transform(This.aInError(m.lnX, 1)))
+		    Insert Into (m.lcCursor) Values (2, [Error message], This.aInError(m.lnX, 2))
+		    If !Isnull(This.aInError(m.lnX, 3))
+		      Insert Into (m.lcCursor) Values (3, [Parameters], This.aInError(m.lnX, 3))
+		    Endif
+		    If !Isnull(This.aInError(m.lnX, 4))
+		      Insert Into (m.lcCursor) Values (4, [Work area], Transform(This.aInError(m.lnX, 4)))
+		    Endif
+		    If !Isnull(This.aInError(m.lnX, 5))
+		      Do Case
+		        Case This.aInError(m.lnX, 5) = 1
+		          lcMessage = [Insert trigger failed]
+		        Case This.aInError(m.lnX, 5) = 1
+		          lcMessage = [Update trigger failed]
+		        Otherwise
+		          lcMessage = [Delete trigger failed]
+		      Endcase
+		      Insert Into (m.lcCursor) Values (5, [Trigger error], m.lcMessage )
+		    Endif
+		Endcase
+		This.GetDataFromGrid([Current error:], , , , [N])
+		*!*  This.DoBrowModal()
+		
+	ENDPROC
+
 	PROCEDURE sk_es
 		* EditSource builder
 		#Define crlf Chr(13)+Chr(10)
@@ -5253,6 +5630,9 @@ DEFINE CLASS sidekick AS container
 		lcText = This.cParameter
 		lnCallerType = This.nWindowType
 		If m.lnCallerType > 0
+		  If this.oEditorWin.nHandle = 10
+		    this.oEditorWin.nHandle = this.nHandle 
+		  Endif
 		  lcCallerName = Lower(This.oEditorWin.GetTitle())
 		  lcFullName = Fullpath(m.lcCallerName)
 		Endif
@@ -5267,8 +5647,9 @@ DEFINE CLASS sidekick AS container
 		llClip = .T.
 		lnEdType = 1
 		llNewProject = .F.
+		
 		Do Case
-		  Case Inlist( m.lnCallerType, 1, 2) And Pemstatus(_Screen, [cSidekickfile], 5) And m.lcCallerName = Lower(This.cSidekickFile)
+		  Case Inlist( m.lnCallerType, 1, 2) And m.lcCallerName = Lower(This.cSidekickFile)
 		    lnEdType = 4 && Only number, Ed syntax
 		    Do Case
 		      Case Left(m.lcText, 1) = [+] && find next project
@@ -5288,7 +5669,7 @@ DEFINE CLASS sidekick AS container
 		        lcText = Substr(m.lcText, m.lnLength + 1 )
 		      Otherwise
 		        lnProject = -1
-		    Endcase
+		    EndCase
 		    Do Case
 		      Case Inlist(Lower(m.lcText), [x], [editsourcex], [edx], [ex])
 		        lnEdType = 3
@@ -5357,13 +5738,14 @@ DEFINE CLASS sidekick AS container
 	PROCEDURE sk_eval
 		#Define ccCR Chr(13)
 		Local lcMethod, lcText
-		
-		If This.cCommand = [=] And Empty(This.cParameter) And Len(This.cCommand) > 1
+		If This.cCommand = [eval] And Empty(This.cParameter) And Len(This.cCommand) > 4
 		  lcMethod = Substr(This.cCommand, 2)
 		Else
 		  lcMethod = This.cParameter
+		EndIf
+		If Empty(m.lcMethod)
+		  m.lcMethod = GetWordNum(this.cParcedText,2)
 		Endif
-		
 		lcText = []
 		If !Right(m.lcMethod, 1) = [)]
 		  lcMethod = m.lcMethod + [()]
@@ -5401,7 +5783,7 @@ DEFINE CLASS sidekick AS container
 	ENDPROC
 
 	PROCEDURE sk_hei
-		this.GiveMessage('Hei!')
+		this.GiveMessage('Hei på deg!')
 	ENDPROC
 
 	PROCEDURE sk_help
@@ -5487,13 +5869,13 @@ DEFINE CLASS sidekick AS container
 	ENDPROC
 
 	PROCEDURE sk_ins
-		If this.nWindowType = 0
-		  Return
-		Endif
 		Local lcCode, lcMethod, lcProc, lcSource, lcText, lnProcs, lnSelect, lnX
 		
 		Local Array laProc[1]
 		
+		If This.nWindowType = 0
+		  Return
+		Endif
 		#Define crlf Chr(13)+Chr(10)
 		lcMethod = This.cParameter
 		lcCode = []
@@ -5501,38 +5883,46 @@ DEFINE CLASS sidekick AS container
 		  If File(m.lcMethod)
 		    lcCode = Filetostr(m.lcMethod)
 		  Else
-		    this.GiveMessage([File not found!], 48, Alltrim(m.lcMethod))
+		    This.GiveMessage([File not found!], 48, Alltrim(m.lcMethod))
 		  Endif
 		Else
 		  lcText = []
 		  lnSelect = Select()
 		  Select 0
 		  Create Cursor CurMethods (Method c(240), Source c(240), Code m)
-		  Wait Window 'Wait while Sidekick processes files!' at 10,25 nowait noclear
+		  Wait Window [Wait while Sidekick processes files!] At 10, 25 Nowait Noclear
 		  This.GetFilesInPath([prg], [curPrgs])
 		  Select curprgs
 		  Scan
 		    lcSource = Alltrim(curprgs.Fname)
 		    lnProcs = Aprocinfo(laProc, curprgs.Fname, 0)
 		    For lnX = 1 To m.lnProcs
-		      If m.laProc(m.lnX, 3) = [Procedure] And (m.lcMethod $ Lower(m.laProc(m.lnX, 1)) Or Empty(m.lcMethod)) && And ![.] $ m.laProc(m.lnX, 1) 
+		      If m.laProc(m.lnX, 3) = [Procedure] And (m.lcMethod $ Lower(m.laProc(m.lnX, 1)) Or Empty(m.lcMethod)) && And ![.] $ m.laProc(m.lnX, 1)
 		        lcProc = m.laProc(m.lnX, 1)
-		        lcCode = this.GetMethdFromPrg(m.lcProc, m.lcSource)
-		        If '.'$m.lcProc 
-		          m.lcProc = JustExt(m.lcProc)
+		        lcCode = This.GetMethdFromPrg(m.lcProc, m.lcSource)
+		        If [.] $ m.lcProc
+		          lcProc = Justext(m.lcProc)
 		        Endif
 		        Insert Into CurMethods (Source, Method, Code) Values (m.lcSource, m.lcProc, m.lcCode )
 		      Endif
 		    Endfor
 		  Endscan
+		  Scan
+		    lcSource = Alltrim(curprgs.Fname)
+		    If Lower(m.lcMethod) $ Juststem(Lower(curprgs.Fname))
+		      lcCode = Filetostr(curprgs.Fname)
+		      lcMethod = '-->' + Juststem(curprgs.Fname)
+		      Insert Into CurMethods (Source, Method, Code) Values (m.lcSource, m.lcMethod, m.lcCode )
+		    Endif
+		  Endscan
 		  Select CurMethods
 		  Index On Lower(Method) Tag Method
 		  Locate
-		  Wait clear
+		  Wait Clear
 		  If Reccount() > 0
 		    lcCode = This.GetDataFromGrid([Select method to insert], [curmethods.code])
 		  Else
-		    this.GiveMessage([No match found!], 48, m.lcMethod)
+		    This.GiveMessage([No match found!], 48, m.lcMethod)
 		  Endif
 		  Select (m.lnSelect)
 		  lcMethod = Trim(CurMethods.Method)
@@ -5594,18 +5984,19 @@ DEFINE CLASS sidekick AS container
 
 	PROCEDURE sk_menu
 		Local lcAsk, lcDesc, lcFile, lcProg, lcSelect, lcSidekickOptions, lcTrigger, lcURL, lcVar, lcWindow
-		Local lnLines, lnX
+		Local llNomenu, lnLines, lnX
 		
 		Local Array laSidekickChoices[1]
 		
 		lcSidekickOptions = This.GetHelpTopics()
 		lcSelect = Select()
 		Select 0
-		Create Cursor curSidekick (Trigger c(12), Descript c(50),  Window c(2), Ask c(25),  url c(100))
+		Create Cursor curSidekick (Nomenu l, Trigger c(12), Descript c(50),  Window c(2), Ask c(25),  url c(100))
 		
 		lnLines = Alines(m.laSidekickChoices, m.lcSidekickOptions )
 		For lnX = 1 To m.lnLines
 		  lcWindow = Alltrim(Getwordnum( m.laSidekickChoices(m.lnX), 1, [|]))
+		  llNomenu = .F.
 		  Do Case
 		    Case Left(m.lcWindow, 1) = [*]
 		      Loop
@@ -5624,6 +6015,11 @@ DEFINE CLASS sidekick AS container
 		  lcDesc = Alltrim(Getwordnum( m.laSidekickChoices(m.lnX), 3, [|]))
 		  lcAsk = Alltrim(Getwordnum( m.laSidekickChoices(m.lnX), 5, [|]))
 		  lcURL = Alltrim(Getwordnum( m.laSidekickChoices(m.lnX), 4, [|]))
+		  If Left(m.lcDesc, 1) = [-]
+		    lcDesc = Substr(m.lcDesc, 2)
+		    llNomenu = .T.
+		  Endif
+		
 		  Do Case
 		    Case Left(m.lcURL, 2) = [sk] And [ #] $ m.lcURL
 		      lcURL = Strtran(m.lcURL, [#], [.md#])
@@ -5639,17 +6035,19 @@ DEFINE CLASS sidekick AS container
 		  Endcase
 		
 		
-		  Insert Into curSidekick (Trigger, Descript, Ask, url) Values (m.lcTrigger, m.lcDesc, m.lcAsk, m.lcURL )
+		  Insert Into curSidekick (Trigger, Descript, Ask, url, Nomenu) Values (m.lcTrigger, m.lcDesc, m.lcAsk, m.lcURL, m.llNomenu  )
 		Endfor
-		Select Trigger, Descript, url, Ask From curSidekick Into Cursor curSidekick Readwrite
+		Select Trigger, Descript, url, Ask, Nomenu From curSidekick Into Cursor curSidekick Readwrite
 		Index On Lower(Descript) Tag Descript
 		Index On Trigger Tag Trigger
 		If [x] $ This.cOption
 		  Browse Normal
+		  List Off Trigger, Descript, Ask To Print
 		Endif
-		lcProg = This.GetDataFromGrid(Textmerge([<<this.cProgram>> "commands", Ctrl+Enter opens url]), [trigger], 1)
+		lcProg = This.GetDataFromGrid(Textmerge([<<this.cProgram>> "commands", Ctrl+Enter opens url]), [trigger], 2)
 		lcAsk = Alltrim(Ask)
-		
+		llNomenu = Nomenu
+		*!*  Set Step On 
 		Use
 		Select (m.lcSelect)
 		If Getwordnum(m.lcProg, 1) # [0]
@@ -5657,13 +6055,14 @@ DEFINE CLASS sidekick AS container
 		Endif
 		If !Empty(m.lcProg)
 		  Do Case
+		    Case m.llNomenu
 		    Case Lower(m.lcAsk) == [na]
 		      lcProg = []
 		    Case m.lcProg = [<blank>]
 		      lcProg = [menu] && [ed]
 		    Case m.lcProg = [2-9999]
 		      lcProg = Alltrim(Inputbox(m.lcAsk), [Empty for list])
-		      m.lcProg = Evl(m.lcProg,'*')
+		      lcProg = Evl(m.lcProg, [*])
 		    Case m.lcProg = [0 <file>]
 		      lcFile = Alltrim(Inputbox(m.lcAsk, [Specify .sk file name!]))
 		      If Empty(m.lcFile)
@@ -5689,7 +6088,7 @@ DEFINE CLASS sidekick AS container
 		  If This.lSKComment
 		    lcProg = [*] + m.lcProg
 		  Endif
-		  If !Empty(m.lcProg)
+		  If !Empty(m.lcProg) And !m.llNomenu
 		    Execscript(_Screen.cThorDispatcher, [thor_tool_sidekick], m.lcProg )
 		  Else
 		    This.GiveMessage([This command is not available via Help menu!])
@@ -5993,7 +6392,7 @@ DEFINE CLASS sidekick AS container
 	ENDPROC
 
 	PROCEDURE sk_ot
-		Local lcCursor, lnFiles, lnWorkArea, lnX
+		Local lcAlias, lcCursor, lnFiles, lnSelect, lnWorkArea, lnX
 		
 		Local Array laDummy[1]
 		
@@ -6010,24 +6409,24 @@ DEFINE CLASS sidekick AS container
 		    RecordS With Reccount(Workarea),;
 		    Order With Order(Workarea)
 		Endscan
-		Select * from (m.lcCursor) into cursor (m.lcCursor) readwrite where alias # Upper(m.lcCursor)
+		Select * From (m.lcCursor) Into Cursor (m.lcCursor) Readwrite Where Alias # Upper(m.lcCursor)
 		Index On Alias Tag Alias
 		Index On Table Tag Table
 		Index On Workarea Tag Workarea
 		
-		This.lNoMessage = .T.
+		This.lNoMessage = .F.
 		If Reccount() > 1
+		  This.lNoMessage = .F.
 		  lnWorkArea = Val(This.GetDataFromGrid([List of open tables], [workarea]))
 		Else
 		  This.GiveMessage([No tables are open!])
-		Endif
+		EndIf
 		If m.lnWorkArea > 0
-		  *!*    Select (m.lnWorkArea)
-		*!*    this.GiveMessage(Textmerge('Work area <<m.lnWorkArea >> is selected'))
-		  this.GiveMessage(Alltrim(alias) + ' is selected!')
+		  This.GiveMessage(Textmerge([Work area <<Transform(m.lnWorkArea)>>, alias "<<this.ShowCase(Alltrim(Alias))>>"  is selected!]))
 		  This.nSelect = m.lnWorkArea
+		Else
+		  This.GiveMessage(Textmerge( [No change, work area <<Int(this.nSelect)>>, alias "<<this.ShowCase( this.cAlias) >>" is selected!]))
 		Endif
-		
 	ENDPROC
 
 	PROCEDURE sk_pa
@@ -6081,7 +6480,7 @@ DEFINE CLASS sidekick AS container
 		If This.nWindowType = 0
 		  Select 0
 		  Create Cursor curProjects (text1 c(240), Projnotxt c(3), Project c(50), projno i)
-		  Append From (this.cSidekickFile) Sdf
+		  Append From (ForceExt(this.cSidekickFile,'.sk')) Sdf
 		  Replace All Projnotxt With Ltrim(Strextract(text1, [#], [ ], 1)),;
 		    projno With Val(Strextract(text1, [#], [ ], 1))
 		  Replace All Project With Strextract(text1, [ ], [], 1) For projno > 0
@@ -6199,7 +6598,9 @@ DEFINE CLASS sidekick AS container
 	ENDPROC
 
 	PROCEDURE sk_sked
-		Local lcCursor, lcDescript, lcFile, lcMessage, lcProg, lcProgFile, lnSelect, lnTools
+		Local lcCursor, lcDescript, lcFile, lcMessage, lcProg, lcProgFile, lcText, lnHandle, lnSelect
+		Local lnTools
+		
 		If [z] $ This.cOption
 		  Set Step On
 		Endif
@@ -6207,24 +6608,31 @@ DEFINE CLASS sidekick AS container
 		If This.cCommand = [!!] And Len(This.cCommand ) > 2
 		  lcProg = Substr(This.cCommand, 3)
 		Endif
-		If !Lower(m.lcProg) = this.cSKFile 
-		  lcProg = this.cSKFile + m.lcProg
+		If !Lower(m.lcProg) = This.cSKFile
+		  lcProg = This.cSKFile + m.lcProg
 		Endif
 		lcProgFile = Forceext(m.lcProg, [prg])
-		If !Empty(m.lcProg) And !m.lcProg == this.cSKFile 
+		If !Empty(m.lcProg) And !m.lcProg == This.cSKFile
 		  If File(m.lcProgFile)
 		    Modify Command (m.lcProgFile) Nowait
 		  Else
-		    This.GiveMessage([File ] + m.lcProgFile + [ is not found!], 0 + 48, [Nothing to do])
+		    If This.GiveMessage([File ] + m.lcProgFile + [ is not found!], 4 + 64, [Create it?], 10000) # 7
+		      lcText = This.cDescriptionMask1 + [  ] + This.cDescriptionMask2
+		      Strtofile(m.lcText, m.lcProgFile)
+		      Modify Command (m.lcProgFile) Nowait
+		      lnHandle = This.oEditorWin.Findlastwindow()
+		      This.oEditorWin.SelectWindow(m.lnHandle)
+		      This.oEditorWin.SetInsertionPoint(15)
+		    Endif
 		  Endif
 		Else
 		  lnSelect = Select()
 		  lcCursor = [curCustom]
 		  lnTools = This.GetFilesInPath([prg], m.lcCursor )
 		  Select Cast(Lower(Substr(Juststem(Fname), 4)) As c(30)) As Program, FileSize, Filedate, Cast([] As c(100)) As Descript, Fname;
-		    From (m.lcCursor) Into Cursor (m.lcCursor) Readwrite Where Lower(Left(Juststem(Fname), 3)) = this.cSKFile 
+		    From (m.lcCursor) Into Cursor (m.lcCursor) Readwrite Where Lower(Left(Juststem(Fname), 3)) = This.cSKFile
 		  If _Tally = 0
-		    lcMessage = [No tool matching ] + this.cSKFile + [ found]
+		    lcMessage = [No tool matching ] + This.cSKFile + [ found]
 		    This.GiveMessage(m.lcMessage, 0 + 48, [No custom tool defined])
 		  Else
 		    Scan
@@ -6682,11 +7090,13 @@ DEFINE CLASS sidekick AS container
 		  !!      | sked
 		  ,       | ta
 		  .       | ta
+		  ::      | ed | w
 		  ++      | dr    | a
 		  +++     | dr    | e
 		  ?=      | db    | x
 		  ??      | ed    | w
 		  br      | br
+		  brw     | br    | w
 		  cl      | us    | c
 		  db 
 		  desc
@@ -6697,6 +7107,11 @@ DEFINE CLASS sidekick AS container
 		  drx     | dr    | a
 		  ec
 		  ed
+		  er      | err
+		  err
+		  error   | err
+		  ev      | eval
+		  eval
 		  fp
 		  help
 		  hk
@@ -6777,8 +7192,8 @@ DEFINE CLASS sidekick AS container
 		  If m.lnColumn > 0
 		    Exit
 		  Endif
-		Endfor
-		If m.lnColumn > 0
+		EndFor
+		If !Empty(m.lnColumn)
 		  This.cCommand = Evl( m.laCommands(m.lnColumn, 2),  m.laCommands(m.lnColumn, 1))
 		  lcParameter = Substr(m.lcCommand, Len(m.laCommands(m.lnColumn, 1)) + 1)
 		  If !Empty(m.laCommands(m.lnColumn, 3))
@@ -6813,7 +7228,9 @@ DEFINE CLASS sidekick AS container
 		If Vartype(m.tcText) # [C] or this.nWindowType < 0
 		  Return
 		Endif
-		
+		If this.oEditorWin.nHandle = 10
+		  this.oEditorWin.nHandle = this.nHandle 
+		Endif
 		this.oEditorWin.Insert(m.tcText)
 		
 		
