@@ -25,10 +25,8 @@ For this documentation the default name, `SKTest.prg`, is used.
 | `, (comma)`                | Same as above                              |
 | `Ta 1`               | Opens `SKTest1.prg` |
 | `.1`           | Same as above |
-| `. 1` | Same as above|
 | `.MyTest` | Opens `SKTest_MyTest.prg`, note the added underscore|
 | `.?` | List of all files matching `SKTest*.prg` |
-| `. ?` | Same as above |
 | `ta.` | Same as above |
 | `..` | Same as above |
 | `,,` | Same as above |

@@ -14,14 +14,25 @@ With `Sidekick` this is extremely simple.
 | Command | Result after pressing ![`F8`](Images/F8.png)|
 |:----------|:--------------------|
 | `ins` | A list of all procedures in all the prgs in the path  |
-| `+` | Same as above |
+| `+` (`plus`) | Same as above |
 | `+xxx` | Same as above, only procedures and prg's with xxx in its name|
 | `ins xxx.prg`|The whole contents of xxx.prg is inserted|
-| `+ xxx.prg` | Same as above'
+| `+ xxx.prg` | Same as above'|
+| `+xxx /v` | A list of methods from class libraries (`.vcx`) where xxx is a part of the library or method name
+| `+xxx /s` | Same as above, except forms (`.scx`) are checked instead of class libraries.
+| `+ .h` | A list of all .h files are presented |
 | `+xxx.h`  | The complete contents of xxx.h is inserted |
 
-If you don't specify any file extension, you can hover the mouse over the green cells, and see what will be inserted. Pick the function you want, and press `Enter`; or `Escape` to cancel.
+If you don't specify any file extension, .prg is assumed.  
+
+You can hover the mouse over the green cells, and see what will be inserted. Select the one you want, and press `Enter`; or `Escape` to cancel.
+
+Result of `+ ascii`: 
 
 ![Ins](Images/skins.png)
 
-***Note:*** This function only works in VFP's code editors.
+Result of `+ .h`:
+
+![skinsh](./Images/skinsh.png)
+
+***Note:*** This function only works in VFP's code editors. In the Command WIndow the short form for this function, `+`, will show the simplest version of [Sidekick's File Picker (advanced dir)](skdir.md).

@@ -29,7 +29,7 @@ If no number is specified, 2 is default. Maximum number of sentences is 122.
 | `RT` | One sentence of random "understandable" text, "medium size", is filled in  |  
 | `RT 3 2`| 3 paragraphs, each of type "long" |
 | `RT 3,2`| Same as above|
-| `RT 1 3`| 1 paragraphs, each of type "very long" |
+| `RT 1 3`| 1 paragraph, of type "very long" |
 
 The parameters can be separated by space or a comma.
 

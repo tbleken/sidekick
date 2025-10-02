@@ -69,7 +69,7 @@ The `Unzip` feature has only two parameters.
 | `Unzip myzip test` | The files in `myzip.zip` are unzipped into folder `test` |
 | `Unzip ? test` | Select the `.zip` file, the files inside go into folder `test` |
 | `Unzip` | Select the `.zip` file, the files inside go into folder `SkUnZip` |
-| `Unzip` | Same as above |
+
 
 If the target folder does not exist, it will be created. And if no target folder is specified, the default folder will be used. 
 

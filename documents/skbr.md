@@ -14,7 +14,8 @@ Note that `br` gives a read only grid, use `brw` to enable editing.
 
 The grid has advanced incremental search; only record where all the given "words" are anywhere in any field, including numeric and memo fields.
 
-This what you see if you issue 
+This is what you see if you type the following in the Command Window:
+
 ```foxpro
 Use (_foxcode) Again
 Br (Press F8)

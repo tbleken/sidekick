@@ -19,15 +19,16 @@ To really take advantage of `Sidekick`, It's recommended to have a file called `
 
 Note that you can have several `.sk` files, but only one can be active at the time. 
 
-If the file `Sidekick.sk` doesn't exist, it can be created in three ways:
-1. In the Command window, press  ![`F8`](Images/F8.png) in a blank line, and confirm.
-2. In the Command window or any VFP editor window, type 0 (zero) on a blank line, press ![`F8`](Images/F8.png) and confirm.
-3. Create the file using any editor, e.g. Modify File or Notepad.
+If the file `Sidekick.sk` doesn't exist, it can be created in two ways:  
+
+1. In the Command window or any VFP editor window, type `0 newfile` on a blank line, press ![`F8`](Images/F8.png) and confirm.
+1. Create the file using any editor, e.g. Modify File or Notepad.
 
 Here is the content of a typical `Sidekick.sk`:
 
 > Default project: 5
 > ****************************************
+> * Description: My project file  *
 > 0 exe do my setup.prg && Sets up the environment  
 > 0 startup.prg  && Needed in every project  
 > 0 myheader.h  && Needed in every project  
@@ -64,6 +65,7 @@ To open **all** the files prefixed with a number, type that number in the Comman
 A special case in many aspects is `0 (zero)`: 
 1. `0` in the Command window will open `Sidekick.sk` for editing, if it exists.
 2. `0` as the group number in `Sidekick.sk` will include the file(s) mentioned for every group.
+3. `0 mynewfile` will open `mynewfile.sk` if it exists, else you will be asked if you want to create it.
 
 Notice the first line above, `Default project: 5`. To open all the files in the specified group, `5` in this example, you don't have to specify the number, you can use `-` (minus, hyphen) instead. Just type `-` followed by ![`F8`](Images/F8.png) in an empty line in the Command window, and all the #5 files will be opened, plus all the #0 files. Notice that this number must be the very last "word" in the first line.
 
@@ -93,10 +95,10 @@ Note that in the `Sidekick` "organizer" file `Sidekick.sk`, the keyword `ed` mus
 | `ed 0 (zero)`                  | File `Sidekick.sk` is opened in editor   |
 | `0`                            | Same as above                             |
 | `es 1-999`               | Creates Editsource() command for all open windows   |
-| `pr`              | Picklist of projects in active `.sk` file (default = `Sidekick.sk`) |
+| `gr`              | Picklist of groups in active `.sk` file (default = `Sidekick.sk`) |
 | `*`| Same as above |
-| `* ab`| Only "projects" where project name contains `ab` |
-| `* ab cd`| Only "projects" where project name contains both `ab` and `cd` |
+| `* ab`| Only groups where project name contains `ab` |
+| `* ab cd`| Only groups where project name contains both `ab` and `cd` |
 
 **Note:** The commands listed above only work from the command window, except `ed X`and `ed 0`.  
 
@@ -173,6 +175,14 @@ Likewise, a URL will be opened in the default Browser.
 #### This feature works in the Command Window and in the editors (Modify Command and Modify File) 
 
 <a id="proj">
+
+## Using `ES` to automate the creation of "command lines" is `Sidekick.sk`
+
+With your "project file" as the active window, you can use `Sidekick's EditSource Builder, ES` to do most of the work for you.  
+If you for instance want to add entries to group number 10, type `es 10` and press ![`F8`](Images/F8.png). `ES` will loop through all VFP editing windows, and show the necessary code in a messagebox. Accept it to have the code pasted into the file.  
+To create a new group, type `es +` instead, and press ![`F8`](Images/F8.png). You will present an inputbox and ask you to enter the group name. Next you are asked to confirm that you want the name and code pasted. In this case `Sidekick` will find the highest used group number, and increment it for the new group.  
+
+
 
 
 

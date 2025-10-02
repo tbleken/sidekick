@@ -15,7 +15,7 @@ A highly appreciated "hidden secret" of this command window, is that you can typ
 
 NB! You get no guarantee that the result is always what you hope for. :grin:
 
-Note that some `Sidekick` commands writes back to the Command Window or to the active code editor. These commands can **not** be called from this inputbox or the menu it calls. They must be called directly from where you want the generated text written.
+Observe that some `Sidekick` commands writes back to the Command Window or to the active code editor. These commands can **not** be called from this inputbox or the menu it calls. They must be called directly from where you want the generated text written.
 
 
 **Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as the hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 

@@ -8,8 +8,11 @@
 
 | You type:                |        Result after pressing ![`F8`](Images/F8.png)|
 |:-------------------------|:----------------------------------------------------------|
-| `Fp` | SuperBrowse opens the currently selected table or cursor |
-| `FP xxx` | SuperBrowse opens with the named table or cursor |  
+| `Fp` | SuperBrowse opens the currently selected table or cursor. If none is selected, you get a list |
+| `FP ?` | SuperBrowse shows list of all tables in the path |  
+| `FP xxx` | SuperBrowse opens with table with `xxxx` in the name |  
+
+If more than one file match the specified parameter, you will see a list to pick from.
 
 Select the fields and options you need, and press `Apply`. 
 

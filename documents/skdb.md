@@ -14,7 +14,7 @@ These commands behaves similarly. Both creates code to list variable names and t
 | `?=lnVar`                    | ?'lnVar', lnVar |
 | `?=m.lnMax `                    | ?'lnMax', m.lnMax |
 | `?= m.lnMax `                    | Same as above, space is optional |  
-| `db m.lcString `| DebugOut 'lcString ', m.lcString |
+| `db m.lcString `| DebugOut 'm.lcString', m.lcString |
 
 These "commands" takes advantage of IntellisenseX, if you use the `m.` version. This means that you only need to type `m.` plus a few letters, select the wanted variable name and press ![`F8`](Images/F8.png).
 

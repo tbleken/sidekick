@@ -4,13 +4,13 @@
 
 **Sidekick** comes with a nice "file finder" with several options. For instance it will show the number of records in all DBF's plus the size of the corresponding memo file.    
 
-To start with a more limited selection of files, you can specify one or more "words" from the file name. All listed words, separated by a space, must be present in the filename or path of the listed files. If the "words list" contains a `.` (dot), you can also specify the extension. In that case also non VFP files are included in the search. 
+To start with a more limited selection of files, you can specify one or more "words" from the file name. All listed words, separated by a space, must be present in the filename or path of the listed files.  
+
+If one of the words is `.` (dot), also non VFP files are included in the search. To get only files of one type, start with a `.` (dot). For instance `.zip` will only show zip files.
 
 When the list shows up, you can filter it even further, each "word" you type must be present in what you see or inside the memo fields. Also numeric fields and date fields are included in the filtering process.
 
 This tool comes in three variants:
-
-**Note ** In this documentation ![`F8`](Images/F8.png) is consistently used as the hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
 
 
 # Version #1, `+` (or `dr`) : Will open files for editing
@@ -18,13 +18,16 @@ This tool comes in three variants:
 
 | Command        |        Result after pressing ![`F8`](Images/F8.png)      |
 |:--|:----------------------------------------------------------|
-|`+`                     | Picklist of all VFP files in the path, for editing |  
-|`+ bb`|  As above, only files having `db` in its name *or* extension|
-|`+ db cust` |  All files with names containing  `db` *and* `cust` |  
-|`+ my .prg` |  All files with `my` in the name *and* `prg`as extension|
-| `+ .png` | All files `.png` files |
-| `+ *`  | All files are shown |
-| `dr *`  | Same as above, see note below |  
+|`dr`                   | Picklist of all VFP files in the path, for editing |  
+|`+`                     | Same as above |  
+|`dr db`|  As above, only files having `db` in its name *or* extension|
+|`+ db`               | Same as above |  
+|`dr db cust` |  All files with names containing  `db` *and* `cust` |  
+|`dr my .prg` |  All files with `my` in the name *and* `prg`as extension|
+| `dr .png` | All `.png` files |
+| `dr .png arr` | All `.png` files with `arr` in the name |
+| `dr *`  | Absolutely all files are shown  |
+| `dr * abc def`  | All files with `abc` *and* `def` in the name or extension  |
 
 **Note** that the `+` version only works in the command window! The reason is that `+` is also used as a short version for `Sidekick's` [Ins](skins.md) command. If you need this functionality from one of VFP's program editors, you can use `dr` instead. Or even better, use the enhanced version `++` which gives much more information, see next paragraph for details.
 
@@ -61,5 +64,25 @@ Syntax is identical to #1 and #2. This variant will show the same information as
 * `++`: Like `+` but with more info
 * `+++`: Like `++` but will only show .prg and .scx, selected file will be `run`, if possible.
 
+## Special mode:
+
+To help you inspect your class libraries (vcx files), this tool has a special "hidden" mode.
+
+| Command        |        Result after pressing ![`F8`](Images/F8.png)      |
+|:--|:----------------------------------------------------------|
+|`dr .vcx `                     | Adds column `classes`  |  
+|`+ .vcx `                     | Same as above  |  
+|`drx .vcx `                     | Same as above plus columns for records and fields  |  
+|`++ .vcx `                     | Same as above|  
+
+Hover the mouse over the column Classes to see the list of classes as tooltips. Click the green button `Memo` to get a better "view".
+
+**Note** that the `+` version only works in the command window!
+
+This picture shows the result of the second version, `++ .vcx`:
+![skdirvcx](./Images/skdirvcx.png)
+
+**Note ** In this documentation ![`F8`](Images/F8.png) is consistently used as the hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
 
 
+<!-- Secret mode: `++ .vcx /l`  -->

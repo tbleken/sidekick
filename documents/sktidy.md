@@ -8,7 +8,7 @@ Tidy shares much of the code and functionality with [`Zip`](skzip.md), but inste
 
 The idea is that from time to time, you want to get rid of files, or at least move them to a secondary folder. For a really thorough cleanup, type the following in your command window:  
 
-`--` or `tidy`, and press ![`F8`](Images/F8.png).  
+Type `tidy`, or the shorter version `--`, and press ![`F8`](Images/F8.png).  
 
 Now you will see a form with a grid. All the files in your active VFP path will be listed. You can reduce the selection by typing text, which can be in the files' names or in their content. 
 
@@ -16,7 +16,7 @@ Scroll to the files you want to move, and press `Ctrl+space` to include the file
 
 If you want to inspect the content of the files, hover your mouse over the green cells. 
 
-When you press `Enter`, the marked files are moved to another folder, as explained below. If no files are marked, only the currently selected file will be moved.
+When you press `Enter`, you are asked to confirm that the marked files are moved to another folder, as explained below. If no files are marked, only the currently selected file will be moved.
 
 You can also specify which file you want to move directly, and optionally a target folder of your choice.
 
@@ -24,9 +24,9 @@ You can also specify which file you want to move directly, and optionally a targ
 
 | You type:                |        Result after pressing ![`F8`](Images/F8.png) |
 |:-------------------------|:----------------------------------------------------------|
-| `Tidy ?` | You see a form with all the files in all the folders in VFP's path |
-| `-- ?` | Same as above. Selected files are moved to the default folder, `BUxxxxxx` |
-| `--` | Same above , `?` is default |
+| `Tidy` | You see a form with all the files in all the folders in VFP's path |
+| `--` | Same as above. Selected files are moved to the default folder, `BUxxxxxx` |
+| `-- ?` | Same above , `?` is default |
 | `-- ? myfolder` | Same as above, target folder is `myfolder` |
 | `Tidy yournote.txt  backup` | `yournote.txt` is moved to the folder `backup` |
 | `-- yournote.txt  backup` | same as above |

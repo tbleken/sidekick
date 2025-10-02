@@ -25,6 +25,10 @@ DEFINE CLASS skoptions AS container
 	*< OBJECTDATA: ObjPath="pgf1.Page2.lblCase" UniqueID="" Timestamp="" />
 	*< OBJECTDATA: ObjPath="pgf1.Page2.txtMRUTable" UniqueID="" Timestamp="" />
 	*< OBJECTDATA: ObjPath="pgf1.Page2.lblMRUTable" UniqueID="" Timestamp="" />
+	*< OBJECTDATA: ObjPath="pgf1.Page2.txtTestarea" UniqueID="" Timestamp="" />
+	*< OBJECTDATA: ObjPath="pgf1.Page2.lblTestarea" UniqueID="" Timestamp="" />
+	*< OBJECTDATA: ObjPath="pgf1.Page2.lblTestareaExt" UniqueID="" Timestamp="" />
+	*< OBJECTDATA: ObjPath="pgf1.Page2.lblMRUTableExt" UniqueID="" Timestamp="" />
 	*< OBJECTDATA: ObjPath="pgf1.Page3.lblNextLength" UniqueID="" Timestamp="" />
 	*< OBJECTDATA: ObjPath="pgf1.Page3.spnNextLength" UniqueID="" Timestamp="" />
 	*< OBJECTDATA: ObjPath="pgf1.Page3.txtBUFolder" UniqueID="" Timestamp="" />
@@ -55,6 +59,7 @@ DEFINE CLASS skoptions AS container
 	*</DefinedPropArrayMethod>
 
 	*<PropValue>
+		Comment = "My very own skoptions"
 		Height = 314
 		Name = "skoptions"
 		Width = 386
@@ -83,6 +88,7 @@ DEFINE CLASS skoptions AS container
 		*< END OBJECT: BaseClass="line" />
 
 	ADD OBJECT 'pgf1' AS pageframe WITH ;
+		Comment = "My comment pageframe", ;
 		ErasePage = .T., ;
 		Height = 285, ;
 		Left = 1, ;
@@ -98,6 +104,7 @@ DEFINE CLASS skoptions AS container
 		Page3.Name = "Page3", ;
 		Page3.ToolTipText = "Specifies the length of automatically increased numbers which can be used in Sidekick'szip and tidy features.", ;
 		Page4.Caption = "Projects", ;
+		Page4.Comment = "My comment page4", ;
 		Page4.Name = "Page4", ;
 		Page5.Caption = "Special", ;
 		Page5.Name = "Page5"
@@ -237,6 +244,42 @@ DEFINE CLASS skoptions AS container
 		Width = 158
 		*< END OBJECT: BaseClass="label" />
 
+	ADD OBJECT 'pgf1.Page2.lblMRUTableExt' AS label WITH ;
+		Alignment = 1, ;
+		AutoSize = .T., ;
+		BackStyle = 0, ;
+		Caption = "(.dbf)", ;
+		Height = 17, ;
+		Left = 315, ;
+		Name = "lblMRUTableExt", ;
+		Top = 198, ;
+		Width = 30
+		*< END OBJECT: BaseClass="label" />
+
+	ADD OBJECT 'pgf1.Page2.lblTestarea' AS label WITH ;
+		Alignment = 1, ;
+		AutoSize = .T., ;
+		BackStyle = 0, ;
+		Caption = "Name template for Test Area:", ;
+		Height = 17, ;
+		Left = 20, ;
+		Name = "lblTestarea", ;
+		Top = 226, ;
+		Width = 162
+		*< END OBJECT: BaseClass="label" />
+
+	ADD OBJECT 'pgf1.Page2.lblTestareaExt' AS label WITH ;
+		Alignment = 1, ;
+		AutoSize = .T., ;
+		BackStyle = 0, ;
+		Caption = "(.prg)", ;
+		Height = 17, ;
+		Left = 315, ;
+		Name = "lblTestareaExt", ;
+		Top = 226, ;
+		Width = 31
+		*< END OBJECT: BaseClass="label" />
+
 	ADD OBJECT 'pgf1.Page2.opgCase' AS optiongroup WITH ;
 		BackStyle = 0, ;
 		ButtonCount = 3, ;
@@ -311,7 +354,16 @@ DEFINE CLASS skoptions AS container
 		Name = "txtMRUTable", ;
 		ToolTipText = "Name of table that contains the list of files and modules, used by ED (+, - and =/?)", ;
 		Top = 194, ;
-		Width = 149
+		Width = 124
+		*< END OBJECT: BaseClass="textbox" />
+
+	ADD OBJECT 'pgf1.Page2.txtTestarea' AS textbox WITH ;
+		Height = 23, ;
+		Left = 187, ;
+		Name = "txtTestarea", ;
+		ToolTipText = "Name stem for test area files", ;
+		Top = 222, ;
+		Width = 123
 		*< END OBJECT: BaseClass="textbox" />
 
 	ADD OBJECT 'pgf1.Page3.cmdBUFolder' AS commandbutton WITH ;
@@ -451,6 +503,7 @@ DEFINE CLASS skoptions AS container
 		*< END OBJECT: BaseClass="textbox" />
 
 	ADD OBJECT 'pgf1.Page4.cboSKProject' AS combobox WITH ;
+		Comment = "Something is missing", ;
 		Height = 25, ;
 		Left = 167, ;
 		Name = "cboSKProject", ;
@@ -662,6 +715,25 @@ DEFINE CLASS skoptions AS container
 		This.Parent.Parent.Parent.SetOption('MRUTable', This.Value)
 	ENDPROC
 
+	PROCEDURE pgf1.Page2.txtTestarea.InteractiveChange
+		*This.Parent.Parent.Parent.SetOption('Font Name', This.Value)
+		
+	ENDPROC
+
+	PROCEDURE pgf1.Page2.txtTestarea.Refresh
+		*This.Value = This.Parent.Parent.Parent.GetOption('Font Name')
+	ENDPROC
+
+	PROCEDURE pgf1.Page2.txtTestarea.UIEnable
+		LPARAMETERS lEnable
+		
+		This.Value = This.Parent.Parent.Parent.GetOption('TestArea')
+	ENDPROC
+
+	PROCEDURE pgf1.Page2.txtTestarea.Valid
+		This.Parent.Parent.Parent.SetOption('TestArea', This.Value)
+	ENDPROC
+
 	PROCEDURE pgf1.Page3.cmdBUFolder.Click
 		Local lcDefault, lcFolder
 		
@@ -789,11 +861,12 @@ DEFINE CLASS skoptions AS container
 		Select * from (m.lcCursor) into array (this.alist)
 		this.RowSource = "this.alist"
 		this.RowSourceType = 5
+		
 	ENDPROC
 
 	PROCEDURE pgf1.Page4.cboSKProject.UIEnable
 		LPARAMETERS lEnable
-		this.Value = this.Parent.Parent.Parent.GetOption('Project')
+		this.Value = Upper(this.Parent.Parent.Parent.GetOption('Project'))
 	ENDPROC
 
 	PROCEDURE pgf1.Page4.cboSKProject.Valid

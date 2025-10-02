@@ -2,7 +2,7 @@
 
 ## `OT` (Open Tables)
 
-`OT` is an easy way to see a list of all open tables and cursors in the active data session.  
+`OT` is an easy way to see all the open tables and cursors in the current datasession in a grid, in addition to their alias, table name, record count and order. 
 
 
 | You type:                |        Result after pressing ![`F8`](Images/F8.png) |

@@ -27,6 +27,8 @@ These "commands" work in **all** of VFP's code editors, including the command wi
 |[!!](documents/skext.md#paned)| [Edit your own `Sidekick` extensions](documents/skext.md#paned)|
 |[EC](documents/skec.md)|[Tries to execute the contents of the clipboard](documents/skec.md)|
 |[Ed](documents/sked.md)| [An easy way to open most files](documents/sked.md)|
+|[FF](documents/skff.md)| [File Finder, searches the current folder and subfolders](documents/skff.md)|
+|[FL](documents/skfl.md)| [File Lister, searches the current folder and path](documents/skff.md)|
 |[Fp](documents/skfp.md)| [Field picker to create SQL statements](documents/skfp.md)|
 |[Hk](documents/skhk.md) |[List of all assigned hot keys](documents/skhk.md)|
 |[Lorem](documents/skrt.md) | [Generate random "Lorem Ipsum" text](documents/skrt.md)|
@@ -55,7 +57,7 @@ In addition to the "commands" listed above, these work **only** in the **Command
 |[0 (zero)](documents/skorg.md) | [Opens active .pan file for editing](documents/skorg.md)|
 |[De (or Desc)](documents/skdesc.md)| [List of all prg's which have a description](documents/skdesc.md)|
 |[Dr](documents/skdir.md)  |[List all VFP files in the path](documents/skdir.md)|
-|[Pr (or Project, *)](documents/skorg.md#proj) | [List of projects in active .pan file](documents/skorg.md#proj)|
+|[Pr (or Project, *)](documents/skorg.md#proj) | [List of projects in active .sk file](documents/skorg.md#proj)|
 |[Tidy](documents/sktidy.md)  | [Easily move one or several files ](documents/sktidy.md)|
 |[Zip](documents/skzip.md)  | [Easily zip one or several files ](documents/skzip.md)|
 |Help |This document|

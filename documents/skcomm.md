@@ -13,7 +13,7 @@ This command is an easy way to break code into segments by adding a line of repe
 | `*-50`| `*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-`| 
 | `*-+*30` |`*-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*`|
  
-No space allowed, start with an asterisk and end with the number of repeats. Limit is 250 characters.  
+Start with an asterisk and end with the number of repeats. Limit is 250 characters.  
 If different characters are wanted, last characters will be an asterisk.  
 The characters in between are repeated so that the total length is the given number, or as close as possible.
 

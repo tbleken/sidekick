@@ -3,7 +3,7 @@
 ## `INC` (or `#`) (INClude)
 
 
-This keyword is a helper to include header files, .h, into your program. Type `inc` or `#` and press `F8`, and you get a dropdown list of all the .h files in your path.
+This command is a helper to include header files, .h, into your program. Type `inc` or `#` and press `F8`, and you get a list of all the .h files in your path.
 
 **Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as the hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
 
@@ -15,7 +15,6 @@ This keyword is a helper to include header files, .h, into your program. Type `i
 
 
 ![inc](Images/skinc.png)
-
 The result after pressing `Enter` is `#include yourfile.h`
 
 

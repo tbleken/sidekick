@@ -1,8 +1,8 @@
 lparameters toUpdateObject
 
 with toUpdateObject
-	.VersionNumber    = '1.25 - 20250814'
-	.AvailableVersion = 'Sidekick-1.25-09357-20250814'
+	.VersionNumber    = '1.20 - 20251002'
+	.AvailableVersion = 'Sidekick-1.20-09406-20251002'
 	.Component        = 'No'
 	.Notes            = GetNotes()
 endwith
@@ -13,6 +13,26 @@ return toUpdateObject
 procedure GetNotes
 local lcNotes
 text to lcNotes noshow
+### 2025-10-02, Version 1.32
+
+New command [FF (Find File)](documents/skff.md), used to locate file in any folder below the current one, and optionally copy its full path and name into the clipboard. 
+
+New command [FL (File Lister)](documents/skfl.md). Lists files without taking any action with the files. Specify the file extension, and get a list of all the matching files in the current folder and path. Accepts wild cards, `*` and `?`.
+
+
+### 2025-09-24, Version 1.31
+
+**Important**: Changed name of command `pr` into `gr` since `pr` was misleading. This command refers to groups within project files, and not the project files themselves.
+
+`Ins` command (`+`): Added the possibility to read methods from form files (`.scx`) and class libraries (`.vcx`). See [Insert](documents/skins.md) for details.
+
+### 2025-09-10, Version 1.30
+
+Mostly bug fixes and minor changes.  
+
+**Important**: It has been necessary to remove some commands from `ed` and move them into a new command `op`, short for `Open`. This means that the variants that works with `Sidekick's` MRU list, `SKMRUList.dbf` by default, are now called with `op`.  
+A positive "side effect" of this change is that the new code is much shorter and easier to maintain. Unfortunately, a few minor changes to the syntax have been necessary.
+
 ### 2025-08-14, Version 1.25
 
 Some bugs have been fixed.  
