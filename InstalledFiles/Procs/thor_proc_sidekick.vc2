@@ -3129,7 +3129,7 @@ DEFINE CLASS sidekick AS container
 		    Else
 		      Do (Forceext( [sk_] + This.cCommand, [prg])) With (This.cParameter)
 		    EndIf
-		    _screen.oSidekick = .null.
+		    Removeproperty(_Screen, [osidekick])
 		    Return
 		  Otherwise
 		    Try
@@ -4719,7 +4719,7 @@ DEFINE CLASS sidekick AS container
 		Lparameters tcCommand
 		
 		Local lcCommand, lnX
-		This.cVersion  = [1.37]
+		This.cVersion  = [1.38]
 		This.cExact = Set([Exact])
 		Set Exact Off
 		Aerror(This.aInError)
@@ -5862,7 +5862,6 @@ DEFINE CLASS sidekick AS container
 		      Do (m.lcMethod ) With This.cParameter
 		    Endif
 		    Removeproperty(_Screen, [osidekick])
-		    _Screen.osidekick = .Null.
 		    llSuccess = .T.
 		  Otherwise
 		    If Pemstatus(This, m.lcMethod, 5)

@@ -4,7 +4,7 @@ Lparameters lxParam1
 
 #Define ccXToolName        'SidekickMenu'
 #Define ccSidekickHelp 'https://github.com/tbleken/Sidekick'
-#Define ccVersion '1.37'
+#Define ccVersion '1.38'
 
 
 *********************************************************************************

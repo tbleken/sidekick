@@ -1,8 +1,8 @@
 lparameters toUpdateObject
 
 with toUpdateObject
-	.VersionNumber    = '1.37 - 20251009'
-	.AvailableVersion = 'Sidekick-1.37-09413-20251009'
+	.VersionNumber    = '1.38 - 20251009'
+	.AvailableVersion = 'Sidekick-1.38-09413-20251009'
 	.Component        = 'No'
 	.Notes            = GetNotes()
 endwith
