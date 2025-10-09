@@ -1,4 +1,4 @@
-### 2025-10-02, Version 1.32
+### 2025-10-09, Version 1.35
 
 New command [FF (Find File)](documents/skff.md), used to locate file in any folder below the current one, and optionally copy its full path and name into the clipboard. 
 
