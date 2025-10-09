@@ -2201,6 +2201,7 @@ DEFINE CLASS sidekick AS container
 		*m: addfield
 		*m: addlinesandtext
 		*m: addoption
+		*m: addskextensions
 		*m: changesidekickfile
 		*m: checkorcreatesidekickfile
 		*m: closeopenedtables
@@ -2254,11 +2255,13 @@ DEFINE CLASS sidekick AS container
 		*m: indexfields
 		*m: indexiffield
 		*m: iscursor
+		*m: isinteger
 		*m: istag
 		*m: lefttrimcode
 		*m: listdescript
 		*m: listfiles
 		*m: listusedtables
+		*m: log
 		*m: notes
 		*m: oeditorwininit
 		*m: openiffile
@@ -2302,6 +2305,7 @@ DEFINE CLASS sidekick AS container
 		*m: sk_inc
 		*m: sk_ins
 		*m: sk_lor
+		*m: sk_ltry
 		*m: sk_menu
 		*m: sk_mf_remove
 		*m: sk_no
@@ -2312,6 +2316,7 @@ DEFINE CLASS sidekick AS container
 		*m: sk_sb
 		*m: sk_sk
 		*m: sk_sked
+		*m: sk_sx
 		*m: sk_ta
 		*m: sk_tools
 		*m: sk_unzip
@@ -2324,6 +2329,7 @@ DEFINE CLASS sidekick AS container
 		*m: writecurrentline
 		*p: calias
 		*p: cbackupfolder		&& Name of folder for "deleted" files
+		*p: ccaption		&& Caption for pg
 		*p: cclip
 		*p: ccommand
 		*p: ccommandoriginal
@@ -2400,6 +2406,7 @@ DEFINE CLASS sidekick AS container
 
 	*<PropValue>
 		calias = 
+		ccaption = 
 		cclip = 
 		ccommand = 
 		ccommandoriginal = 
@@ -2578,6 +2585,9 @@ DEFINE CLASS sidekick AS container
 			<memberdata name="indexfields" display="IndexFields"/>
 			<memberdata name="iscursor" display="isCursor"/>
 			<memberdata name="istag" display="isTag"/>
+			<memberdata name="addskextensions" display="addSKExtensions"/>
+			<memberdata name="ccaption" display="cCaption"/>
+			<memberdata name="isinteger" display="isInteger"/>
 		</VFPData>
 	*</PropValue>
 
@@ -2670,9 +2680,30 @@ DEFINE CLASS sidekick AS container
 		
 	ENDPROC
 
+	PROCEDURE addskextensions
+		Local lcAlias, lcCommand, lcCursor, lcDescript, lnSelect
+		
+		lcAlias = Alias()
+		lnSelect = Select()
+		lcCursor = [curSkExt]
+		This.GetFilesInPath([sk_*.prg], m.lcCursor, .T. )
+		Select Cast(Juststem(Strextract(Filename, [sk_], [], 1, 1)) As c(20)) As Command, Cast(This.GetDescript(Filename) As c(50)) As Descript From (m.lcCursor) Into Cursor (m.lcCursor) Readwrite
+		Scan
+		  lcCommand = Upper(Command)
+		  lcDescript = Descript
+		  lcDescript = Evl(m.lcDescript, [* Missing description in .prg *])
+		  Update (m.lcAlias) Set Descript = m.lcDescript, url = [Override] Where Upper(Command) == m.lcCommand
+		  If _Tally = 0
+		    Insert Into (m.lcAlias) (Command, Descript, url) Values (m.lcCommand, m.lcDescript, [Private])
+		  Endif
+		Endscan
+		Select (m.lnSelect)
+		
+	ENDPROC
+
 	PROCEDURE changesidekickfile
-		Local lcContent, lcCurrent, lcDescript, lcFile, lcFilename, lcParameter, lcText, lnFiles, lnLines
-		Local lnX
+		Local lcContent, lcCurrent, lcDescript, lcFile, lcFilename, lcFolder, lcParameter, lcText, lnFiles
+		Local lnLines, lnX
 		
 		Local Array laDummy[1]
 		Local Array laFiles[1]
@@ -2680,19 +2711,25 @@ DEFINE CLASS sidekick AS container
 		lcFile =  This.cSidekickFile
 		
 		lcParameter = This.cParameter
+		If Directory([text])
+		  lcFolder = [text]
+		Else
+		  lcFolder = []
+		Endif
+		
 		If Inlist(m.lcParameter, [*], [-], [+], [/] )
-		  lnFiles = Adir(laFiles, [*.sk])
+		  lnFiles = Adir(laFiles, Forcepath([*.sk], m.lcFolder), [], 1)
 		  Do Case
 		    Case m.lnFiles = 0
 		      lcFile = [sidekick.sk]
 		    Case m.lnFiles = 1
-		      lcFile = m.laFiles(1, 1)
+		      lcFile = ForcePath(m.laFiles(1, 1),m.lcFolder)
 		    Otherwise
 		      Select 0
 		      Create Cursor curSKFiles (Current c(6), Filename c(25), Date T, Size i, LineS i, Descript c(50), Content m)
 		      For lnX = 1 To m.lnFiles
-		        lcFilename = Trim(Lower(m.laFiles(m.lnX, 1)))
-		        If m.lcFilename == Lower(This.cSidekickFile)
+		        lcFilename = ForcePath( Trim(Lower(m.laFiles(m.lnX, 1))),m.lcFolder)
+		        If JustFname(m.lcFilename) == Lower(This.cSidekickFile)
 		          lcCurrent = [Now ->]
 		        Else
 		          lcCurrent = []
@@ -2701,15 +2738,15 @@ DEFINE CLASS sidekick AS container
 		        lnLines = Alines(laDummy, m.lcContent)
 		        lcDescript = This.GetDescript(m.lcFilename)
 		        Insert Into curSKFiles (Current, Filename, Date, Size, LineS, Descript, Content) ;
-		          Values (m.lcCurrent, Lower(m.laFiles(m.lnX, 1)), dir2dt(m.laFiles(m.lnX, 4), m.laFiles(m.lnX, 3)), m.laFiles(m.lnX, 2), m.lnLines, m.lcDescript, m.lcContent )
+		          Values (m.lcCurrent, ForcePath(Lower(m.laFiles(m.lnX, 1)),m.lcFolder), dir2dt(m.laFiles(m.lnX, 4), m.laFiles(m.lnX, 3)), m.laFiles(m.lnX, 2), m.lnLines, m.lcDescript, m.lcContent )
 		      Endfor
 		      This.IndexFields()
 		      Set Order To Date Descending
-		      lcFile = This.GetDataFromGrid(Textmerge([New <<this.cProgram>> file (current is <<this.cSidekickFile >>):]), [Filename])
+		      lcFile = ForcePath(This.GetDataFromGrid(Textmerge([New <<this.cProgram>> file (current is <<this.cSidekickFile >>):]), [Filename]),m.lcFolder)
 		  Endcase
 		Else
 		  If !Empty(This.cParameter)
-		    lcFile = Forceext(This.cParameter, [sk])
+		    lcFile = ForcePath(Forceext(This.cParameter, [sk]),m.lcFolder)
 		  Endif
 		  If !File(m.lcFile)
 		    If This.GiveMessage([Specified file "] + m.lcFile + [" doesn't exist, create empty file?], 4, [File not found!]) = 6
@@ -2725,11 +2762,11 @@ DEFINE CLASS sidekick AS container
 		  Endif
 		Endif
 		If !Empty(m.lcFile)
-		  This.cSidekickFile = m.lcFile
-		  Execscript(_Screen.cThorDispatcher, [Set Option=], [Project], [SideKick], m.lcFile  )
-		  _Screen.oSKOptions.cProject = m.lcFile
+		  This.cSidekickFile = JustFname(m.lcFile)
+		  Execscript(_Screen.cThorDispatcher, [Set Option=], [Project], [SideKick], JustFname(m.lcFile)  )
+		  _Screen.oSKOptions.cProject = JustFname( m.lcFile)
 		Endif
-		This.CutAndGiveMessage(Textmerge([Active "<<this.cProgram>>" file is <<This.cSidekickFile>>]), 64, This.cProgram, This.nTimeOut )
+		This.CutAndGiveMessage(Textmerge([Active "<<this.cProgram>>" project file is <<This.cSidekickFile>>]), 64, This.cProgram, This.nTimeOut )
 		
 		
 	ENDPROC
@@ -2740,13 +2777,17 @@ DEFINE CLASS sidekick AS container
 		If File(This.cSidekickFile )
 		  Return .T.
 		Else
+		  lcFile = This.cSidekickFile
+		  If Directory('text')
+		    m.lcFile = ForcePath(m.lcFile, 'text')
+		  Endif
 		  If This.GiveMessage(Textmerge([Specified file "<<this.cSidekickFile>>" doesn't exist, create empty file?]), 4, [File not found!]) = 6
 		    Text To m.lcText Noshow Textmerge Pretext 7
 		        Default group: 0
 		        *************************
 		    Endtext
-		    Strtofile(m.lcText, This.cSidekickFile )
-		    Modify Command (This.cSidekickFile ) Nowait
+		    Strtofile(m.lcText, m.lcFile)
+		    Modify Command (m.lcFile ) Nowait
 		  Endif
 		  Return .F.
 		Endif
@@ -2901,20 +2942,29 @@ DEFINE CLASS sidekick AS container
 		Local lcParameter, lcProcess
 		
 		If !Empty(Dbf())
-		  tcValues = Evl(m.tcValues, [])
-		  If [w] $ This.cOption
-		    tcValues = m.tcValues + [W]
-		  Endif
-		  lcParameter = [10UZF] + m.tcValues
-		  lcProcess = Execscript(_Screen.cThorDispatcher, [Full Path=] + [thor_proc_sidekick.VCX])
-		  loPg = Newobject([pg], m.lcProcess, [], m.lcParameter)
-		  loPg.FontSize = This.nFontSize
-		  If [w] $ This.cOption
-		    loPg.Caption = Alltrim(m.loPg.Caption) + [ (R/W) (] + Transform(Reccount()) + [ records)]
+		  If Reccount() > 0
+		    tcValues = Evl(m.tcValues, [])
+		    If [w] $ This.cOption
+		      tcValues = m.tcValues + [W]
+		    Endif
+		    lcParameter = [10UZF] + m.tcValues
+		    lcProcess = Execscript(_Screen.cThorDispatcher, [Full Path=] + [thor_proc_sidekick.VCX])
+		    loPg = Newobject([pg], m.lcProcess, [], m.lcParameter)
+		    loPg.FontSize = This.nFontSize
+		    If Empty(this.cCaption)
+		      If [w] $ This.cOption
+		        loPg.Caption = Alltrim(m.loPg.Caption) + [ (R/W)] && + Transform(Reccount()) + [ records)]
+		      Else
+		        loPg.Caption = Alltrim(m.loPg.Caption) + [ (R/O)] &&+ Transform(Reccount()) + [ records)]
+		      EndIf
+		    Else 
+		      lopg.Caption = this.cCaption 
+		    Endif
+		    m.loPg.Show(1)
 		  Else
-		    loPg.Caption = Alltrim(m.loPg.Caption) + [ (R/O) (] + Transform(Reccount()) + [ records)]
+		    this.GiveMessage('This table have no records!')
 		  Endif
-		  m.loPg.Show(1)
+		    
 		Endif
 		
 		
@@ -3033,7 +3083,7 @@ DEFINE CLASS sidekick AS container
 		    lcFile = m.tcFile
 		  Case !Empty(m.lcPath)
 		    If Empty(Justext(m.tcFile))
-		      lnFiles = Adir(laFiles, Forceext(m.tcFile, [*]))
+		      lnFiles = Adir(laFiles, Forceext(m.tcFile, [*]), [], 1)
 		      If m.lnFiles > 1
 		        For lnX = 1 To m.lnFiles
 		          If Inlist(Lower(Justext(m.laFiles(m.lnX, 1))),&tcFilter)
@@ -3066,16 +3116,20 @@ DEFINE CLASS sidekick AS container
 		llSuccess = .F.
 		Do Case
 		  Case Inlist(This.cCommand, [*], [#])
-		  Case This.nWindowType < 1 &&= 0
 		  Case This.cCommand == [?]
 		  Case This.cCommand == [??]
+		  Case Left(This.cCommand,1) == [!] and File(ForceExt('sk_' + GetWordNum(this.cCommand,1,'!')  ,'prg'))
+		  Case Left(This.cCommand,2) == [!!]
 		  Case Left(This.cCommand, 1) = [=] And This.nWindowType > 0
+		  Case this.isInteger(this.cCommand)
 		  Case File(Forceext( [sk_] + This.cCommand, [prg]))
+		    _screen.AddProperty('oSidekick',this)
 		    If Empty(This.cParameter)
 		      Do (Forceext( [sk_] + This.cCommand, [prg]))
 		    Else
 		      Do (Forceext( [sk_] + This.cCommand, [prg])) With (This.cParameter)
-		    Endif
+		    EndIf
+		    _screen.oSidekick = .null.
 		    Return
 		  Otherwise
 		    Try
@@ -3087,21 +3141,25 @@ DEFINE CLASS sidekick AS container
 		    If m.llSuccess
 		      Return
 		    Endif
-		Endcase
+		EndCase
+		
+		_screen.AddProperty('lLog',.T.)
+		
 		Do Case
 		  Case Len(Trim(This.cParcedText)) > 3 And Left(This.cParcedText, 3) = [???]
 		  Case Len(Trim(This.cParcedText)) > 2 And Left(This.cParcedText, 2) = [??]
 		  Case Len(Trim(This.cParcedText)) > 1 And Left(This.cParcedText, 1) = [?] And Left(This.cParcedText, 2) # [?=] And Left(This.cParcedText, 2) # [??]
 		  Case Alines(laDummy, This.cParcedText) > 1
 		  Case Left(This.cCommand, 1) = [*] And This.nWindowType = 1
+		  Case Left(This.cCommand ,1) == '-' And This.cCommand = Transform(Val(This.cCommand ))
 		  Otherwise
 		    This.SplitCommand()
 		Endcase
+		
 		If This.lInputBox And Inlist(This.cCommand, [es]) And This.nWindowType = 2
 		  This.ReturnUnknownCommand(1)
 		  Return
 		Endif
-		
 		Do Case
 		  Case This.OpenIfFile()
 		  Case This.SKFactory()
@@ -3117,12 +3175,11 @@ DEFINE CLASS sidekick AS container
 		  Case Left(This.cParameter, 4) = [http]
 		    This.RunEd(This.cParameterOriginal )
 		
-		  Case Val(This.cCommand) > 0 And Isdigit(This.cCommand) And This.cCommand = Transform(Val(This.cCommand )) And Empty(This.cParameter );
-		      And (This.nWindowType < 1 Or This.lInputBox) && = 0
+		  Case Val(This.cCommand) # 0 And (Isdigit(This.cCommand) or left(this.cCommand,1) == '-') And This.cCommand = Transform(Val(This.cCommand )) And Empty(This.cParameter ) 
 		    This.GetLinesToProcess(Val(This.cCommand))
-		  Case Isdigit(This.cCommand ) And This.cCommand = Transform(Val(This.cCommand )) And !Empty(This.cParameter ) And Inlist(This.nWindowType, 1, 2)
+		  Case this.isInteger(This.cCommand ) And !Empty(This.cParameter ) And Inlist(This.nWindowType, 1, 2)
 		    This.RunEd(This.cParameter)
-		  Case Isdigit(This.cCommand ) And This.cCommand = Transform(Val( This.cCommand )) And !Empty( This.cParameter) ;
+		  Case this.isInteger(This.cCommand ) And !Empty( This.cParameter) ;
 		      And Inlist(Getwordnum( This.cParameter, 1), [do], This.cRun ) And  Inlist(This.nWindowType, 1, 2, -1)
 		    If Getwordnum(This.cParameter, 1) = This.cRun
 		      lcParameter = Strextract(This.cParameter, This.cRun, [])
@@ -3361,7 +3418,9 @@ DEFINE CLASS sidekick AS container
 		    lcParameter = [1U] + m.lcHideColumns + m.tcPGParameter
 		    lcProcess = Execscript(_Screen.cThorDispatcher, [Full Path=] + [thor_proc_sidekick.VCX])
 		    loPg = Newobject([pg], m.lcProcess, [], m.lcParameter)
-		
+		    If Reccount() < 10
+		      lopg.Height = 300
+		    Endif
 		    loPg.FontSize = This.nFontSize
 		    loPg.Caption = Alltrim(m.tcCaption) + [ (] + Transform(Reccount()) + [ records)]
 		    loPg.nIncStart = 0
@@ -3848,8 +3907,8 @@ DEFINE CLASS sidekick AS container
 		lcNewFolder = Justpath(This.cParameter)
 		If Directory(m.lcNewFolder)
 		  Cd (m.lcNewFolder)
-		  This.GetFilesInPath([*], This.cCursor)
-		  Update (This.cCursor) Set Fname = Forcepath(Fname, m.lcNewFolder)
+		  This.GetFilesInPath([*])
+		  Update (This.cCursor) Set Filename = Forcepath(Filename, m.lcNewFolder)
 		  Cd (m.lcOldFolder)
 		Endif
 		
@@ -3857,7 +3916,7 @@ DEFINE CLASS sidekick AS container
 	ENDPROC
 
 	PROCEDURE getfilesinpath
-		Lparameters tcMask, tcCursor
+		Lparameters tcMask, tcCursor, tlSelectOnFinish
 		Local lcFilemask, lcFileSkel, lcFilter, ldDate, lnFiles, lnFolders, lnRecords, lnSelect, lnSize, lnX
 		Local lnX2
 		
@@ -3867,7 +3926,7 @@ DEFINE CLASS sidekick AS container
 		lnSelect = Select()
 		tcCursor = Evl(m.tcCursor, This.cCursor) && [curFiles])
 		Select 0
-		Create Cursor (m.tcCursor) (Fname c(240), Filedate D, FileSize i)
+		Create Cursor (m.tcCursor) (Filename c(240), Filedate D, FileSize i)
 		tcMask = Evl(m.tcMask, [prg])
 		If Empty(Justext(m.tcMask))
 		  lcFilter = [*]
@@ -3879,27 +3938,32 @@ DEFINE CLASS sidekick AS container
 		
 		lnFolders = Alines(laFolders, Set([Path]), 1 + 4, [;], [,])
 		lcFilemask = m.lcFilter  + m.tcMask
+		
 		For lnX = 0 To m.lnFolders
 		  If m.lnX = 0
 		    lcFileSkel = m.lcFilemask
 		  Else
 		    lcFileSkel =  Forcepath(m.lcFilemask, Alltrim(m.laFolders(m.lnX)))
 		  Endif
-		  lnFiles = Adir(laDummy, m.lcFileSkel)
+		  lnFiles = Adir(laDummy, m.lcFileSkel,'',1)
 		  If m.lnFiles > 0
 		    For lnX2 = 1 To m.lnFiles
 		      lnSize = m.laDummy(m.lnX2, 2)
 		      ldDate = m.laDummy(m.lnX2, 3)
 		      If m.lnX = 0
-		        Insert Into (m.tcCursor) (Fname, Filedate, FileSize) Values (m.laDummy(m.lnX2, 1), m.ldDate, m.lnSize )
+		        Insert Into (m.tcCursor) (Filename, Filedate, FileSize) Values (m.laDummy(m.lnX2, 1), m.ldDate, m.lnSize )
 		      Else
-		        Insert Into (m.tcCursor) (Fname, Filedate, FileSize) Values (Trim(m.laFolders(m.lnX)) + [\] + m.laDummy(m.lnX2, 1), m.ldDate, m.lnSize )
+		        Insert Into (m.tcCursor) (Filename, Filedate, FileSize) Values (Trim(m.laFolders(m.lnX)) + [\] + m.laDummy(m.lnX2, 1), m.ldDate, m.lnSize )
 		      Endif
 		    Endfor
 		  Endif
 		Endfor
 		lnRecords = Reccount()
-		Select (m.lnSelect)
+		If !Empty(m.tlSelectOnFinish)
+		  Select (m.tcCursor) 
+		Else 
+		  Select (m.lnSelect)
+		Endif
 		Return m.lnRecords
 		
 		
@@ -3936,11 +4000,12 @@ DEFINE CLASS sidekick AS container
 		 a   | .-          | Lowest available Sidekick "test area"                  | skta
 		 ef  | = <func>    |-Inserts return value from function                     | skeval
 		 a   | ?           | Menu                                                   | skmnu
+		 a   | ??          | Menu, private extensions excluded                      | skmnu
 		 cef | ?= <var>    |-Returns ?'memvar',mvar                                 | skdb
 		 cef | //          | List of stored items                                   | skop    
 		 ef  | //+         |-Adds or updates the active window                      | skop    
 		 ef  | //-         |-Inactivates the active window                          | skop    
-		 cef | ///m       | Opens current MRU table for editing                    | skop    
+		 cef | ///m        | Opens current MRU table for editing                    | skop    
 		 a   | 0           | Opens active .sk file for editing                      | skorg
 		 a   | 0 *         | Picklist of Sidekick files in the path                 | skorg
 		 a   | 0 <file>    | Makes filename.sk the active Sidekick file             | skorg | .sk file to become active:
@@ -3976,14 +4041,16 @@ DEFINE CLASS sidekick AS container
 		 cef | Op          | List of stored items                                   | skop    
 		 ef  | Op+         |-Adds or updates the active window                      | skop    
 		 ef  | Op-         |-Inactivates the active window                          | skop    
-		 cef | Op/m       | Opens current MRU table for editing                    | skop    
+		 cef | Op/m        | Opens current MRU table for editing                    | skop    
 		 a   | Ot          | Shows all open tables and cursors in active datasession| skot  
 		 a   | Pa          | Shows the current Set Path setting plus some more      | skpa  
 		 cef | Rt          |-Random readable text generator                         | skrt
 		 cef | SB          | SuperBrowse                                            | sksf
 		 cef | SF          |-Select From syntax helper                              | sksf
+		 a   | SHX         | ShellExecute                                           | sksx
 		 cef | Sk          | Run or create custom made Sidekick extensions          | skext
 		 cef | Sked        | Edit custom made Sidekick extensions                   | skext
+		 a   | SX          | ShellExecute                                           | sksx
 		 a   | Ta          | Sidekick "Test area"                                   | skta
 		 a   | Ta?         | List of Sidekick "test areas"                          | skta
 		 a   | Ta+         | Next Sidekick "test area"                              | skta
@@ -4067,7 +4134,6 @@ DEFINE CLASS sidekick AS container
 		If ! this.CheckOrCreateSidekickFile()
 		  Return
 		EndIf
-		
 		llFound = .F.
 		lnLines = Alines(laLines, Filetostr(this.cSidekickFile))
 		For lnCounter = 1 To m.lnLines
@@ -4345,7 +4411,7 @@ DEFINE CLASS sidekick AS container
 		lnSelect = Select()
 		Select 0
 		tcCursor = Evl(m.tcCursor, [curFiles])
-		Create Cursor (m.tcCursor) (Fname c(240), Filedate D, FileSize i)
+		Create Cursor (m.tcCursor) (Filename c(240), Filedate D, FileSize i)
 		tcMask = Evl(m.tcMask, [prg])
 		Dimension m.laFolders(3)
 		laFolders(1) = _Screen.Cthorfolder + [Tools]
@@ -4358,15 +4424,15 @@ DEFINE CLASS sidekick AS container
 		  Else
 		    lcFileSkel = Alltrim(m.laFolders(m.lnX)) + [\*.] + m.tcMask
 		  Endif
-		  lnFiles = Adir(laDummy, m.lcFileSkel)
+		  lnFiles = Adir(laDummy, m.lcFileSkel, [], 1)
 		  If m.lnFiles > 0
 		    For lnX2 = 1 To m.lnFiles
 		      ldDate = m.laDummy(m.lnX2, 3)
 		      lnSize = m.laDummy(m.lnX2, 2)
 		      If m.lnX = 0
-		        Insert Into (m.tcCursor) (Fname, Filedate, FileSize) Values (m.laDummy(m.lnX2, 1), m.ldDate, m.lnSize )
+		        Insert Into (m.tcCursor) (Filename, Filedate, FileSize) Values (m.laDummy(m.lnX2, 1), m.ldDate, m.lnSize )
 		      Else
-		        Insert Into (m.tcCursor) (Fname, Filedate, FileSize) Values (Trim(m.laFolders(m.lnX)) + [\] + m.laDummy(m.lnX2, 1), m.ldDate, m.lnSize )
+		        Insert Into (m.tcCursor) (Filename, Filedate, FileSize) Values (Trim(m.laFolders(m.lnX)) + [\] + m.laDummy(m.lnX2, 1), m.ldDate, m.lnSize )
 		      Endif
 		    Endfor
 		  Endif
@@ -4653,8 +4719,7 @@ DEFINE CLASS sidekick AS container
 		Lparameters tcCommand
 		
 		Local lcCommand, lnX
-		
-		This.cVersion  = [1.20]
+		This.cVersion  = [1.35]
 		This.cExact = Set([Exact])
 		Set Exact Off
 		Aerror(This.aInError)
@@ -4663,24 +4728,36 @@ DEFINE CLASS sidekick AS container
 		This.cClip = _Cliptext
 		This.Cpoint = Set([Point])
 		Set Point To [.]
-		This.lNoInterface = Vartype(m.tcCommand) = [L]
+		lcCommand = ''
+		Do case 
+		  Case Vartype(m.tcCommand) = 'L'
+		    This.lNoInterface = .T.
+		    m.tcCommand = ''
+		  Case Left(m.tcCommand ,1) = '-'
+		    m.lcCommand = m.tcCommand 
+		    m.tcCommand = Substr(m.tcCommand,2)
+		    this.lInputBox = .T.
+		    this.cParcedText = '' && m.tcCommand 
+		Endcase
 		This.cCommentString = Evl(This.ReadRegistryOption([EditorCommentString]), [*!*])
 		Use In (Select(This.cCursor))
 		This.ReadOptions()
 		Aused(This.aInUse)
 		This.HandleMRUTable([Check])
-		If Empty(m.tcCommand) And !This.lNoInterface
+		If Empty(m.tcCommand) And !This.lNoInterface 
 		  This.oEditorWinInit()
-		  This.oEditor = Execscript(_Screen.cThorDispatcher, [class= HighlightedText from Thor_Proc_HighlightedText.PRG])
-		  For lnX = 1 To 2
-		    This.oEditor.GetHighlightedText([Statement], .T.)
-		    This.cParcedText = This.oEditor.cHighlightedText
-		    If Empty(This.cParcedText)
-		      Wait Window [] Timeout 0.001
-		    Else
-		      Exit
-		    Endif
-		  Endfor
+		  If !Left(m.lcCommand ,1) == '-'
+		    This.oEditor = Execscript(_Screen.cThorDispatcher, [class= HighlightedText from Thor_Proc_HighlightedText.PRG])
+		    For lnX = 1 To 2
+		      This.oEditor.GetHighlightedText([Statement], .T.)
+		      This.cParcedText = This.oEditor.cHighlightedText
+		      If Empty(This.cParcedText)
+		        Wait Window [] Timeout 0.001
+		      Else
+		        Exit
+		      Endif
+		    EndFor
+		  Endif
 		Else
 		  If This.lNoInterface
 		    This.cCommand = []
@@ -4692,9 +4769,11 @@ DEFINE CLASS sidekick AS container
 		Endif
 		If Empty(This.cParcedText) And !This.lNoInterface
 		  This.lInputBox = .T.
-		  This.nLastWindow = This.oEditorWin.Findlastwindow()
-		  If This.nLastWindow > 1
-		    This.oEditorWin.SetHandle(This.nLastWindow)
+		  If !Left(m.lcCommand ,1) == '-'
+		    This.nLastWindow = This.oEditorWin.Findlastwindow()
+		    If This.nLastWindow > 1
+		      This.oEditorWin.SetHandle(This.nLastWindow)
+		    EndIf
 		  Endif
 		  lcCommand = Inputbox([Type command:], [Sidekick Command Box], This.cDefaultCommand, 0, [], [<>])
 		  If m.lcCommand = [<>] && Cancel
@@ -4707,17 +4786,16 @@ DEFINE CLASS sidekick AS container
 		This.cParcedText = Chrtran(This.cParcedText, [|], [ ])
 		tcCommand = This.cParcedText
 		This.cParameterOriginal = This.cParcedText
-		If Pemstatus(_Screen, [lTest], 5) And _Screen.lTest
-		  Set Step On
-		Endif
-		
+		*!*  If Pemstatus(_Screen, [lTest], 5) And _Screen.lTest
+		*!*    Set Step On
+		*!*  Endif
 		
 		If .T. && and !this.ExecuteHighlight()
 		  If !Empty(This.cParcedText) Or !This.lNoInterface Or This.lInputBox
 		    This.FindSwitch()
 		    This.FindCommand()
 		    This.FindParameters()
-		    If Inlist(This.nWindowType, 0, 1) And This.cTitle == This.cSidekickFile And !Inlist(m.tcCommand, [es], [es all], [de], [desc], [descript], [description], [+], [us], [pa], [path], [-])
+		    If Inlist(This.nWindowType, 0, 1) And This.cTitle == This.cSidekickFile And !Inlist(m.tcCommand, [es], [es all], [de], [desc], [descript], [description], [+], [us], [pa], [path], [-]) 
 		      This.RunSidekickLine(This.cParcedText )
 		    Else
 		      If This.cTitle == This.cSidekickFile And This.cCommand == [+]
@@ -4738,6 +4816,11 @@ DEFINE CLASS sidekick AS container
 		tcAlias = Evl(m.tcAlias, Alias())
 		
 		Return (Justpath(Dbf(m.tcAlias)) = Sys(2023)) And Justext(Dbf(m.tcAlias)) = [TMP]
+	ENDPROC
+
+	PROCEDURE isinteger
+		Lparameters tcData
+		Return Isdigit(tcData) And tcData == Transform(Val(tcData))
 	ENDPROC
 
 	PROCEDURE istag
@@ -4832,15 +4915,6 @@ DEFINE CLASS sidekick AS container
 		Endif
 		Select * From (this.cCursor) Into Cursor (this.cCursor) Readwrite Order By uDescript
 		this.IndexFields() 
-		*!*  Index On Upper(Filename) Tag Filename
-		*!*  Index On Upper(FullName) Tag FullName
-		*!*  Index On Datetime Tag Datetime
-		*!*  Index On Size Tag Size
-		*!*  Index On lines Tag Lines
-		*!*  Index On Upper(Descript) Tag Descript
-		*!*  Set Order To
-		*!*  Go Top
-		Wait clear
 		lcSelected = This.GetDataFromGrid([Prg files with description], [Fullname], 1)
 		If !Empty(m.lcSelected)
 		  This.oEditorWin.Delete()
@@ -4861,7 +4935,6 @@ DEFINE CLASS sidekick AS container
 		#Define ccVFPTablesExtended [dbf], [dbc], [frx], [lbx], [mnx], [pjx], [scx], [vcx]
 		#Define crlf Chr(13)+Chr(10)
 		
-		
 		If ccSelectFilter $ m.tcFilter
 		  This.cFilter = [Include]
 		  tcFilter = Strtran(m.tcFilter, ccSelectFilter, [])
@@ -4870,17 +4943,16 @@ DEFINE CLASS sidekick AS container
 		Wait Window [Wait while Sidekick processes files!] At 10, 25 Nowait Noclear
 		Select 0
 		If ![t] $ This.cOption
-		  lnFiles = This.GetFilesInPath([*], This.cCursor)
+		  lnFiles = This.GetFilesInPath([*])
 		Else
 		  lnFiles = This.GetThorFiles([*], This.cCursor)
 		Endif
 		If m.lnFiles = 0
 		  Return
 		Endif
-		
 		Do Case
 		  Case [e] $ This.cOption
-		    Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where Inlist(Lower(Justext(Fname)), [prg], [scx])
+		    Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where Inlist(Lower(Justext(Filename)), [prg], [scx])
 		    lcMessage = [Select a file to run:]
 		  Case [f] $ This.cOption
 		    lcMessage = [Pick a source table:]
@@ -4893,22 +4965,30 @@ DEFINE CLASS sidekick AS container
 		  Case m.tcFilter = [ta] && Test area
 		    lcFilter = Lower(This.cTestArea)
 		    lnLen = Len(m.lcFilter)
-		    Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where Lower(Justext(Fname)) == [prg] And Left(Lower(Juststem(Fname)), m.lnLen) = m.lcFilter
+		    If Empty(Justpath(m.lcFilter))
+		      Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where Lower(Justext(Filename)) == [prg] And Left(Lower(Juststem(Filename)), m.lnLen) = m.lcFilter
+		    Else
+		      Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where Lower(Justext(Filename)) == [prg] And Left(Lower(Filename), m.lnLen) = m.lcFilter
+		    Endif
 		  Case m.tcFilter = [dbf] And [s] $ This.cOption And !Empty(This.cParameter)
 		    lcFilter = Getwordnum(This.cParameter, 1)
-		    Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where Lower(Justext(Fname)) == [scx] And m.lcFilter $ Lower(Juststem(Fname))
+		    Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where Lower(Justext(Filename)) == [scx] And m.lcFilter $ Lower(Juststem(Filename))
 		  Case m.tcFilter = [dbf] And [s] $ This.cOption
-		    Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where Lower(Justext(Fname)) == [scx]
+		    Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where Lower(Justext(Filename)) == [scx]
 		  Case m.tcFilter = [dbf] And [v] $ This.cOption And !Empty(This.cParameter)
 		    lcFilter = Getwordnum(This.cParameter, 1)
-		    Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where Lower(Justext(Fname)) == [vcx] And m.lcFilter $ Lower(Juststem(Fname))
+		    Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where Lower(Justext(Filename)) == [vcx] And m.lcFilter $ Lower(Juststem(Filename))
 		  Case m.tcFilter = [dbf] And [v] $ This.cOption
-		    Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where Lower(Justext(Fname)) == [vcx]
+		    Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where Lower(Justext(Filename)) == [vcx]
 		  Case m.tcFilter = [dbf] And !Empty(This.cParameter)
 		    lcFilter = Getwordnum(This.cParameter, 1)
-		    Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where Lower(Justext(Fname)) == [dbf] And m.lcFilter $ Lower(Juststem(Fname))
+		    If m.lcFilter # '*'
+		      Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where Lower(Justext(Filename)) == [dbf] And m.lcFilter $ Lower(Juststem(Filename))
+		    Else
+		      Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where Lower(Justext(Filename)) == [dbf] 
+		    Endif
 		  Case m.tcFilter = [dbf]
-		    Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where Lower(Justext(Fname)) == [dbf]
+		    Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where Lower(Justext(Filename)) == [dbf]
 		  Case m.tcFilter = [.v] && [.vcx]
 		    Do Case
 		      Case [.vcx] $ This.cParameter
@@ -4924,22 +5004,22 @@ DEFINE CLASS sidekick AS container
 		  Case Occurs([.], m.tcFilter) = 1
 		    For lnX = 1 To Getwordcount(m.tcFilter )
 		      lcWord = Getwordnum(m.tcFilter, m.lnX)
-		      Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where m.lcWord $ Lower(Fname)
+		      Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where m.lcWord $ Lower(Filename)
 		    Endfor
 		  Case Getwordnum(m.tcFilter, 1) == [*] Or Getwordnum(m.tcFilter, 1) == [vfp]
 		    lnWords = Getwordcount(m.tcFilter)
 		    If m.lnWords > 1
 		      For lnX = 2 To m.lnWords
 		        lcWord = Getwordnum(m.tcFilter, m.lnX)
-		        Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where m.lcWord $ Lower(Justfname(Fname))
+		        Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where m.lcWord $ Lower(Justfname(Filename))
 		      Endfor
 		    Endif
 		  Case !Empty(m.tcFilter)
 		    For lnX = 1 To Getwordcount(m.tcFilter)
 		      lcWord = Getwordnum(m.tcFilter, m.lnX)
-		      Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where m.lcWord $ Lower(Justfname( Fname))
+		      Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where m.lcWord $ Lower(Justfname( Filename))
 		    Endfor
-		  Otherwise && Don't use GetFilesInPath at all
+		  Otherwise
 		    This.GetFilesInFolder()
 		    llOtherFolder = .T.
 		Endcase
@@ -4958,34 +5038,34 @@ DEFINE CLASS sidekick AS container
 		    Return .F.
 		  Endif
 		Endif
-		Update (This.cCursor) Set Fname = [ ] + Fname Where Empty(Justpath(Fname))
+		Update (This.cCursor) Set Filename = [ ] + Filename Where Empty(Justpath(Filename))
 		Do Case
 		  Case m.tcFilter = [vfp]
-		    Select Fname, Cast(Justfname(Fname) As c(50)) As f1, Filedate, FileSize From (This.cCursor) ;
-		      Into Cursor (This.cCursor) Readwrite Where Inlist(Lower(Justext(Fname)), ccVFPFilesToList)
+		    Select Filename, Cast(Justfname(Filename) As c(50)) As f1, Filedate, FileSize From (This.cCursor) ;
+		      Into Cursor (This.cCursor) Readwrite Where Inlist(Lower(Justext(Filename)), ccVFPFilesToList)
 		  Case [?] = m.tcFilter Or m.tcFilter == [*]
-		    Select Fname, Cast(Justfname(Fname) As c(50)) As f1, Filedate, FileSize From (This.cCursor) ;
+		    Select Filename, Cast(Justfname(Filename) As c(50)) As f1, Filedate, FileSize From (This.cCursor) ;
 		      Into Cursor (This.cCursor) Readwrite Where .T.
-		  Case m.tcFilter = [dbf] And !Empty(This.cParameter)
+		  Case m.tcFilter = [dbf] And !Empty(This.cParameter) and this.cParameter # '*'
 		    For lnX = 1 To Getwordcount(This.cParameter )
 		      lcWord = Getwordnum(This.cParameter, m.lnX)
-		      Select Fname, Cast(Justfname(Fname) As c(50)) As f1, Filedate, FileSize From (This.cCursor) ;
-		        Into Cursor (This.cCursor) Readwrite Where m.lcWord $ Lower(Fname);
-		        And Inlist(Lower(Justext(Fname)), ccVFPFilesToList)
+		      Select Filename, Cast(Justfname(Filename) As c(50)) As f1, Filedate, FileSize From (This.cCursor) ;
+		        Into Cursor (This.cCursor) Readwrite Where m.lcWord $ Lower(Filename);
+		        And Inlist(Lower(Justext(Filename)), ccVFPFilesToList)
 		    Endfor
 		  Case m.tcFilter = [dbf] Or m.tcFilter = [ta] Or m.llOtherFolder Or Left(m.tcFilter, 1) == [*]
-		    Select Fname, Cast(Justfname(Fname) As c(50)) As f1, Filedate, FileSize From (This.cCursor) ;
+		    Select Filename, Cast(Justfname(Filename) As c(50)) As f1, Filedate, FileSize From (This.cCursor) ;
 		      Into Cursor (This.cCursor) Readwrite
 		  Otherwise
 		    For lnX = 1 To Getwordcount(m.tcFilter)
 		      lcWord = Getwordnum(m.tcFilter, m.lnX)
 		      If [.] $ m.tcFilter
-		        Select Fname, Cast(Justfname(Fname) As c(50)) As f1, Filedate, FileSize From (This.cCursor) ;
-		          Into Cursor (This.cCursor) Readwrite Where m.lcWord $ Lower(Fname)
+		        Select Filename, Cast(Justfname(Filename) As c(50)) As f1, Filedate, FileSize From (This.cCursor) ;
+		          Into Cursor (This.cCursor) Readwrite Where m.lcWord $ Lower(Filename)
 		      Else
-		        Select Fname, Cast(Justfname(Fname) As c(50)) As f1, Filedate, FileSize From (This.cCursor) ;
-		          Into Cursor (This.cCursor) Readwrite Where m.lcWord $ Lower(Fname);
-		          And Inlist(Lower(Justext(Fname)), ccVFPFilesToList)
+		        Select Filename, Cast(Justfname(Filename) As c(50)) As f1, Filedate, FileSize From (This.cCursor) ;
+		          Into Cursor (This.cCursor) Readwrite Where m.lcWord $ Lower(Filename);
+		          And Inlist(Lower(Justext(Filename)), ccVFPFilesToList)
 		      Endif
 		    Endfor
 		Endcase
@@ -4994,9 +5074,9 @@ DEFINE CLASS sidekick AS container
 		  This.RunEd(This.cParameter )
 		  Return
 		Endif
-		Select Max(Len(Trim(f1))), Max(Len(Trim(Fname))) From (This.cCursor) Into Array laDummy
+		Select Max(Len(Trim(f1))), Max(Len(Trim(Filename))) From (This.cCursor) Into Array laDummy
 		Select Cast(This.ShowCase(f1) As c(m.laDummy(1, 1))) As Filename,;
-		  Cast(This.ShowCase(Alltrim(Fname)) As c(m.laDummy(1, 2))) As FullName,;
+		  Cast(This.ShowCase(Alltrim(Filename)) As c(m.laDummy(1, 2))) As FullName,;
 		  Filedate, FileSize From (This.cCursor) Into Cursor (This.cCursor) Readwrite Order By 1
 		llRecords = .F.
 		If [a] $ This.cOption Or [e] $ This.cOption
@@ -5089,27 +5169,23 @@ DEFINE CLASS sidekick AS container
 		Endif
 		
 		This.DropFieldIfEmpty([records, lines, fields, text, descript, memosize])
-		*!*  This.IndexIfField([records, lines, fields, memosize, descript])
 		If [l] $ This.cOption And Inlist(m.tcFilter, [dbf], [.vcx]) And [v] $ This.cOption && vcx
 		  Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Order By Filename, Classes
-		*!*    Index On Classes Tag Classes
-		EndIf
-		this.IndexFields()
-		*!*  This.IndexIfField([fullname, filename, filedate, filesize])
-		*!*  Set Order To
+		Endif
+		This.IndexFields()
 		Wait Clear
 		If m.tcFilter = [ta]
 		  lcText = []
 		  Return
 		Else
 		  lcText = This.GetDataFromGrid(m.lcMessage, [fullname], 0)
-		EndIf
+		Endif
 		Do Case
 		  Case !Empty(This.cFilter)
 		  Case [e] $ This.cOption And Inlist(Lower(Justext(m.lcText)), [prg], [scx])
 		    This.RunProgram(m.lcText)
 		  Case Lower(Justext(m.lcText)) = [zip]
-		  Case Inlist(This.cCommand, [us], [ta], [sf], [fp])
+		  Case Inlist(This.cCommand, [us], [ta], [sf], [fp], [br])
 		  Case This.nWindowType = 0 And This.cCommand == [use]
 		  Case Lower(Justext(m.lcText)) = [sk]
 		    Modify Command (m.lcText) Nowait
@@ -5153,6 +5229,34 @@ DEFINE CLASS sidekick AS container
 		  Endscan
 		Endif
 		Return Reccount() > 0
+	ENDPROC
+
+	PROCEDURE log
+		Lparameters txCaller
+		Local lcCaller, lcFile, lcText
+		
+		If Vartype(m.txCaller) = [L]
+		  If !Pemstatus(_Screen, [lLog], 5)
+		    _Screen.AddProperty([lLog], m.tlCaller)
+		  Else
+		    _Screen.llog = m.txCaller
+		  Endif
+		Else
+		  If _Screen.llog
+		    lcCaller = Evl(m.txCaller, Program(2))
+		    lcFile = [sidekicklog.txt]
+		    Text To m.lcText Noshow Textmerge Pretext 1 + 2 + 4
+		  Level: <<m.txCaller>>
+		  cCommand    : <<this.cCommand>>
+		  cParameter  : <<this.cParameter>>
+		  cParcedText : <<this.cParcedText>>
+		  nWindowType : <<this.nWindowType>> 
+		    Endtext
+		    Strtofile(m.lcText, m.lcFile, 1)
+		    Wait Window 'Log added' at 10,25 timeout 2
+		  Endif
+		Endif
+		
 	ENDPROC
 
 	PROCEDURE notes
@@ -5540,15 +5644,18 @@ DEFINE CLASS sidekick AS container
 		If m.llRun
 		  Return .T.
 		Endif
-		
 		Do Case
 		  Case Empty(Justext(m.lcParam1)) And Right(m.lcParam1, 1) # [)] And !Inlist(Lower(Left(m.lcParam1, 4)), [http], [mail])
-		    If This.cCommand == [ed]
-		      Return .F.
-		    Else
-		      lcExt = [prg]
-		      lcParam1 = Forceext(m.lcParam1, m.lcExt)
-		    Endif
+		    Do Case
+		      Case This.cCommand == [ed]
+		        Return .F.
+		      Case This.cCommand == [dr]
+		        This.GiveMessage([No file found!])
+		        Return .F.
+		      Otherwise
+		        lcExt = [prg]
+		        lcParam1 = Forceext(m.lcParam1, m.lcExt)
+		    Endcase
 		  Case [.scx] $ Lower(m.lcParam1)
 		    lcExt = [scx]
 		  Case [.vcx] $ Lower(m.lcParam1)
@@ -5571,6 +5678,8 @@ DEFINE CLASS sidekick AS container
 		    This.TryExecute(m.tcPar)
 		  Case Inlist(Lower(Strextract(m.lcParam1, [], [:], 1, 4)), [http:], [https:])
 		    This.ShellX(m.lcParam1)
+		  Case Inlist(m.lcExt, [exe], [com], [bat])
+		    This.ShellX(m.tcPar)
 		  Case m.lcExt = [sk]
 		    Modify Command (m.tcPar) Nowait
 		  Case m.lcExt = [vcx] Or m.lcExt = [scx]
@@ -5610,7 +5719,7 @@ DEFINE CLASS sidekick AS container
 		        lcParam1 = Substr(m.lcParam1, 3)
 		      Endif
 		      loTools = Execscript (_Screen.cThorDispatcher, [Class= tools from pemeditor])
-		      m.loTools.EditSourceX(m.lcParam1 )
+		      m.loTools.EditSourceX(Fullpath(m.lcParam1 ))
 		    Endif
 		  Case m.lcExt = [dbf]
 		    lcAlias = Juststem(m.lcFile)
@@ -5627,7 +5736,7 @@ DEFINE CLASS sidekick AS container
 		    Return
 		  Otherwise
 		    loTools = Execscript (_Screen.cThorDispatcher, [Class= tools from pemeditor])
-		    m.loTools.EditSourceX(m.lcParam1 )
+		    m.loTools.EditSourceX(Fullpath(m.lcParam1 ))
 		Endcase
 		
 	ENDPROC
@@ -5749,11 +5858,15 @@ DEFINE CLASS sidekick AS container
 		Endif
 		Do Case
 		  Case File(Forceext( m.lcMethod, [.prg]))
+		    _Screen.AddProperty([oSidekick], This)
+		    Set Step On
 		    If Empty(This.cParameter)
 		      Do (m.lcMethod )
 		    Else
 		      Do (m.lcMethod ) With This.cParameter
 		    Endif
+		    Removeproperty(_Screen, [osidekick])
+		    _Screen.osidekick = .Null.
 		    llSuccess = .T.
 		  Otherwise
 		    If Pemstatus(This, m.lcMethod, 5)
@@ -5796,15 +5909,43 @@ DEFINE CLASS sidekick AS container
 	ENDPROC
 
 	PROCEDURE sk_br
-		If !Empty(Dbf())
-		  If [i] $ This.cOption
-		    This.IndexFields()
-		  Endif
-		  This.DoBrowModal()
-		Else
-		  This.GiveMessage([No table is open in the current work area.])
-		Endif
+		Local lcAlias, lcFile, lnSelect
+		If !Empty(This.cParameter) And Getwordcount(This.cParameter) = 1 And This.cCommand == [br]
+		  lcAlias = Juststem(This.cParameter)
+		  If File(Forceext(m.lcAlias, [dbf]))
+		    Select Select(m.lcAlias)
+		    Use (m.lcAlias)
+		    This.DoBrowModal()
+		  Else
+		    If Len(this.cParameter) = 1 and Empty(Chrtran(this.cParameter,'*,.-',''))
+		      this.cParameter = '*'
+		    Endif
+		    lcFile = This.ListFiles([dbf])
 		
+		    If Empty(m.lcFile)
+		      This.GiveMessage([No table selected!])
+		    Else
+		      lnSelect = Select(Juststem(m.lcFile))
+		      Select (m.lnSelect)
+		      Use (m.lcFile)
+		      This.DoBrowModal()
+		      If m.lnSelect = 0
+		        Use
+		      Endif
+		    Endif
+		  Endif
+		Else
+		  If !Empty(Dbf())
+		    If [i] $ This.cOption
+		      This.IndexFields()
+		    Endif
+		    This.DoBrowModal()
+		  Else
+		    this.cParameter = '*'
+		    this.sk_br()
+		  Endif
+		Endif
+		Use in Select(this.cCursor)
 		
 	ENDPROC
 
@@ -5843,13 +5984,14 @@ DEFINE CLASS sidekick AS container
 	PROCEDURE sk_def
 		Lparameters tcProject
 		Local lcParam1
-		
 		If !This.CheckOrCreateSidekickFile()
 		  Return
 		Endif
 		lcParam1 = This.GetLineNo(This.cSidekickFile, 1)
-		If Lower(Getwordnum(m.lcParam1, 1)) = [default]
+		If InList(Lower(Getwordnum(m.lcParam1, 1)) , [default], '*default')
+		  m.lcParam1 = Chrtran(m.lcParam1,'*','')
 		  lcParam1 = Getwordnum(m.lcParam1, Getwordcount(m.lcParam1 ))
+		
 		Else
 		  This.GiveMessage([No Default group defined in ] + This.cSidekickFile, 0)
 		  Return
@@ -5857,7 +5999,7 @@ DEFINE CLASS sidekick AS container
 		If !Empty(m.tcProject)
 		  lcParam1 = m.tcProject
 		Endif
-		If Val(m.lcParam1) > 0
+		If Val(m.lcParam1) # 0
 		  This.GetLinesToProcess(Val(m.lcParam1))
 		Else
 		  This.RunEd(m.lcParam1)
@@ -5918,9 +6060,10 @@ DEFINE CLASS sidekick AS container
 
 	PROCEDURE sk_ed
 		Local llSuccess
-		
 		llSuccess = .F.
 		Do Case
+		  Case InList(JustExt(this.cParameter),'exe','bat','com')
+		    this.ShellX(this.cParameter)  
 		  Case This.cParameter == [-]
 		    This.sk_def()
 		  Case Left(This.cParameter, 1) = [!]
@@ -5954,7 +6097,7 @@ DEFINE CLASS sidekick AS container
 		
 		llSuccess = .F.
 		lcProcedure = Set([Procedure])
-		lnFiles = This.GetFilesInPath([prg], This.cCursor)
+		*!*  lnFiles = This.GetFilesInPath([prg], This.cCursor)
 		
 		If File([myscrap.prg])
 		  Set Procedure To [myscrap] Additive
@@ -6177,8 +6320,11 @@ DEFINE CLASS sidekick AS container
 		  lnLastKey = Lastkey()
 		  If m.lnLastKey = 13
 		    lcFile = Alltrim(Evaluate(This.cCursor + [.filename]))
-		    If This.GiveMessage([Place the filename in the clipboard?], 4 + 32, m.lcFile ) = 6
+		    If 'y'$this.cOption or This.GiveMessage([Place the filename in the clipboard?], 4 + 32, m.lcFile ) = 6
 		      This.cClip = m.lcFile
+		      If 'y'$this.cOption
+		        MessageBox( m.lcFile + ' is copied to the clipboard.',0+64,'Sidekick',this.nTimeOut)
+		      Endif
 		    Endif
 		  Endif
 		Else
@@ -6188,16 +6334,38 @@ DEFINE CLASS sidekick AS container
 	ENDPROC
 
 	PROCEDURE sk_fl
-		Local lcPar
+		Local lcFile, lcPar, llConfirm, lnLastKey
 		
 		lcPar = This.cParameter
-		If Left(m.lcPar, 1) == [.]
-		  lcPar = Substr(m.lcPar, 2)
-		Endif
+		Do case 
+		  Case Left(m.lcPar, 1) == [.]
+		    lcPar = Substr(m.lcPar, 2)
+		  Case right(m.lcPar, 1) == [.]
+		    lcPar = lcPar + '*'
+		Endcase
+		*!*  If Left(m.lcPar, 1) == [.]
+		*!*    lcPar = Substr(m.lcPar, 2)
+		*!*  Endif
 		
-		If This.GetFilesInPath(m.lcPar, This.cCursor  ) > 0
+		If This.GetFilesInPath(m.lcPar, ,.T.) > 0
+		  *!*  Set Step On 
 		  This.AddOption([i])
 		  This.sk_br()
+		  lnLastKey = Lastkey()
+		  If m.lnLastKey = 13
+		    llConfirm = .T.
+		    Do Case
+		      Case [y] $ This.cOption
+		      Case [q] $ This.cOption And This.GiveMessage([Place the filename in the clipboard?], 4 + 32, m.lcFile ) = 6
+		      Otherwise
+		        llConfirm = .F.
+		    Endcase
+		    If m.llConfirm
+		      lcFile = Alltrim(Evaluate(This.cCursor + [.filename]))
+		      This.cClip = m.lcFile
+		      MessageBox( m.lcFile + ' is copied to the clipboard.',0+64,'Sidekick',this.nTimeOut)
+		    Endif
+		  Endif
 		Else
 		  This.GiveMessage([No match to ] + This.cParameter )
 		Endif
@@ -6251,10 +6419,17 @@ DEFINE CLASS sidekick AS container
 		  Append From (Forceext(This.cSidekickFile, [.sk])) Sdf
 		  Replace All Grouptxt With Ltrim(Strextract(text1, [#], [ ], 1)),;
 		    Groupno With Val(Strextract(text1, [#], [ ], 1))
-		  Replace All Group With Strextract(text1, [ ], [], 1) For Groupno > 0
-		  Select Grouptxt, Group  From curGroups x;
-		    Where x.Groupno > 0 Order By Groupno;
-		    Into Cursor curGroups Readwrite
+		  If [x] $ This.cOption
+		    Replace All Group With Strextract(text1, [ ], [], 1) For Groupno # 0
+		    Select Grouptxt, Group  From curGroups x;
+		      Where x.Groupno # 0 Order By Groupno;
+		      Into Cursor curGroups Readwrite
+		  Else
+		    Replace All Group With Strextract(text1, [ ], [], 1) For Groupno > 0
+		    Select Grouptxt, Group  From curGroups x;
+		      Where x.Groupno > 0 Order By Groupno;
+		      Into Cursor curGroups Readwrite
+		  Endif
 		  If _Tally > 0
 		    Select Grouptxt As Groupno, Group  From curGroups Into Cursor curGroups Readwrite
 		    If !Empty(This.cParameter)
@@ -6281,9 +6456,9 @@ DEFINE CLASS sidekick AS container
 		Local lcCursor, lcPar
 		
 		lcPar = This.cParameter
-		lcPar = Evl(m.lcPar, [*proc.prg])
+		lcPar = Evl(m.lcPar, [my*.prg])
 		
-		If This.GetFilesInPath(m.lcPar, This.cCursor  ) > 0
+		If This.GetFilesInPath(m.lcPar,,.T.   ) > 0
 		  This.sk_br()
 		Else
 		  This.GiveMessage([No match!])
@@ -6354,19 +6529,19 @@ DEFINE CLASS sidekick AS container
 		Endif
 		lcClip = _Cliptext
 		Select 0
-		If This.GetFilesInPath([H], This.cCursor) = 0
+		If This.GetFilesInPath([H]) = 0
 		  _Cliptext = This.cClip
 		  Return
 		Endif
 		Select (This.cCursor)
 		Select *, Cast([] As Memo) As Data From (This.cCursor) Into Cursor (This.cCursor) Readwrite
 		Scan
-		  Replace Data With Filetostr(Fname)
+		  Replace Data With Filetostr(Filename)
 		Endscan
 		If !Empty(m.lcParameter )
-		  Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where m.lcParameter  $ Lower(Fname)
+		  Select * From (This.cCursor) Into Cursor (This.cCursor) Readwrite Where m.lcParameter  $ Lower(Filename)
 		Endif
-		lcText = This.GetDataFromGrid([Select file:], This.cCursor + [.fname])
+		lcText = This.GetDataFromGrid([Select file:], This.cCursor + [.Filename])
 		If !Empty(m.lcText)
 		  This.ReplaceCurrentLine([#Include ] + m.lcText + ccCR)
 		Endif
@@ -6395,7 +6570,6 @@ DEFINE CLASS sidekick AS container
 		    lcExtension = Justext(m.lcMethod)
 		    lcExtension = Evl(m.lcExtension, [prg])
 		Endcase
-		
 		If Inlist(Lower(Justext(m.lcMethod)), [prg], [h]) And !Empty(Juststem(m.lcMethod))
 		  If File(m.lcMethod)
 		    lcCode = Filetostr(m.lcMethod)
@@ -6410,10 +6584,9 @@ DEFINE CLASS sidekick AS container
 		    Case Inlist(m.lcExtension, [vcx], [scx])
 		      Wait Window [Wait while Sidekick processes files!] At 10, 25 Nowait Noclear
 		      Create Cursor CurMethods (Filename c(240), Source c(240), Code m)
-		      This.GetFilesInPath(m.lcExtension, [curprgs])
-		      Select curprgs
+		      This.GetFilesInPath(m.lcExtension, [curprgs], .T.)
 		      Scan
-		        lcFile = curprgs.Fname
+		        lcFile = curprgs.Filename
 		        This.getMethdosFromClasslib(m.lcFile )
 		      Endscan
 		      If !Empty(m.lcMethod)
@@ -6438,11 +6611,10 @@ DEFINE CLASS sidekick AS container
 		    Case m.lcExtension = [prg]
 		      Create Cursor CurMethods (Method c(240), Source c(240), Code m)
 		      Wait Window [Wait while Sidekick processes files!] At 10, 25 Nowait Noclear
-		      This.GetFilesInPath([prg], [curPrgs])
-		      Select curprgs
+		      This.GetFilesInPath([prg], [curPrgs], .T.)
 		      Scan
-		        lcSource = Alltrim(curprgs.Fname)
-		        lnProcs = Aprocinfo(laProc, curprgs.Fname, 0)
+		        lcSource = Alltrim(curprgs.Filename)
+		        lnProcs = Aprocinfo(laProc, curprgs.Filename, 0)
 		        For lnX = 1 To m.lnProcs
 		          If m.laProc(m.lnX, 3) = [Procedure] And (Empty(Juststem(m.lcMethod)) Or m.lcMethod $ Lower(m.laProc(m.lnX, 1)) Or Empty(m.lcMethod)) && And ![.] $ m.laProc(m.lnX, 1)
 		            lcProc = m.laProc(m.lnX, 1)
@@ -6455,16 +6627,18 @@ DEFINE CLASS sidekick AS container
 		        Endfor
 		      Endscan
 		      Scan
-		        lcSource = Alltrim(curprgs.Fname)
-		        If Lower(m.lcMethod) $ Juststem(Lower(curprgs.Fname))
-		          lcCode = Filetostr(curprgs.Fname)
-		          lcText = [-->] + Juststem(curprgs.Fname)
+		        lcSource = Alltrim(curprgs.Filename)
+		        If Lower(m.lcMethod) $ Juststem(Lower(curprgs.Filename))
+		          lcCode = Filetostr(curprgs.Filename)
+		          lcText = [-->] + Juststem(curprgs.Filename)
 		          Insert Into CurMethods (Source, Method, Code) Values (m.lcSource, m.lcText, m.lcCode )
 		        Endif
 		      Endscan
 		      Select CurMethods
-		      Select * From CurMethods Into Cursor CurMethods Readwrite Where m.lcMethod $ Lower(Method + [|] + Source)
-		      This.IndexFields()
+		      If !Empty(m.lcMethod)
+		        Select * From CurMethods Into Cursor CurMethods Readwrite Where m.lcMethod $ Lower(Method + [|] + Source)
+		      Endif
+		      This.IndexFields('method')
 		      *!*        Index On Lower(Method) Tag Method
 		      *!*        Locate
 		      Wait Clear
@@ -6481,10 +6655,9 @@ DEFINE CLASS sidekick AS container
 		    Case m.lcExtension = [h]
 		      Create Cursor CurMethods (Source c(240), Code m)
 		      Wait Window [Wait while Sidekick processes files!] At 10, 25 Nowait Noclear
-		      This.GetFilesInPath([h], [curPrgs])
-		      Select curprgs
+		      This.GetFilesInPath([h], [curPrgs], .T.)
 		      Scan
-		        lcFile = Alltrim(curprgs.Fname)
+		        lcFile = Alltrim(curprgs.Filename)
 		        lcData = Filetostr(m.lcFile)
 		        Insert Into CurMethods (Source, Code) Values (m.lcFile, m.lcData)
 		      Endscan
@@ -6556,8 +6729,16 @@ DEFINE CLASS sidekick AS container
 		
 	ENDPROC
 
+	PROCEDURE sk_ltry
+		*!*  If !Pemstatus(_Screen, [lTry], 5)
+		*!*    _Screen.AddProperty([lTry],.F.)
+		*!*  Endif
+		_screen.ltry = !_screen.ltry 
+		Wait Window _screen.ltry at 10,25 timeout 2
+	ENDPROC
+
 	PROCEDURE sk_menu
-		Local lcAsk, lcDesc, lcFile, lcProg, lcSelect, lcSidekickOptions, lcTrigger, lcURL, lcVar, lcWindow
+		Local lcAsk, lcCommand, lcDesc, lcFile, lcProg, lcSelect, lcSidekickOptions, lcURL, lcVar, lcWindow
 		Local llNomenu, lnLines, lnX
 		
 		Local Array laSidekickChoices[1]
@@ -6566,7 +6747,7 @@ DEFINE CLASS sidekick AS container
 		lcSelect = Select()
 		
 		Select 0
-		Create Cursor curSidekick (Nomenu l, Trigger c(12), Descript c(50),  Window c(2), Ask c(25),  url c(100))
+		Create Cursor curSidekick (Nomenu l, Command c(20), Descript c(50),  Window c(2), Ask c(25),  url c(100))
 		
 		lnLines = Alines(m.laSidekickChoices, m.lcSidekickOptions )
 		For lnX = 1 To m.lnLines
@@ -6583,9 +6764,9 @@ DEFINE CLASS sidekick AS container
 		    Otherwise
 		      Loop
 		  Endcase
-		  lcTrigger = Alltrim(Getwordnum( m.laSidekickChoices(m.lnX), 2, [|]))
-		  If m.lcTrigger = [<blank>]
-		    lcTrigger = [ <blank>]
+		  lcCommand = Alltrim(Getwordnum( m.laSidekickChoices(m.lnX), 2, [|]))
+		  If m.lcCommand = [<blank>]
+		    lcCommand = [ <blank>]
 		  Endif
 		  lcDesc = Alltrim(Getwordnum( m.laSidekickChoices(m.lnX), 3, [|]))
 		  lcAsk = Alltrim(Getwordnum( m.laSidekickChoices(m.lnX), 5, [|]))
@@ -6610,15 +6791,18 @@ DEFINE CLASS sidekick AS container
 		  Endcase
 		
 		
-		  Insert Into curSidekick (Trigger, Descript, Ask, url, Nomenu) Values (m.lcTrigger, m.lcDesc, m.lcAsk, m.lcURL, m.llNomenu  )
+		  Insert Into curSidekick (Command, Descript, Ask, url, Nomenu) Values (m.lcCommand, m.lcDesc, m.lcAsk, m.lcURL, m.llNomenu  )
 		Endfor
-		Select Trigger, Descript, url, Ask, Nomenu From curSidekick Into Cursor curSidekick Readwrite
-		This.IndexFields([trigger])
-		If [x] $ This.cOption
-		  Browse Normal
-		  List Off Trigger, Descript, Ask To Print
+		Select Command, Descript, url, Ask, Nomenu From curSidekick Into Cursor curSidekick Readwrite
+		If ![x] $ This.cOption
+		  This.addSKExtensions()
 		Endif
-		lcProg = This.GetDataFromGrid(Textmerge([<<this.cProgram>> "commands", Ctrl+Enter opens url]), [trigger], 2)
+		This.IndexFields([Command])
+		If [y] $ This.cOption
+		  Browse Normal
+		  List Off Command, Descript, Ask To Print
+		Endif
+		lcProg = This.GetDataFromGrid(Textmerge([<<this.cProgram>> "commands", Ctrl+Enter opens url]), [command], 2)
 		lcAsk = Alltrim(Ask)
 		llNomenu = Nomenu
 		
@@ -6686,25 +6870,25 @@ DEFINE CLASS sidekick AS container
 		?'this.cparameter', this.cparameter
 		If [.] $ This.cParameter Or !Pemstatus(_Screen, [sklastform], 5)
 		  This.cParameter = Chrtran(This.cParameter, [.], [])
-		  This.GetFilesInPath([scx], m.lcCursor )
-		  Select (m.lcCursor)
-		  Select Cast(Justfname(Fname) As c(50)) As Form, Fname, FileSize As Size, Filedate As Date;
+		  This.GetFilesInPath([scx],, .T.)
+		*!*    Select (m.lcCursor)
+		  Select Cast(Justfname(Filename) As c(50)) As Form, Filename, FileSize As Size, Filedate As Date;
 		    From (Alias()) Into Cursor ( Alias()) Readwrite
-		  Select Max(Len(Trim(Form))), Max(Len(Trim(Fname))) From (Alias()) Into Array laDummy
-		  Select Cast(Form As c(m.laDummy(1))) As Form, Cast(Fname As c(m.laDummy(2))) As Fname, Size, Date;
+		  Select Max(Len(Trim(Form))), Max(Len(Trim(Filename))) From (Alias()) Into Array laDummy
+		  Select Cast(Form As c(m.laDummy(1))) As Form, Cast(Filename As c(m.laDummy(2))) As Filename, Size, Date;
 		    From (Alias()) Into Cursor ( Alias()) Readwrite
 		  lnWords = Getwordcount(This.cParameter)
 		  For lnX = 1 To m.lnWords
 		    lcWord = Getwordnum(This.cParameter, m.lnX)
-		    Select * From (Alias()) Where m.lcWord $ Lower(Fname) Into Cursor (Alias()) Readwrite
+		    Select * From (Alias()) Where m.lcWord $ Lower(Filename) Into Cursor (Alias()) Readwrite
 		  Endfor
 		  lcMessage = [Select a form to modify:]
 		  If Reccount() > 1
 		    this.IndexFields()
 		    Set Order To date desc 
-		    lcDBF = This.GetDataFromGrid(m.lcMessage, [fname])
+		    lcDBF = This.GetDataFromGrid(m.lcMessage, [Filename])
 		  Else
-		    lcDBF = Alltrim(Fname)
+		    lcDBF = Alltrim(Filename)
 		  Endif
 		  _Screen.AddProperty([sklastform], m.lcDBF)
 		Endif
@@ -6785,7 +6969,7 @@ DEFINE CLASS sidekick AS container
 		    Create Cursor (ccCursor) (Classname c(50), LibName c(240), Timestamp T, Classinfo c(254) )
 		    Select curDummy
 		    Scan
-		      lcSource = Trim(curDummy.Fname)
+		      lcSource = Trim(curDummy.Filename)
 		      Use In Select([tempsource])
 		      Use (m.lcSource) Again In 0 Alias tempsource
 		      Select tempsource
@@ -6972,6 +7156,8 @@ DEFINE CLASS sidekick AS container
 		
 		llSuccess = .T.
 		Do Case
+		  Case InList(JustExt(this.cParameter),'exe','bat','com')
+		    this.ShellX(this.cParameter)
 		  Case This.nWindowType > 0 And This.cParameter == [+]
 		    This.HandleMRUTable([Add])
 		  Case This.nWindowType > 0 And This.cParameter == [-]
@@ -7128,24 +7314,26 @@ DEFINE CLASS sidekick AS container
 		  lnSelect = Select()
 		  lcCursor = [curCustom]
 		  lnTools = This.GetFilesInPath([prg], m.lcCursor )
-		  Select Cast(Lower(Substr(Juststem(Fname), 4)) As c(30)) As Program, FileSize, Filedate, Cast([] As c(100)) As Descript, Fname;
-		    From (m.lcCursor) Into Cursor (m.lcCursor) Readwrite Where Lower(Left(Juststem(Fname), 3)) = [sk_]
+		  Select Cast(Lower(Substr(Juststem(Filename), 4)) As c(30)) As Program, FileSize, Filedate, Cast([] As c(100)) As Descript, Filename;
+		    From (m.lcCursor) Into Cursor (m.lcCursor) Readwrite Where Lower(Left(Juststem(Filename), 3)) = [sk_]
 		  If _Tally = 0
 		    This.GiveMessage([No tool matching sk_ *.prg found], 0 + 48, [No custom tool defined])
 		  Else
 		    Scan
-		      lcFile = Alltrim(Fname)
+		      lcFile = Alltrim(Filename)
 		      lcDescript = This.GetDescript(m.lcFile )
 		      If !Empty( m.lcDescript )
 		        Replace Descript With m.lcDescript
 		      Endif
 		    Endscan
-		    Go Top
-		    lcProg = This.GetDataFromGrid(Textmerge([My "<<this.cProgram>>" extensions (R/O) to run:]), [fname], 1)
+		    This.IndexFields([program])
+		    lcProg = This.GetDataFromGrid(Textmerge([My "<<this.cProgram>>" extensions (R/O) to run:]), [Filename], 1)
 		    Use
 		    Select (m.lnSelect)
 		    If !Empty(m.lcProg)
+		      _Screen.AddProperty([oSidekick], This)
 		      Do (m.lcProg)
+		      Removeproperty(_Screen, [osidekick])
 		    Endif
 		    If !This.lSKComment
 		      This.CutCurrentLine()
@@ -7195,9 +7383,9 @@ DEFINE CLASS sidekick AS container
 		  Set Step On
 		Endif
 		lcProg = This.cParameter
-		If This.cCommand = [!!] And Len(This.cCommand ) > 2
-		  lcProg = Substr(This.cCommand, 3)
-		Endif
+		*!*  If This.cCommand = [!!] And Len(This.cCommand ) > 2
+		*!*    lcProg = Substr(This.cCommand, 3)
+		*!*  Endif
 		If !Lower(m.lcProg) = This.cSKFile
 		  lcProg = This.cSKFile + m.lcProg
 		Endif
@@ -7206,6 +7394,9 @@ DEFINE CLASS sidekick AS container
 		  If File(m.lcProgFile)
 		    Modify Command (m.lcProgFile) Nowait
 		  Else
+		    If Directory('prog')
+		      m.lcProgFile = ForcePath(m.lcProgFile,'prog')
+		    Endif
 		    If This.GiveMessage([File ] + m.lcProgFile + [ is not found!], 4 + 64, [Create it?], 10000) # 7
 		      lcText = This.cDescriptionMask1 + [  ] + This.cDescriptionMask2
 		      Strtofile(m.lcText, m.lcProgFile)
@@ -7219,21 +7410,21 @@ DEFINE CLASS sidekick AS container
 		  lnSelect = Select()
 		  lcCursor = [curCustom]
 		  lnTools = This.GetFilesInPath([prg], m.lcCursor )
-		  Select Cast(Lower(Substr(Juststem(Fname), 4)) As c(30)) As Program, FileSize, Filedate, Cast([] As c(100)) As Descript, Fname;
-		    From (m.lcCursor) Into Cursor (m.lcCursor) Readwrite Where Lower(Left(Juststem(Fname), 3)) = This.cSKFile
+		  Select Cast(Lower(Substr(Juststem(Filename), 4)) As c(30)) As Program, FileSize, Filedate, Cast([] As c(100)) As Descript, Filename;
+		    From (m.lcCursor) Into Cursor (m.lcCursor) Readwrite Where Lower(Left(Juststem(Filename), 3)) = This.cSKFile
 		  If _Tally = 0
 		    lcMessage = [No tool matching ] + This.cSKFile + [ found]
 		    This.GiveMessage(m.lcMessage, 0 + 48, [No custom tool defined])
 		  Else
 		    Scan
-		      lcFile = Alltrim(Fname)
+		      lcFile = Alltrim(Filename)
 		      lcDescript = This.GetDescript(m.lcFile )
 		      If !Empty( m.lcDescript )
 		        Replace Descript With m.lcDescript
 		      Endif
 		    Endscan
-		    Go Top
-		    lcProg = This.GetDataFromGrid(Textmerge([My "<<this.cProgram>>" extensions to edit:]), [fname], 1)
+		    this.IndexFields('program')
+		    lcProg = This.GetDataFromGrid(Textmerge([My "<<this.cProgram>>" extensions to edit:]), [Filename], 1)
 		    Use
 		    Select (m.lnSelect)
 		    If !Empty(m.lcProg)
@@ -7245,6 +7436,10 @@ DEFINE CLASS sidekick AS container
 		  Endif
 		Endif
 		This.lsuccess = .T.
+	ENDPROC
+
+	PROCEDURE sk_sx
+		this.ShellX(GetWordNum(this.cParameter,1),,StrExtract(this.cParameter,' '))
 	ENDPROC
 
 	PROCEDURE sk_ta
@@ -7260,21 +7455,25 @@ DEFINE CLASS sidekick AS container
 		  Case Inlist(This.cParameter, [?], [,], [.])
 		    This.AddOption([a])
 		    This.ListFiles([ta])
-		    lcFile = This.GetDataFromGrid(m.lcMessage, [fullname], 0)
+		    If Reccount() > 0
+		      lcFile = This.GetDataFromGrid(m.lcMessage, [fullname], 0)
+		    Else 
+		      m.lcFile = ''
+		    Endif
 		    If Empty(m.lcFile)
 		      Return
 		    Endif
 		  Case Inlist(This.cParameter, [+])
 		    This.AddOption([a])
 		    This.ListFiles([ta])
-		    Calculate Max(Val(Substr(Filename, m.lnLen ))) To m.lnMax
+		    Calculate Max(Val(Substr(Fullname, m.lnLen ))) To m.lnMax
 		    lcExt = Transform(m.lnMax + 1)
 		  Case Inlist(This.cParameter, [-])
 		    This.AddOption([a])
 		    This.ListFiles([ta])
 		    lnX = 1
 		    Do While .T.
-		      Locate For Val(Substr(Filename, m.lnLen )) = m.lnX
+		      Locate For Val(Substr(Fullname, m.lnLen )) = m.lnX
 		      If Found()
 		        lnX = m.lnX + 1
 		        Loop
@@ -7533,6 +7732,9 @@ DEFINE CLASS sidekick AS container
 	ENDPROC
 
 	PROCEDURE sk_zero
+		If Directory('text') and ADir(laDir,'*.sk')>0
+		  Rename *.sk to text\*.sk
+		Endif
 		Do Case
 		  Case This.cParcedText = [**]
 		    This.cParameter = [*]
@@ -7541,7 +7743,7 @@ DEFINE CLASS sidekick AS container
 		    This.CutCurrentLine()
 		    Modify Command (This.cSidekickFile ) Nowait
 		  Case This.cParameter = [?]
-		    This.CutAndGiveMessage(Textmerge([Active "<<this.cProgram>>" file is <<this.cSidekickFile>>]), 64, This.cProgram )
+		    This.CutAndGiveMessage(Textmerge([Active "<<this.cProgram>>" project file is <<this.cSidekickFile>>]), 64, This.cProgram )
 		  Case Inlist(This.cParameter, [*], [-], [+], [/])
 		    This.ChangeSidekickFile()
 		  Case Getwordnum(This.cParameter, 1) # This.cRun
@@ -7679,6 +7881,7 @@ DEFINE CLASS sidekick AS container
 		lcParameter = []
 		Text To m.lcText Noshow Textmerge Pretext 1 + 2
 		  ?       | menu
+		  ??      | menu | x
 		  =       | equ
 		  -       | def
 		  !       | sk
@@ -7694,6 +7897,7 @@ DEFINE CLASS sidekick AS container
 		  //      | op    | w
 		  br      | br
 		  bri     | br    | i
+		  briw    | br    | wi
 		  brw     | br    | w
 		  brwi    | br    | wi
 		  cl      | us    | c
@@ -7718,7 +7922,10 @@ DEFINE CLASS sidekick AS container
 		  evl     | equ
 		  equ
 		  fl
+		  fly    | fl    | y
 		  ff
+		  ffy    | ff    | y
+		  ffq    | ff    | q
 		  fp
 		  hei
 		  help
@@ -7735,8 +7942,10 @@ DEFINE CLASS sidekick AS container
 		  pa
 		  path    | pa
 		  rt
+		  shx     | sx
 		  sk
 		  sked
+		  sx
 		  ta
 		  tore
 		  test    | ta

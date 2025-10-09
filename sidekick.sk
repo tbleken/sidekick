@@ -17,13 +17,17 @@ Default project: 0
 #5 Sidekick Help pages:
 5 https://github.com/tbleken/sidekick
 
-#6 Test
+#6 Mydate code sample
 6 exe set proc to sidekick.sk addi
-6 exewait window testpr123()
+6 exewait window mydate() at 10,25 timeout 3
 6 exe Release Procedure sidekick.sk
 
-Procedure testpr123
+#-2 Change to VFF folder
+-2 exe cd ..\SWFox\
+-2 exe do prog\mysetup
+
+Procedure Mydate
 Text To lcText Noshow Textmerge Pretext 1+2+4
-  I dag er <<Date()>>
+  Today is <<Date()>>
 EndText
 Return m.lcText 

@@ -1,7 +1,7 @@
 
 [![How Sidekick works](documents/Images/SKLogo.png)](documents/skhow.md)
 
-SideKick version 1.20 released June 30, 2025.
+SideKick version 1.32 released October 2, 2025.
 
 [What's new in this release](Change%20Log.md)
 

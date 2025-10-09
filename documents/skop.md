@@ -68,6 +68,9 @@ Here are a few samples of what goes where in `SkMRUList.dbf`:
 | https://mysite.com/page1 ||||.T.| Default browser |
 | https://mysite.com/page1 | opera.exe |||.T.| Specific browser |
 
+To edit this table, you can use the command `op /m` or `// /m`. This will simply Browse the table, however there will be no error checking. For that reason, you will be asked whether you want `Sidekick` to make a copy of the table.  
+
+Another way to edit the table is the `Sidekick` command `brw skmru`. This command will open the table in the Sidekick Form in read-write mode. Still no error checking, and you can not add records.
 
 **Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as the hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools.
 

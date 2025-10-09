@@ -1,6 +1,6 @@
 AppName   = Sidekick
 AppID     = Sidekick
-Version   = 1.32
+Version   = 1.35
 Component = No
 
 ChangeLog      = Change Log.md

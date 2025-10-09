@@ -1,8 +1,8 @@
 lparameters toUpdateObject
 
 with toUpdateObject
-	.VersionNumber    = '1.32 - 20251002'
-	.AvailableVersion = 'Sidekick-1.32-09406-20251002'
+	.VersionNumber    = '1.35 - 20251009'
+	.AvailableVersion = 'Sidekick-1.32-09413-20251009'
 	.Component        = 'No'
 	.Notes            = GetNotes()
 endwith
@@ -17,8 +17,13 @@ text to lcNotes noshow
 
 New command [FF (Find File)](documents/skff.md), used to locate file in any folder below the current one, and optionally copy its full path and name into the clipboard. 
 
-New command [FL (File Lister)](documents/skfl.md). Lists files without taking any action with the files. Specify the file extension, and get a list of all the matching files in the current folder and path. Accepts wild cards, `*` and `?`.
+New command [FL (File Lister)](documents/skfl.md). Lists all the matching files in the current folder and path, and optionally copies its full path and name into the clipboard. Accepts wild cards, `*` and `?`. 
 
+Enhanced behavior of Sidekick's [Menu](documents/skmnu.md) command. Now all personal extensions are listed unless you use the optional command `??`. See [the documentation](documents/skmnu.md) for details.  
+
+More features added to the [BR](documents/skbr.md) command. See [Help on BR](documents/skbr.md) for details.  
+
+Added an alternative Thor starter program for `Sidekick`, `thor_tool_sidekickmenu.prg`. For details, check [How Sidekick works](documents/skhow.md).  
 
 ### 2025-09-24, Version 1.31
 
