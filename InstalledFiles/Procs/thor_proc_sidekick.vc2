@@ -4719,7 +4719,7 @@ DEFINE CLASS sidekick AS container
 		Lparameters tcCommand
 		
 		Local lcCommand, lnX
-		This.cVersion  = [1.36]
+		This.cVersion  = [1.37]
 		This.cExact = Set([Exact])
 		Set Exact Off
 		Aerror(This.aInError)
@@ -4786,9 +4786,6 @@ DEFINE CLASS sidekick AS container
 		This.cParcedText = Chrtran(This.cParcedText, [|], [ ])
 		tcCommand = This.cParcedText
 		This.cParameterOriginal = This.cParcedText
-		*!*  If Pemstatus(_Screen, [lTest], 5) And _Screen.lTest
-		*!*    Set Step On
-		*!*  Endif
 		
 		If .T. && and !this.ExecuteHighlight()
 		  If !Empty(This.cParcedText) Or !This.lNoInterface Or This.lInputBox
@@ -5859,7 +5856,6 @@ DEFINE CLASS sidekick AS container
 		Do Case
 		  Case File(Forceext( m.lcMethod, [.prg]))
 		    _Screen.AddProperty([oSidekick], This)
-		    Set Step On
 		    If Empty(This.cParameter)
 		      Do (m.lcMethod )
 		    Else
@@ -6348,7 +6344,6 @@ DEFINE CLASS sidekick AS container
 		*!*  Endif
 		
 		If This.GetFilesInPath(m.lcPar, ,.T.) > 0
-		  *!*  Set Step On 
 		  This.AddOption([i])
 		  This.sk_br()
 		  lnLastKey = Lastkey()
@@ -6912,7 +6907,6 @@ DEFINE CLASS sidekick AS container
 		        Endif
 		      Endfor
 		    EndIf
-		*!*      Set Step On 
 		    If File(m.lcFile)
 		      Erase (m.lcFile)
 		    EndIf

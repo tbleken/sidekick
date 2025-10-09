@@ -2,7 +2,7 @@
 
 Lparameters lxParam1
 
-#Define ccVersion '1.36'
+#Define ccVersion '1.37'
 
 #Define ccXToolName        'Sidekick'
 #Define ccSidekickHelp 'https://github.com/tbleken/Pandora'

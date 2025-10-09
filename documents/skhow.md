@@ -19,6 +19,6 @@ This is really handy, since you can have a special file with all your `Sidekick`
 
 Update: Sidekick now also includes the file `thor_tool_sidekickmenu.prg`. It's recommended to create a Thor hotkey to this file also, for instance **shift-**![`F8`](Images/F8.png). With this the "screen reader" part of `Sidekick` bypassed, and will show the Sidekick Command Box directly, independent of "where" in the IDE you are.  
 
-If you open this file, you will see that the variable `tcCommand` is an empty string by default. Replace it with a Sidekick command of your liking.
+If you create a copy of this file in Thor's My Tools folder, or a folder in your path, you can adapt it to your own liking. In this file you will see that the variable `tcCommand` is an empty string by default. Replace it with a Sidekick command of your liking.
 
 **Note:** In this documentation ![`F8`](Images/F8.png) is consistently used as the hotkey for `Sidekick`. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools. 
