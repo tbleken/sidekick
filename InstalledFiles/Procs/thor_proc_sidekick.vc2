@@ -4719,7 +4719,7 @@ DEFINE CLASS sidekick AS container
 		Lparameters tcCommand
 		
 		Local lcCommand, lnX
-		This.cVersion  = [1.35]
+		This.cVersion  = [1.36]
 		This.cExact = Set([Exact])
 		Set Exact Off
 		Aerror(This.aInError)
