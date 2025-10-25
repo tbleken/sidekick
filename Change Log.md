@@ -1,6 +1,6 @@
 ### 2025-10-25, Version 1.50
 
-Several bug fixes and minor additions.
+Several bug fixes, some modifications and minor additions.
 
 New command [==](documents/skdb.md) which creates searchable `?` commands in your code.  
 And added `===` as an alternative command for `db` to create debugout commands.
