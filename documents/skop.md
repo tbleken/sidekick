@@ -14,7 +14,7 @@ To get quick access to your "favorite places", `Sidekick` uses a table, default 
 | `//` | Same as above |
 | `op*` | Same as above |
 | `op?` | Same as above |
-| `op init`  | Same as above, only entries with `init` in any of the listed fielda are shown  |
+| `op init`  | Same as above, only entries with `init` in any of the listed fields are shown  |
 | `op .prg`  | Same as above, only .prg files are shown  |
 | `op .vcx`  | Same as above, only .vcx files are shown  |
 | `op /a` | Shows all records, also where Active = .F. |
@@ -41,32 +41,25 @@ This table has the following fields:
 
 | Name | Type | Description  |  
 |:-----|:-----|:-------------|  
-| Fullname | c(240) | Full path to the file in question |
-| Module   | c(100) | Name of class, module or program to open the file |
+| Fullname | c(240) | Full path and name of the file  |
+| Module   | c(100) | Name of class or module  |
 | Method   | c(40)  | Name of method (in .vcx or .scx) |
 | Lineno   | int    | Line number in method or .prg |
 | Descript | c(40)  | Description |
 | Datetime | T      | Date and time for last "update" (see `op+` above) |
 | Active   | L      | .F. will hide the record, unless command `op? /a` is used |
-| External | L      | .T. means a "no-VFP" file |  
 
-For "external" "files", these rules apply:
-* To run external programs, the name of the executable file goes into `Fullname`
-* If the external program needs parameters, the name goes into `module` and the parameters goes into `fullname`
-* URL's or data files goes into `fullname` if you want Windows' default programs to open them.    
 
 Here are a few samples of what goes where in `SkMRUList.dbf`:  
 
-| Fullname | Module | Method | Line | Ext | Note |
-|:---------|:-------|:-------|-----:|:--|:-----| 
-| d:\my\my.prg |    |        | 10   |.F.||
-| d:\my\my.vcx | myclass | init | 5 |.F. ||
-| d:\my\my.scx | myform | Header1.Click | 15 |.F.||
-| Notepad.exe  ||||.T.||
-| mytext.txt | ||10|.F.| Modify File |
-| mytext.txt | Notepad.exe||| .T.| Notepad is specified|
-| https://mysite.com/page1 ||||.T.| Default browser |
-| https://mysite.com/page1 | opera.exe |||.T.| Specific browser |
+| Fullname | Module | Method | Line  |
+|:---------|:-------|:-------|-----:|
+| d:\my\my.prg |    |        | 10   |
+| d:\my\my.vcx | myclass | init | 5 |
+| d:\my\my.scx | myform | Header1.Click | 15 |
+| Notepad.exe  ||||
+| mytext.txt | ||10|
+| https://mysite.com/page1 ||||
 
 To edit this table, you can use the command `op /m` or `// /m`. This will simply Browse the table, however there will be no error checking. For that reason, you will be asked whether you want `Sidekick` to make a copy of the table.  
 

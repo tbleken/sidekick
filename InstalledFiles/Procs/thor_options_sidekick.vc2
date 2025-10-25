@@ -45,8 +45,6 @@ DEFINE CLASS skoptions AS container
 	*< OBJECTDATA: ObjPath="pgf1.Page4.txtRun" UniqueID="" Timestamp="" />
 	*< OBJECTDATA: ObjPath="pgf1.Page4.lblMaxDescript" UniqueID="" Timestamp="" />
 	*< OBJECTDATA: ObjPath="pgf1.Page4.spnMaxDescript" UniqueID="" Timestamp="" />
-	*< OBJECTDATA: ObjPath="pgf1.Page4.lblSKProject" UniqueID="" Timestamp="" />
-	*< OBJECTDATA: ObjPath="pgf1.Page4.cboSKProject" UniqueID="" Timestamp="" />
 	*< OBJECTDATA: ObjPath="pgf1.Page5.lblHelpURL" UniqueID="" Timestamp="" />
 	*< OBJECTDATA: ObjPath="pgf1.Page5.txtHelpURL" UniqueID="" Timestamp="" />
 	*< OBJECTDATA: ObjPath="pgf1.Page5.lblWait" UniqueID="" Timestamp="" />
@@ -502,16 +500,6 @@ DEFINE CLASS skoptions AS container
 		Width = 125
 		*< END OBJECT: BaseClass="textbox" />
 
-	ADD OBJECT 'pgf1.Page4.cboSKProject' AS combobox WITH ;
-		Comment = "Something is missing", ;
-		Height = 25, ;
-		Left = 167, ;
-		Name = "cboSKProject", ;
-		ToolTipText = "Name of currently active Sidekick project file.", ;
-		Top = 32, ;
-		Width = 133
-		*< END OBJECT: BaseClass="combobox" />
-
 	ADD OBJECT 'pgf1.Page4.lblMaxDescript' AS label WITH ;
 		Alignment = 1, ;
 		AutoSize = .T., ;
@@ -521,7 +509,7 @@ DEFINE CLASS skoptions AS container
 		Height = 17, ;
 		Left = 44, ;
 		Name = "lblMaxDescript", ;
-		Top = 155, ;
+		Top = 84, ;
 		Width = 204
 		*< END OBJECT: BaseClass="label" />
 
@@ -533,19 +521,8 @@ DEFINE CLASS skoptions AS container
 		Height = 17, ;
 		Left = 18, ;
 		Name = "lblRun", ;
-		Top = 114, ;
+		Top = 43, ;
 		Width = 237
-		*< END OBJECT: BaseClass="label" />
-
-	ADD OBJECT 'pgf1.Page4.lblSKProject' AS label WITH ;
-		Alignment = 1, ;
-		BackStyle = 0, ;
-		Caption = "Sidekick active project file:", ;
-		Height = 17, ;
-		Left = 16, ;
-		Name = "lblSKProject", ;
-		Top = 38, ;
-		Width = 140
 		*< END OBJECT: BaseClass="label" />
 
 	ADD OBJECT 'pgf1.Page4.spnMaxDescript' AS spinner WITH ;
@@ -558,7 +535,7 @@ DEFINE CLASS skoptions AS container
 		Name = "spnMaxDescript", ;
 		SpinnerHighValue =  30.00, ;
 		SpinnerLowValue =   6.00, ;
-		Top = 153, ;
+		Top = 82, ;
 		Width = 67
 		*< END OBJECT: BaseClass="spinner" />
 
@@ -568,7 +545,7 @@ DEFINE CLASS skoptions AS container
 		MaxLength = 3, ;
 		Name = "txtRun", ;
 		ToolTipText = ' Defines the "command" to tell Sidekick to execute/run a file instead of opening it in Sidekick projects. NB! Only change it if any conflict occurs!! Default is "exe".', ;
-		Top = 111, ;
+		Top = 40, ;
 		Width = 46
 		*< END OBJECT: BaseClass="textbox" />
 
@@ -841,36 +818,6 @@ DEFINE CLASS skoptions AS container
 		LPARAMETERS lEnable
 		
 		This.Value = This.Parent.Parent.Parent.GetOption('ZipTarget')
-	ENDPROC
-
-	PROCEDURE pgf1.Page4.cboSKProject.Init
-		
-		this.AddProperty('alist[1]')
-		lcCursor = 'curSKProjects'
-		lcPath = '.,' + Set("Path")
-		Create Cursor (m.lcCursor) (filename c(100))
-		For lnX = 1 to GetWordCount(m.lcPath,',')
-		  lcFolder = Addbs(GetWordNum(m.lcPath,m.lnX,','))
-		  lnFiles = ADir(laDummy,m.lcFolder + '*.sk')
-		  If m.lnFiles > 0
-		    For lnY = 1 to m.lnFiles 
-		      Insert into (m.lcCursor) (filename) Values (Sys(2014, m.lcFolder + m.laDummy(m.lnY,1)))
-		    Endfor
-		  Endif
-		EndFor
-		Select * from (m.lcCursor) into array (this.alist)
-		this.RowSource = "this.alist"
-		this.RowSourceType = 5
-		
-	ENDPROC
-
-	PROCEDURE pgf1.Page4.cboSKProject.UIEnable
-		LPARAMETERS lEnable
-		this.Value = Upper(this.Parent.Parent.Parent.GetOption('Project'))
-	ENDPROC
-
-	PROCEDURE pgf1.Page4.cboSKProject.Valid
-		this.Parent.Parent.Parent.SetOption('Project', Alltrim(this.Value))
 	ENDPROC
 
 	PROCEDURE pgf1.Page4.spnMaxDescript.InteractiveChange

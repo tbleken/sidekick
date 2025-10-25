@@ -15,7 +15,9 @@ This is what I see on my machine with the command `ff *us*.*`:
 
 Select the file you want, and confirm that you want the filename, including its path, copied to the clipboard. 
 
-To avoid the confirmation mentioned, you can add the command line switch `/Y`, or use the alternative command `FFY`.
+To avoid the confirmation mentioned, you can add the command line switch `/Y`, or use the alternative command `FFY`.  
+
+Use the command line switch `/F` if you want the full path of the selected file.
 
 
 **Note** This tool is still in development, check here for updates.

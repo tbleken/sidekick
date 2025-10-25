@@ -27,9 +27,13 @@ If you don't specify any file extension, .prg is assumed.
 
 You can hover the mouse over the green cells, and see what will be inserted. Select the one you want, and press `Enter`; or `Escape` to cancel.
 
-Result of `+ ascii`: 
+Result of `+ change`: 
 
 ![Ins](Images/skins.png)
+
+Result of `+ reset /v`:  
+
+![skinsv](./Images/skinsv.png)
 
 Result of `+ .h`:
 

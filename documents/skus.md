@@ -46,6 +46,18 @@ The different path options are also defined in Sidekick Options (Thor Tools -> O
 * `us /j` means no path, justpath(filename) is used.
 * `us /r` means relative path, sys(2014(filename)) is used.
 
+If you want to generate code to both use a table and select it, you have two alternative variants.   
+* `us /y my` 
+* `uss my`
+
+If you pick the table DATA\MyTable.DBF, both of these commands will generate this code in VFP's editors:
+
+```foxpro
+Select Select("MyTable")
+Use "DATA\Mytable.DBF"
+```
+
+
 
 <a id="skselopen">  
 

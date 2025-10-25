@@ -4,7 +4,7 @@ Lparameters lxParam1
 
 #Define ccXToolName        'SidekickMenu'
 #Define ccSidekickHelp 'https://github.com/tbleken/Sidekick'
-#Define ccVersion '1.38'
+#Define ccVersion '1.50'
 
 
 *********************************************************************************
@@ -57,8 +57,7 @@ Return
 Procedure ToolCode
   Lparameters tcCommand
   Local lcVCXFile
-
-  tcCommand = Evl(m.tcCommand, []) && Blank means Sidekick Command Box with '?' as default.
+  tcCommand = '' && Sidekick command goes here!
   * Replace the value of tcCommand with whatever Sidekick command you want.
   lcVCXFile = Execscript(_Screen.cThorDispatcher, [Full Path=] + [thor_proc_sidekick.VCX])
   Execscript(_Screen.cThorDispatcher, [thor_tool_sidekick], [-] + m.tcCommand  )

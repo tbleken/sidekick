@@ -19,7 +19,8 @@ This is what happens in a prg or a method code window:
 | `no lo` | All classes are listed, variable is `lo` |
 | `no my*` | All classes matching `*my*` are listed, variable is `lo` + class name |
 | `no *my` | Same as above | 
-| `no lo my` | Same as above, variable is `lo` || `no *` | Same as above, **all** clases are listed, variable is `lo` + class name |
+| `no lo my` | Same as above, variable is `lo` ||
+`no *` | Same as above, **all** clases are listed, variable is `lo` + class name |
 | `no` | Same as above, variable is `lo` |
 
 All the samples will also work in the Command window, except **no** Local declaration is added.  

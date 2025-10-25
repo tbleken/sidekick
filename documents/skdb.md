@@ -14,9 +14,13 @@ These commands behaves similarly. Both creates code to list variable names and t
 | `?=lnVar`                    | ?'lnVar', lnVar |
 | `?=m.lnMax `                    | ?'lnMax', m.lnMax |
 | `?= m.lnMax `                    | Same as above, space is optional |  
+| `==lnMax `                    | ?'SKfix lnMax', m.lnMax |
 | `db m.lcString `| DebugOut 'm.lcString', m.lcString |
+| `=== m.lcString `| Same as above |
 
 These "commands" takes advantage of IntellisenseX, if you use the `m.` version. This means that you only need to type `m.` plus a few letters, select the wanted variable name and press ![`F8`](Images/F8.png).
+
+The output from `Sidekick` command `==` adds the word `SKfix` in front of the variable name. This makes it easy to find these lines later, if you want to remove them, or comment them out.  
 
 No rocket science, but a real time saver. :grin:
 

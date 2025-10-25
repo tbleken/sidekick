@@ -39,9 +39,9 @@ All the different choices have Tooltips to describe their purpose.
 5. **Necessary delay for zip creation (mS):** Default is `100`. `Sidekick` need a little time to prepare a `.zip` file before it's filled with data. Increase this number if the operation fails.
 
 ### Page 4, Projects:  
-1. **Sidekick active project file:** Default is `SKOptions.sk`. This file is used in `Sidekick's` project feature, as described in [`Sidekick` group of files organizer](skorg.md). Change the name here, or use the options specified in the document referred to.
-2. **Command to Run instead of opening a file:** Default is `exe`. This string is used in `Sidekick's` project feature, [`Sidekick` group of files organizer](skorg.md). Change this value if the default string `exe` causes any conflict.  
-3. **Max number for Description in .sk-file:** Default is 15. `Sidekick` uses some time to look for `description` text in the defined format in files. The earlier it appears, the faster is the process. This value specifies how many lines to process before the rest of the file is ignored.
+
+1. **Command to Run instead of opening a file:** Default is `exe`. This string is used in `Sidekick's` project feature, [`Sidekick` group of files organizer](skorg.md). Change this value if the default string `exe` causes any conflict.  
+1. **Max number for Description in .sk-file:** Default is 15. `Sidekick` uses some time to look for `description` text in the defined format in files. The earlier it appears, the faster is the process. This value specifies how many lines to process before the rest of the file is ignored.
  
 ### Page 5, Special:
 1. **Location (URL) for Help files:** Default is `https://github.com/tbleken/sidekick`. This is the "base" URL for all of `Sidekick's` help files. Change this value only if the files are moved.

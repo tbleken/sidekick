@@ -13,7 +13,7 @@ Then Sidekick will try to execute the current line, or all the marked lines, if 
 
 An initial \* is respected as a commented line for single executable lines. **However**, if the first word following the \* is a `Sidekick` keyword, the \* is ignored! This makes it easy to hide "secret" expandable `Sidekick` "code" in your programs. This code will only be available during your development, since it will be ignored in the working program.
 
-*Note:* To distinguish "real" VFP commands from `Sidekick` keywords, it's necessary to add the the keyword `ed`, as the first word in a line in a prg. This is **not** necessary in the Command window. 
+*Note:* To distinguish "real" VFP commands from `Sidekick` keywords, it's sometimes necessary to add the the keyword `ed`, as the first word in a line in a prg. This is **not** necessary in the Command window. 
 
 This is really handy, since you can have a special file with all your `Sidekick` code snippets. Tip: Use `SKTestarea.prg` for this, available directly from the Command window by typing . (dot) and pressing ![`F8`](Images/F8.png).  
 

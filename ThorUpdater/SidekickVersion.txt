@@ -1,8 +1,8 @@
 lparameters toUpdateObject
 
 with toUpdateObject
-	.VersionNumber    = '1.38 - 20251009'
-	.AvailableVersion = 'Sidekick-1.38-09413-20251009'
+	.VersionNumber    = '1.50 - 20251025'
+	.AvailableVersion = 'Sidekick-1.50-09429-20251025'
 	.Component        = 'No'
 	.Notes            = GetNotes()
 endwith
@@ -13,7 +13,21 @@ return toUpdateObject
 procedure GetNotes
 local lcNotes
 text to lcNotes noshow
-### 2025-10-09, Version 1.37
+### 2025-10-25, Version 1.50
+
+Several bug fixes and minor additions.
+
+New command [==](documents/skdb.md) which creates searchable `?` commands in your code.  
+And added `===` as an alternative command for `db` to create debugout commands.
+
+Changed behavior for `Sidekick` "project files", `.sk`.  
+It's common to have one root folder per VFP project, each with its own set of subfolders. For this reason it was not practical to have a common setting for which `Sidekick` "project file", `.sk`, was active.  
+The new behavior is that each root folder has its own file `sidekick.def` which holds the name of the active project file. If the root folder has a subfolder called `text`, it's store there. Else it goes to the root folder itself.
+To change the active project file, use the command `**` or `0*`.  
+
+The support for "external" files in `Sidekick's` OP command has been removed, since the same behavior is achieved by other Sidekick features. 
+
+### 2025-10-09, Version 1.38
 
 New command [FF (Find File)](documents/skff.md), used to locate file in any folder below the current one, and optionally copy its full path and name into the clipboard. 
 

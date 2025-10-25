@@ -34,12 +34,12 @@ In some cases you will see a column containing a memo field from the underlying 
 | `ed 0` | Opens `Sidekick's` "busy files" list, see below |
 | `ed 5` | "Runs" group 5 in `Sidekick's` "busy files" list  |
 | `ed -` | "Runs" "default group" in `Sidekick's` "busy files" list |
+| `ed C:\Windows\Notepad.exe`| Notepad opens |
+| `ed Notepad.exe`| Same as above, if notepad.exe is in Windows' path |
 | `ed !https://github.com/tbleken/Sidekick`| The URL is opened in default browser|
 | `ed !D:\Doc\MyDocs\MyDocument.docx`| The document is opened in the default application |
-| `ed !C:\Windows\Notepad.exe`| Notepad opens |
-| `ed !Notepad.exe`| Same as above, if notepad.exe is in Windows' path |
-
-In the last samples, note the exclamation mark `(!)` preceding the parameter.  
+             
+In the last samples, note the exclamation mark `(!)` preceding the parameter. The reason is that the text needs to be passed as a parameter and not as a command. 
 
 ### Special case: 
 `ed` followed by a number will perform the corresponding action as described in [`Sidekick` "group of files organizer"](skorg.md).  

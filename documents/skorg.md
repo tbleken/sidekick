@@ -118,65 +118,13 @@ This is a sample of what you see after typing `*` in the Command Window and pres
 **Note:** If the given project file, `someproject.sk` in the sample above, doesn't already exist, you are asked if `Sidekick` shall create it for you.
 
 
-## 2. Easy opening (or running) VFP files  
-
-| You type:                |        Result after pressing ![`F8`](Images/F8.png)|
-|:-------------------------|:----------------------------------------------------------|
-| `ed test.txt`                  | File `test.txt` is opened in editor        |
-| `ed prog\pro1.prg`             | `prog\pro1.prg` is opened in editor              |
-| `ed (_screen.cthorfolder + 'Tools\peme_snippet_no.prg')` | variable is resolved and file opened in editor |
-| `ed myprog.prg && My notes`    | `myprog.prg` is opened, comments ignored       |
-| `ed mytable.dbf`               | `mytable.dbf` is opened in SuperBrowse        |   
-| `ed pg.vcx`                    | `pg.vcx` is opened in the Class Browser  |
-
-#### This feature works in the Command Window and in the editors (Modify Command and Modify File): 
-
-`ed` followed by a the name of a file, will open that file. 
-
-| File extension | Files will open in: |  
-|:-------------------------|:----------------------------------------------------------|
-| prg| Editor  |  
-| txt|Editor  |
-| sk | Editor |
-| dbf| SuperBrowse  |
-| scx| Form Designer|
-| vcx| Class Browser|
-| frx| Report Designer|
-| lbx| Label Designer  |
-
-### 2a. Opening Forms and Class Libraries: 
-
-For a scx or vcx where the name of the method is specified, with or without the optional line number, the class is opened, and the specified method is opened in the editor.  
-Likewise, for a vcx the class browser is opened, in addition to the method editor.
-
-| You type:                |        Result after pressing `F8`                                |
-|:-------------------------|:----------------------------------------------------------|
-| `ed pg.vcx.pg1`      | Class `pg1` in `pg.vcx` is opened, last method appears in the editor|
-| `ed pg.vcx.pg1.init` | Class `pg1` in `pg.vcx` is opened, `init` method appears in the editor|
-| `ed pg.scx.form.txtfind.keypress`  | Form `pg.scx` is opened and editor shows `form.txtfind.keypress`|
-| `ed pg.scx.form.txtfind.keypress:10`| Same as above, cursor is on line 10         |
-
 #### This feature works in the Command Window and in the editors (Modify Command and Modify File) 
 
-***Tip:*** You can store your frequently used commands in `Sidekick.prg` or in any other .prg!
+<!---
+<a id="proj"> -->
 
 
-## 3. Opening external files:  
-
-For registered file types, the file will be opened in the corresponding application.  
-Likewise, a URL will be opened in the default Browser.
-
-| You type:                |        Result after pressing ![`F8`](Images/F8.png)             |
-|:-------------------------|:----------------------------------------------------------|
-| `ed https:\\github.com/VFPX/Thor` | Thor homepage opens in default browser      |
-| `ed C:\Somefolder\Somefile.xlsx`    | `Somefile.xlsx` is opened in Excel        |
-| `ed C:\Somefolder\Somemovie.mp4`    | `Somemovie.mp4` is opened in default application        |
-
-#### This feature works in the Command Window and in the editors (Modify Command and Modify File) 
-
-<a id="proj">
-
-## Using `ES` to automate the creation of "command lines" is `Sidekick.sk`
+Using `ES` to automate the creation of "command lines" is `Sidekick.sk`  
 
 With your "project file" as the active window, you can use `Sidekick's EditSource Builder, ES` to do most of the work for you.  
 If you for instance want to add entries to group number 10, type `es 10` and press ![`F8`](Images/F8.png). `ES` will loop through all VFP editing windows, and show the necessary code in a messagebox. Accept it to have the code pasted into the file.  
